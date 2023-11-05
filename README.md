@@ -5,8 +5,8 @@ CRN:12166
 ## GROUP MEMBERS
 
 - [ONUR BAYLAM](#mem)
-- Orhan Berkay Yılmaz - 150210054
--
+- Orhan Berkay Yılmaz(orhosko) - 150210054
+- 
 -
 -
 
@@ -16,10 +16,10 @@ Provide a brief introduction to your project. Explain what it does, why it's use
 
 ## Quick Start
 
-1. Clone the repo
+1. Clone the repository:
 
-        git clone https://github.com/grnonur/ITU-BLG317E-DBSystems-Project.git
-        cd ITU-BLG317E-DBSystems-Project
+        git clone https://github.com/itudb2313/itudb2313
+        cd itudb2313
 
 2. Initialize and activate a virtual environment:
 
