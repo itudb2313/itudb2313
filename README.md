@@ -6,7 +6,7 @@ CRN:12166
 
 - [ONUR BAYLAM](#mem)
 - Orhan Berkay Yılmaz(orhosko) - 150210054
-- 
+- Muhammed Necati Polat(MuhammedNecatiPolat) - 070200734
 -
 -
 
