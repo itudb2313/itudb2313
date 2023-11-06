@@ -22,3 +22,7 @@ def hello(name):
     """
 
     return f"Hello, {name}!"
+
+@app.route("/random")
+def random():
+    return ""
