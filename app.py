@@ -2,16 +2,13 @@
 This is the main file that will be run by the server.
 """
 
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    """
-    This is the main page of the website.
-    """
-    return "<p>Hello, World!</p>"
+   return render_template("index.html")
 
 @app.route("/db/<name>")
 def hello(name):
