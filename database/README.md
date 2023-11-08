@@ -1,47 +1,51 @@
-* DATABASE SETUP
+# DATABASE SETUP
 
-** Set docker mysql (mysql is the container name)
+## Set docker mysql (mysql is the container name)
 
 	docker pull mysql
 	docker run --name mysql -e MYSQL_ROOT_PASSWORD=123123 -d mysql:latest
 
-** Import using .sql file
+## Import using .sql file
 
-*** Copy file and get into mysql
+I added a test.sql file inside database/ directory, which is produced by the operations on Manual Import part. So, you can just use this steps to import database from that file. 
+
+### Copy file and get into mysql
 
 	docker cp <path-to-sql>/test.sql mysql:/home/test.sql
 	mysql -p132123 
 	
-*** create database and source .sql file
+### create database and source .sql file
 
 	CREATE DATABASE import_test;
 	USE import_test;
 	source /home/test.sql;
 
-** Manual Import
+## Manual Import
 
-*** copy files
+I created the tables according my guess of data type and set the limits to not create data clipping. Still there is no constraint, if you have any ideas feel free to add them.
+
+### copy files
 
 	docker cp Downloads/archive mysql:/home/
 
-*** connect to docker and open mysql cli
+### connect to docker and open mysql cli
 
 	docker exec -it mysql bash
 	mysql -p123123
 
-*** create database and set local_infile to be able to use LOAD DATA LOCAL
+### create database and set local_infile to be able to use LOAD DATA LOCAL
 
 	CREATE DATABASE test;
 	USE test;
 	SET GLOBAL local_infile=1;
 
-*** re-enter using --local-infile=1 argument to be able to use LOAD DATA LOCAL
+### re-enter using --local-infile=1 argument to be able to use LOAD DATA LOCAL
 
 	exit
 	mysql --local-infile=1 -uroot -p123123
 	USE test;
 	
-*** create tables and load data onto them
+### create tables and load data onto them
 
 	CREATE TABLE category(category_id CHAR(3),employee_id INT, category_name VARCHAR(30), rating VARCHAR(5), quantity_sold INT, being_manufactured INT, total_sold_value INT );
 	LOAD DATA LOCAL INFILE '/home/archive/category.csv' INTO TABLE category FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
@@ -67,6 +71,6 @@
 	CREATE TABLE store(store_id INT, employee_id INT, store_name VARCHAR(40), phone CHAR(10), street VARCHAR(40), city VARCHAR(30), country VARCHAR(60), email VARCHAR(40), post_code INT);
 	LOAD DATA LOCAL INFILE '/home/archive/store.csv' INTO TABLE store FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 	
-*** to export use mysqldump command
+### to export use mysqldump command
 
 	mysqldump --databases --user=root --password test > /home/test.sql
