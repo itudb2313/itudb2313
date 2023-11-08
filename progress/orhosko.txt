@@ -2,3 +2,6 @@
 Created github organization and repository
 Added requirements.txt .gitignore README.md
 -w6-
+Write down steps for setting up mysql on Docker
+Import CSVs to mysql and create tables
+Export database to file and write down steps to import from .sql file
