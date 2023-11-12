@@ -3,8 +3,11 @@ This is the main file that will be run by the server.
 """
 
 from flask import Flask
+from flask import render_template
+from products import get_all_products
 
 app = Flask(__name__)
+app.config.from_envvar("FLASK_APP_SETTINGS")
 
 @app.route("/")
 def hello_world():
@@ -23,6 +26,6 @@ def hello(name):
 
     return f"Hello, {name}!"
 
-@app.route("/random")
+@app.route("/products")
 def random():
-    return ""
+    return render_template("products.html", products=get_all_products())
