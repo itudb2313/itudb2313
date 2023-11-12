@@ -2,8 +2,9 @@
 This is the main file that will be run by the server.
 """
 
-from flask import Flask, render_template
 
+from flask import Flask, render_template
+from product import get_all_products
 app = Flask(__name__)
 app.config.from_envvar('FLASK_APP_SETTINGS')
 
@@ -11,6 +12,10 @@ app.config.from_envvar('FLASK_APP_SETTINGS')
 @app.route("/")
 def hello_world():
     return render_template("index.html")
+
+@app.route("/products")
+def products():
+    return render_template("products.html", products=get_all_products())
 
 @app.route("/db/<name>")
 def hello(name):
