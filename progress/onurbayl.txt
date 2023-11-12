@@ -2,3 +2,8 @@
 Joined github organization and repository
 Informations added to README.md
 -w6-
+database.py created and initialized with mysql.connector
+Database class created which contains queries in its methods
+Database connection URI is defined
+insert and select queries of employee table are created
+insert and select queries of rise_archive table are created
