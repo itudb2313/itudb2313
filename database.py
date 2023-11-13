@@ -1,14 +1,14 @@
 import mysql.connector as dbapi
-
+from flask import current_app
 
 class Database:
     def __init__(self):
         self.connection = dbapi.connect(
-            host="localhost",
-            port=3306,
-            user="root",
-            password="test",
-            database="AutomotiveBusiness",
+            host = current_app.config["DB_HOST"],
+            # port = current_app.config["DB_PORT"],
+            user = current_app.config["DB_USER"],
+            password = current_app.config["DB_PASSWORD"],
+            database = current_app.config["DB_DATABASE"],
         )
 
     def select_all_employees(self):
@@ -73,5 +73,20 @@ class Database:
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_all_products(self):
+        query = """SELECT * FROM product"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            products = cursor.fetchall()
+            return products
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
         finally:
             cursor.close()
