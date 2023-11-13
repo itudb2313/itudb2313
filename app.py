@@ -5,7 +5,7 @@ This is the main file that will be run by the server.
 from flask import Flask, render_template
 
 app = Flask(__name__)
-app.config.from_envvar('FLASK_APP_SETTINGS')
+# app.config.from_envvar('FLASK_APP_SETTINGS')
 
 
 @app.route("/")
