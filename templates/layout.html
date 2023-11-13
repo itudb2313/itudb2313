@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>itudb2313 - {% block title %}{% endblock %}</title>  
+  
+  <link rel="stylesheet"
+          href="{{ url_for('static', filename='layout.css') }}"/>   
+  </head>
+  <body>
+  
+     <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('hello_world') }}">Home</a></li>    
+        </ul>
+      </nav>
+    </header> 
+  
+    {% block content %}{% endblock %}   
+
+    <footer>
+      <small>&copy; 2023, itudb2313</small>
+    </footer>
+  
+
+  </body>
+  
+</html>
