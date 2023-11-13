@@ -5,3 +5,7 @@ Added requirements.txt .gitignore README.md
 Write down steps for setting up mysql on Docker
 Import CSVs to mysql and create tables
 Export database to file and write down steps to import from .sql file
+Merge 2 different database usage 
+Use config.py instead of envvars
+Create layout.html inside /products and /
+Fix general coherency problems
