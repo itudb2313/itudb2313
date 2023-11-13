@@ -2,3 +2,8 @@
 Joined github organization and repository
 Added my information to README.MD
 -w6-
+Created Db connection
+Set config files
+created product view
+created get product method
+-w7-
