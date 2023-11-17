@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>itudb2313 - {% block title %}{% endblock %}</title>  
+    <title{% block title %}{% endblock %}</title>  
   
   <link rel="stylesheet"
           href="{{ url_for('static', filename='layout.css') }}"/>   
@@ -15,6 +15,7 @@
         <ul>
           <li><a href="{{ url_for('hello_world') }}">Home</a></li>    
           <li><a href="{{ url_for('products') }}">Products</a></li>    
+          <li><a href="{{ url_for('orders') }}">Orders</a></li>    
         </ul>
       </nav>
     </header> 
@@ -24,8 +25,6 @@
     <footer>
       <small>&copy; 2023, itudb2313</small>
     </footer>
-  
 
   </body>
-  
 </html>

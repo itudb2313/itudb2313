@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+    <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+
+    <h1>Orders</h1>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Product ID</th>
+                <th>Store ID</th>
+                <th>Employee ID</th>
+                <th>Order Date</th>
+                <th>Ship Date</th>
+                <th>Required Date</th>
+                <th>Status</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody id="replace">
+
+        {% for order in orders %}
+        <tr>
+            <td>{{order[0]}}</td>
+            <td>{{order[1]}}</td>
+            <td>{{order[2]}}</td>
+            <td>{{order[3]}}</td>
+            <td>{{order[4]}}</td>
+            <td>{{order[5]}}</td>
+            <td>{{order[6]}}</td>
+            <td>{{order[7]}}</td>
+            <td>{{order[8]}}</td>
+            <td>{{order[9]}}</td>
+        </tr>
+        {% endfor %}
+
+            <tr>
+        <td colspan="10" hx-get="/htmx-test?page=1" hx-target="#replace" hx-swap="innerHTML">htmx test</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+{% endblock %}

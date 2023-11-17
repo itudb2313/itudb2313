@@ -90,3 +90,22 @@ class Database:
             return None
         finally:
             cursor.close()
+
+
+    def get_all_orders(self):
+        query = """SELECT * FROM orders"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+
+            orders = cursor.fetchall()
+            return orders
+
+    def get_orders_paged(self, limit=10, offset=0):
+        query = """SELECT * FROM orders LIMIT %s OFFSET %s"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (limit, offset))
+
+            orders = cursor.fetchall()
+            return orders
