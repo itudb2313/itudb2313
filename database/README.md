@@ -1,20 +1,25 @@
 # DATABASE SETUP
 
-## Set docker mysql (mysql is the container name)
+You can both use a local installation and official docker of mysql. Commands used inside (# Create database and source .sql file) will be identical. 
+
+## Set docker mysql
+
+NOTE: mysql is the container name here. Feel free to change pasword and name.
 
 	docker pull mysql
-	docker run --name mysql -e MYSQL_ROOT_PASSWORD=123123 -d mysql:latest
+	docker run --name mysql -e MYSQL_ROOT_PASSWORD=123123 -p 3306:3306 -d mysql:latest
 
 ## Import using .sql file
 
 I added a test.sql file inside database/ directory, which is produced by the operations on Manual Import part. So, you can just use this steps to import database from that file. 
 
-### Copy file and get into mysql
+Copy file and get into mysql:
 
 	docker cp <path-to-sql>/test.sql mysql:/home/test.sql
-	mysql -p132123 
+	docker exec -it mysql bash
+	mysql -p123123
 	
-### create database and source .sql file
+## Create database and source .sql file
 
 	CREATE DATABASE import_test;
 	USE import_test;
