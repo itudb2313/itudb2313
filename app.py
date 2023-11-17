@@ -38,7 +38,15 @@ def htmx_test():
             <td>{order[9]}</td>
         </tr>'''
 
-    return rows + f'<tr><td colspan="10" hx-get="/htmx-test?page={page+1}" hx-target="#replace" hx-swap="innerHTML">click for next page: {page+1}</td></tr>'
-
+    return rows + f'''
+        <tr>
+            <td colspan="10"
+                hx-get="/htmx-test?page={page+1}"
+                hx-target="#replace"
+                hx-swap="innerHTML">
+                click for next page: {page+1}
+            </td>
+        </tr>
+        '''
 
 app.run()

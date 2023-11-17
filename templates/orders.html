@@ -5,7 +5,6 @@
 
     <h1>Orders</h1>
 
-
     <table>
         <thead>
             <tr>
@@ -38,12 +37,16 @@
         </tr>
         {% endfor %}
 
-            <tr>
-        <td colspan="10" hx-get="/htmx-test?page=1" hx-target="#replace" hx-swap="innerHTML">htmx test</td>
-            </tr>
+        <tr>
+            <td colspan="10"
+                hx-get="/htmx-test?page=1"
+                hx-target="#replace"
+                hx-swap="innerHTML">
+                htmx test
+            </td>
+        </tr>
 
         </tbody>
     </table>
-
 
 {% endblock %}

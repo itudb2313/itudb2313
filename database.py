@@ -91,7 +91,6 @@ class Database:
         finally:
             cursor.close()
 
-
     def get_all_orders(self):
         query = """SELECT * FROM orders"""
 
