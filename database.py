@@ -1,5 +1,5 @@
 import mysql.connector as dbapi
-from flask import current_app
+from flask import current_app, stream_with_context
 
 class Database:
     def __init__(self):
@@ -100,11 +100,19 @@ class Database:
             orders = cursor.fetchall()
             return orders
 
-    def get_orders_paged(self, limit=10, offset=0):
-        query = """SELECT * FROM orders LIMIT %s OFFSET %s"""
+    def get_orders_paged(self, limit=10, offset=0, order_by="order_id", order="ASC"):
+        sortable_columns = ["order_id", "order_date", "ship_date",
+                            "required_date", "order_status", "quantity"]
 
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (limit, offset))
+            # we need to check if the column name is valid since
+            # execute() will put single quotes around the column name
+            if order_by in sortable_columns and order in ["ASC", "DESC"]:
+                cursor.execute("SELECT * FROM orders ORDER BY " + order_by + " "  + order + " LIMIT %s OFFSET %s;", (limit, offset))
+            else:
+                print(order_by, order)
+                return []
 
             orders = cursor.fetchall()
+            print(orders)
             return orders

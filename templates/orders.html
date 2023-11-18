@@ -2,47 +2,64 @@
 {% block title %}Orders{% endblock %}
 {% block content %}
     <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <h1>Orders</h1>
+    <h1 class="text-4xl font-bold">Orders</h1>
 
-    <table>
+    <table class="table-auto border text-center">
         <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Customer ID</th>
-                <th>Product ID</th>
-                <th>Store ID</th>
-                <th>Employee ID</th>
-                <th>Order Date</th>
-                <th>Ship Date</th>
-                <th>Required Date</th>
-                <th>Status</th>
-                <th>Quantity</th>
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=order_id&order=DESC"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Order ID ↓
+                </th>
+                <th class="border w-28">Customer ID</th>
+                <th class="border w-28">Product ID</th>
+                <th class="border w-28">Store ID</th>
+                <th class="border w-28">Employee ID</th>
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=order_date"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Order Date ↓
+                </th>
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=ship_date"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Ship Date ↓
+                </th>
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=required_date"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Required Date ↓
+                </th>
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=order_status"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Status ↓
+                </th> 
+                <th class="border w-28" 
+                    hx-get="/htmx-test?page=0&order_by=quantity"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    Quantity ↓
+                </th> 
             </tr>
         </thead>
         <tbody id="replace">
 
-        {% for order in orders %}
         <tr>
-            <td>{{order[0]}}</td>
-            <td>{{order[1]}}</td>
-            <td>{{order[2]}}</td>
-            <td>{{order[3]}}</td>
-            <td>{{order[4]}}</td>
-            <td>{{order[5]}}</td>
-            <td>{{order[6]}}</td>
-            <td>{{order[7]}}</td>
-            <td>{{order[8]}}</td>
-            <td>{{order[9]}}</td>
-        </tr>
-        {% endfor %}
-
-        <tr>
-            <td colspan="10"
-                hx-get="/htmx-test?page=1"
+            <td colspan="10" class="text-center"
+                hx-get="/htmx-test?page=0"
+                hx-trigger="load"
                 hx-target="#replace"
                 hx-swap="innerHTML">
-                htmx test
+                for fetch
             </td>
         </tr>
 
