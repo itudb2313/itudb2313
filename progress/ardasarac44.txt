@@ -2,3 +2,7 @@
 Joined github organization and repository
 Added my information to README.MD
 -w6-
+Stores view is created.
+Stores route is setted.
+Store data projected on screen with get stores method.
+-w7-

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raise Information Form</title>
+</head>
+<body>
+    <h2>Raise Information Form</h2>
+    <form id="raiseForm" action="/insert_rise" method="post">
+        <label for="rise_id">Raise ID:</label>
+        <input type="text" id="rise_id" name="rise_id" required><br>
+
+        <label for="amount_by_percent">Amount by Percent:</label>
+        <input type="text" id="amount_by_percent" name="amount_by_percent" required><br>
+
+        <label for="rise_date">Raise Date:</label>
+        <input type="date" id="rise_date" name="rise_date" required><br>
+
+        <label for="rise_state">Raise State:</label>
+        <select id="rise_state" name="rise_state" required>
+            <option value="Suspended">Suspended</option>
+            <option value="Confirmed">Confirmed</option>
+        </select><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

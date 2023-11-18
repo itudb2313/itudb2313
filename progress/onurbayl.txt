@@ -1,9 +1,31 @@
--w5-
-Joined github organization and repository
-Informations added to README.md
--w6-
-database.py created and initialized with mysql.connector
-Database class created which contains queries in its methods
-Database connection URI is defined
-insert and select queries of employee table are created
-insert and select queries of rise_archive table are created
+#week5
+-Joined github organization and repository
+-Informations added to README.md
+
+#week6
+-database.py created and initialized with mysql.connector
+-Database class created which contains queries in its methods
+-Database connection URI is defined
+-Insert and select queries of employee table are created
+-Insert and select queries of rise_archive table are created
+
+#week7
+-Select and insert queries of "customer" table are created in database.py
+-"customers.html" file has been created in templates folder to view customers 
+data from the customer table
+-"insert_customer.html" file has been created in templates folder to insert new customer 
+record to the customer table using html form.
+-"rises.html" file has been created in templates folder to view the data of rise_archive table
+-"insert_rises.html" file has been created in templates folder to insert new record to "rise_archive" 
+table through html form.
+-"layout.html" file is modified to add necessary routing links for newly created html pages.
+-Endpoint of "customers" has been created to answer 'GET' request which fetches customer data from customer 
+table and sends it to "customers.html" page
+-Endpoint of "insert_customer" has been created to insert a new record into the "customer" table.
+ After insertion, it redirects to customers page (Fetches up-to-date data from the table)
+-Endpoint of "rises" has been created to answer 'GET' requests. It fetches data
+from rise_archive table and performs routing to rises.html
+-Endpoint of "insert_rise" has been created to insert a new record into the "rise_archive" table. 
+After insertion, it redirects to rises page (Fetches up-to-date data from the table)
+-redirect and url_for packages are introduced in app.py to connect different endpoints in sync
+-process_json endpoint has been created to demonstrate json data transfer between backend and frontend.
