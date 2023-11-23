@@ -4,7 +4,7 @@ CRN:12166
 
 ## GROUP MEMBERS
 
-- ONUR Baylam(onurbayl) - 150220770
+- Onur Baylam(onurbayl) - 150220770
 - Orhan Berkay Yılmaz(orhosko) - 150210054
 - Muhammed Necati Polat(MuhammedNecatiPolat) - 070200734
 - Murat Arda Saracoglu(ardasarac44) - 150210704	

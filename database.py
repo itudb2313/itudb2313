@@ -11,18 +11,45 @@ class Database:
             database = current_app.config["DB_DATABASE"],
         )
 
-    def select_all_employees(self):
-        query = """SELECT * FROM employee"""
+    def select_all_customers(self):
+        query = """SELECT * FROM customer"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            # return cursor
+            customers = cursor.fetchall()
+            return customers
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
             cursor.close()
 
-    def insert_employee(self, employee):
+    def insert_customer(self, customer_id,employee_id,firstname,lastname,dof,phone,email,city,country):
+        query = """INSERT INTO customer (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
+        VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query,(customer_id,employee_id,firstname,lastname,dof,phone,email,city,country))
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()        
+    
+    def select_all_employees(self):
+        query = """SELECT * FROM employee"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            employees = cursor.fetchall()
+            return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def insert_employee(self, employee_id, store_id, firstname,
+        lastname, dof, phone, email, status, salary, street, city, country):
         query = """INSERT INTO employee (employee_id, store_id, firstname,
         lastname, dof, phone, email, status, salary, street, city, country)
         VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s)"""
@@ -32,18 +59,18 @@ class Database:
             cursor.execute(
                 query,
                 (
-                    employee.employee_id,
-                    employee.store_id,
-                    employee.firstname,
-                    employee.lastname,
-                    employee.dof,
-                    employee.phone,
-                    employee.email,
-                    employee.status,
-                    employee.salary,
-                    employee.street,
-                    employee.city,
-                    employee.country,
+                    employee_id,
+                    store_id,
+                    firstname,
+                    lastname,
+                    dof,
+                    phone,
+                    email,
+                    status,
+                    salary,
+                    street,
+                    city,
+                    country,
                 ),
             )
             self.connection.commit()
@@ -57,19 +84,20 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            # return cursor
+            rises = cursor.fetchall()
+            return rises
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
             cursor.close()
 
-    def insert_rise(self):
+    def insert_rise(self, rise_id, amount_by_percent, rise_date, rise_state):
         query = """INSERT INTO rise_archive (rise_id, amount_by_percent,
         rise_date, rise_state) VALUES (%s, %s,%s, %s)"""
 
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query)
+            cursor.execute(query, (rise_id, amount_by_percent, rise_date, rise_state))
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()

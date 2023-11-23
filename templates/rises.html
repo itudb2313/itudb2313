@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+
+    <h1>Rises</h1>
+    <h2>Insert a Rise</h2>
+    <a href="{{ url_for('insert_rise') }}">Click to insert</a>
+    <ul>
+        
+        {% for rise in rises %}
+        <li>{{rise}}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
