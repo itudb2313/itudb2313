@@ -18,8 +18,8 @@ def products():
 def orders():
     return render_template("orders.html", orders=db.get_orders_paged(10,0))
 
-@app.route("/htmx-test", methods=["GET"])
-def htmx_test():
+@app.route("/get-orders", methods=["GET"])
+def get_orders():
     page = int(request.args.get("page", 1))
     order_by = request.args.get("order_by", "order_id")
     t_order = request.args.get("order", "ASC")
@@ -51,7 +51,7 @@ def htmx_test():
     return rows + f'''
         <tr>
             <td colspan="10"
-                hx-get="/htmx-test?page={page+1}&order_by={order_by}&order={t_order}"
+                hx-get="/get-orders?page={page+1}&order_by={order_by}&order={t_order}"
                 hx-target="#replace"
                 hx-swap="innerHTML">
                 click for next page: {page+1}

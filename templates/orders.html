@@ -10,9 +10,17 @@
         <thead>
             <tr>
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=order_id&order=DESC"
+                    hx-get="/get-orders?page=0&order_by=order_id&order=DESC"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_id&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_id&order=ASC');
+                            this.innerHTML = 'Order ID ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_id&order=DESC');
+                            this.innerHTML = 'Order ID ↓';}
+                            htmx.process(this);">
                     Order ID ↓
                 </th>
                 <th class="border w-28">Customer ID</th>
@@ -20,33 +28,73 @@
                 <th class="border w-28">Store ID</th>
                 <th class="border w-28">Employee ID</th>
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=order_date"
+                    hx-get="/get-orders?page=0&order_by=order_date"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_date&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_date&order=ASC');
+                            this.innerHTML = 'Order Date ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_date&order=DESC');
+                            this.innerHTML = 'Order Date ↓';}
+                            htmx.process(this);">
                     Order Date ↓
                 </th>
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=ship_date"
+                    hx-get="/get-orders?page=0&order_by=ship_date"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=ship_date&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=ship_date&order=ASC');
+                            this.innerHTML = 'Ship Date ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=ship_date&order=DESC');
+                            this.innerHTML = 'Ship Date ↓';}
+                            htmx.process(this);">
                     Ship Date ↓
                 </th>
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=required_date"
+                    hx-get="/get-orders?page=0&order_by=required_date"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=required_date&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=required_date&order=ASC');
+                            this.innerHTML = 'Required Date ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=required_date&order=DESC');
+                            this.innerHTML = 'Required Date ↓';}
+                            htmx.process(this);">
                     Required Date ↓
                 </th>
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=order_status"
+                    hx-get="/get-orders?page=0&order_by=order_status"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_status&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_status&order=ASC');
+                            this.innerHTML = 'Order Status ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_status&order=DESC');
+                            this.innerHTML = 'Order Status ↓';}
+                            htmx.process(this);">
                     Status ↓
                 </th> 
                 <th class="border w-28" 
-                    hx-get="/htmx-test?page=0&order_by=quantity"
+                    hx-get="/get-orders?page=0&order_by=quantity"
                     hx-target="#replace"
-                    hx-swap="innerHTML">
+                    hx-swap="innerHTML"
+                    hx-on="htmx:afterRequest: 
+                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=quantity&order=DESC') {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=quantity&order=ASC');
+                            this.innerHTML = 'Quantity ↑'; }
+                            else {
+                            this.setAttribute('hx-get','/get-orders?page=0&order_by=quantity&order=DESC');
+                            this.innerHTML = 'Quantity ↓';}
+                            htmx.process(this);">
                     Quantity ↓
                 </th> 
             </tr>
@@ -55,7 +103,7 @@
 
         <tr>
             <td colspan="10" class="text-center"
-                hx-get="/htmx-test?page=0"
+                hx-get="/get-orders?page=0"
                 hx-trigger="load"
                 hx-target="#replace"
                 hx-swap="innerHTML">

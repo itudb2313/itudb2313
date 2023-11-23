@@ -1,5 +1,5 @@
 import mysql.connector as dbapi
-from flask import current_app, stream_with_context
+from flask import current_app 
 
 class Database:
     def __init__(self):
@@ -108,11 +108,12 @@ class Database:
             # we need to check if the column name is valid since
             # execute() will put single quotes around the column name
             if order_by in sortable_columns and order in ["ASC", "DESC"]:
-                cursor.execute("SELECT * FROM orders ORDER BY " + order_by + " "  + order + " LIMIT %s OFFSET %s;", (limit, offset))
+                cursor.execute("SELECT * FROM orders ORDER BY " 
+                    + order_by + " "  + order + 
+                    " LIMIT %s OFFSET %s;",
+                    (limit, offset))
             else:
-                print(order_by, order)
                 return []
 
             orders = cursor.fetchall()
-            print(orders)
             return orders
