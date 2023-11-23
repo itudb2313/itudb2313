@@ -36,7 +36,9 @@ class Database:
         city,
         country,
     ):
-        query = """INSERT INTO customer (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
+
+        query = """INSERT INTO customer 
+        (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
         VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
 
         try:
@@ -159,3 +161,40 @@ class Database:
             return None
         finally:
             cursor.close()
+
+    def get_all_orders(self):
+        query = """SELECT * FROM orders"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+
+            orders = cursor.fetchall()
+            return orders
+
+    def get_orders_paged(self, limit=10, offset=0, order_by="order_id", order="ASC"):
+        sortable_columns = [
+            "order_id",
+            "order_date",
+            "ship_date",
+            "required_date",
+            "order_status",
+            "quantity",
+        ]
+
+        with self.connection.cursor() as cursor:
+            # we need to check if the column name is valid since
+            # execute() will put single quotes around the column name
+            if order_by in sortable_columns and order in ["ASC", "DESC"]:
+                cursor.execute(
+                    "SELECT * FROM orders ORDER BY "
+                    + order_by
+                    + " "
+                    + order
+                    + " LIMIT %s OFFSET %s;",
+                    (limit, offset),
+                )
+            else:
+                return []
+
+            orders = cursor.fetchall()
+            return orders

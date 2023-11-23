@@ -9,3 +9,7 @@ Merge 2 different database usage
 Use config.py instead of envvars
 Create layout.html inside /products and /
 Fix general coherency problems
+-w7-
+Update docker instructions
+Create /orders page
+Add pagination to /orders
