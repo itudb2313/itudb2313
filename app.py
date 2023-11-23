@@ -83,5 +83,3 @@ def process_json():
     except Exception as e:
         # Handle any exceptions or validation errors
         return jsonify({'error': str(e)}), 400
-
-app.run()
