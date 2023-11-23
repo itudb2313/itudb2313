@@ -36,6 +36,7 @@ class Database:
         city,
         country,
     ):
+
         query = """INSERT INTO customer 
         (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
         VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
@@ -143,12 +144,15 @@ class Database:
         finally:
             cursor.close()
 
-    def get_all_products(self):
-        query = """SELECT * FROM product"""
+    def get_all_products(self, search):
+        select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
+        join_category = """INNER JOIN category USING (category_id) """
+        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s"""
+        query = select_clause + join_category + search_filters
 
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query)
+            cursor.execute(query, (search, search, search))
 
             products = cursor.fetchall()
             return products
