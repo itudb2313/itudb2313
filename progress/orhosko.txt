@@ -13,3 +13,7 @@ Fix general coherency problems
 Update docker instructions
 Create /orders page
 Add pagination to /orders
+-w8-
+Add sorting to /orders
+Make sorting both ASC and DESC
+Merge /orders and /products
