@@ -7,3 +7,8 @@ Set config files
 created product view
 created get product method
 -w7-
+modify get product method to get search filter
+add a table to product view and give it a style
+add delete product method
+-w8-
+
