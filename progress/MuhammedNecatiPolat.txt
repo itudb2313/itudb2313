@@ -11,4 +11,9 @@ modify get product method to get search filter
 add a table to product view and give it a style
 add delete product method
 -w8-
+add get provider method
+add search filter to provider method
+add debt filter to provider method
+add get distinct provider countries method
+improve search funtionality of get products method
 
