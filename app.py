@@ -83,7 +83,9 @@ def insert_rise():
 
 @app.route("/products")
 def products():
-    return render_template("products.html", products=db.get_all_products())
+    searchword = request.args.get('search', '')
+    searchword = "%" + searchword + "%"
+    return jsonify(db.get_all_products(search=searchword))
 
 
 @app.route("/orders")
@@ -157,7 +159,4 @@ def process_json():
     except Exception as e:
         # Handle any exceptions or validation errors
         return jsonify({"error": str(e)}), 400
-
-
-app.run()
 
