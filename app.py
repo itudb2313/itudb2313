@@ -82,10 +82,22 @@ def insert_rise():
 
 
 @app.route("/products")
-def products():
+def get_products():
     searchword = request.args.get('search', '')
     searchword = "%" + searchword + "%"
-    return jsonify(db.get_all_products(search=searchword))
+    return jsonify(db.get_products(search=searchword))
+
+@app.route("/providers")
+def get_providers():
+    searchword = request.args.get('search', '')
+    searchword = "%" + searchword + "%"
+    start_debt = request.args.get('from', '')
+    end_debt = request.args.get('to', '')
+    return jsonify(db.get_providers(search=searchword, start=start_debt, to=end_debt))
+
+@app.route("/providers/countries")
+def get_proiveder_countries():
+    return jsonify(db.get_provider_countries())
 
 
 @app.route("/orders")
