@@ -17,3 +17,6 @@ Add pagination to /orders
 Add sorting to /orders
 Make sorting both ASC and DESC
 Merge /orders and /products
+Add delete row functionality and create /delete-order endpoint
+Add add new row functionality and create /add-order endpoint
+
