@@ -86,6 +86,38 @@ class Database:
         finally:
             cursor.close()
 
+    def get_stores_columns(self):
+        query = """show columns from store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            stores_column_names = cursor.fetchall()
+            return stores_column_names
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+    def get_all_stores(self):
+        query = """SELECT * FROM store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            stores = cursor.fetchall()
+            return stores
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+
+
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
         try:
