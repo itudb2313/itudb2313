@@ -59,6 +59,47 @@ def insert_customer():
     else:
         return render_template("insert_customer.html")
 
+# customers endpoint to view content of customer table
+@app.route("/employees", methods=["GET"])
+def employees():
+    return render_template("employees.html", employees=db.select_all_employees())
+
+
+# insert_customer endpoint to insert new customer record into the customer table
+@app.route("/insert_employee", methods=["GET", "POST"])
+def insert_employee():
+    if request.method == "POST":
+        employee_id = request.form["employee_id"]
+        store_id = request.form["store_id"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        dof = request.form["dof"]
+        phone = request.form["phone"]
+        email = request.form["email"]
+        status = request.form["status"]
+        salary = request.form["salary"]
+        street = request.form["street"]
+        city = request.form["city"]
+        country = request.form["country"]
+
+        db.insert_employee(
+            employee_id,
+            store_id,
+            firstname,
+            lastname,
+            dof,
+            phone,
+            email,
+            status,
+            salary,
+            street,
+            city,
+            country
+        )
+        return render_template("employees.html", employees=db.select_all_employees())
+    else:
+        return render_template("insert_employee.html")
+
 
 # rises endpoint to view content of rise_archive table
 @app.route("/rises", methods=["GET"])
@@ -82,8 +123,22 @@ def insert_rise():
 
 
 @app.route("/products")
-def products():
-    return render_template("products.html", products=db.get_all_products())
+def get_products():
+    searchword = request.args.get('search', '')
+    searchword = "%" + searchword + "%"
+    return jsonify(db.get_products(search=searchword))
+
+@app.route("/providers")
+def get_providers():
+    searchword = request.args.get('search', '')
+    searchword = "%" + searchword + "%"
+    start_debt = request.args.get('from', '')
+    end_debt = request.args.get('to', '')
+    return jsonify(db.get_providers(search=searchword, start=start_debt, to=end_debt))
+
+@app.route("/providers/countries")
+def get_proiveder_countries():
+    return jsonify(db.get_provider_countries())
 
 
 @app.route("/orders")
@@ -157,7 +212,4 @@ def process_json():
     except Exception as e:
         # Handle any exceptions or validation errors
         return jsonify({"error": str(e)}), 400
-
-
-app.run()
 

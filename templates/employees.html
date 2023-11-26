@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+
+    <h1>Customers</h1>
+    <h2>Insert a Customer</h2>
+    <a href="{{ url_for('insert_employee') }}">Click to insert a employee</a>
+    <ul>
+        
+        {% for employee in employees %}
+        <li>{{employee}}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

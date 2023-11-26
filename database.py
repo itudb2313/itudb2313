@@ -144,18 +144,54 @@ class Database:
         finally:
             cursor.close()
 
-    def get_all_products(self, search):
+    def get_products(self, search):
         select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
         search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s"""
         query = select_clause + join_category + search_filters
-
+    
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, (search, search, search))
 
             products = cursor.fetchall()
             return products
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+    def get_provider_countries(self):
+        query = """SELECT DISTINCT(country) FROM provider"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            unique_countries = cursor.fetchall()
+            return unique_countries
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+    def get_providers(self, search, start, to):
+        query = """SELECT provider_name, phone, email, country, city, debt from provider """
+        search_filters = """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
+        debt_filters = ""
+        if start != '':
+            debt_filters = """AND debt > %s """ % (start)
+        if to != '':
+            debt_filters += """AND debt < %s """ % (to)
+        
+        query += search_filters + debt_filters
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (search, search, search))
+
+            providers = cursor.fetchall()
+            return providers
         except dbapi.DatabaseError:
             self.connection.rollback()
             return None
