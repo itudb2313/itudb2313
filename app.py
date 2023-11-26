@@ -59,6 +59,47 @@ def insert_customer():
     else:
         return render_template("insert_customer.html")
 
+# customers endpoint to view content of customer table
+@app.route("/employees", methods=["GET"])
+def employees():
+    return render_template("employees.html", employees=db.select_all_employees())
+
+
+# insert_customer endpoint to insert new customer record into the customer table
+@app.route("/insert_employee", methods=["GET", "POST"])
+def insert_employee():
+    if request.method == "POST":
+        employee_id = request.form["employee_id"]
+        store_id = request.form["store_id"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        dof = request.form["dof"]
+        phone = request.form["phone"]
+        email = request.form["email"]
+        status = request.form["status"]
+        salary = request.form["salary"]
+        street = request.form["street"]
+        city = request.form["city"]
+        country = request.form["country"]
+
+        db.insert_employee(
+            employee_id,
+            store_id,
+            firstname,
+            lastname,
+            dof,
+            phone,
+            email,
+            status,
+            salary,
+            street,
+            city,
+            country
+        )
+        return render_template("employees.html", employees=db.select_all_employees())
+    else:
+        return render_template("insert_employee.html")
+
 
 # rises endpoint to view content of rise_archive table
 @app.route("/rises", methods=["GET"])

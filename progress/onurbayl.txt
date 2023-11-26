@@ -29,3 +29,11 @@ from rise_archive table and performs routing to rises.html
 After insertion, it redirects to rises page (Fetches up-to-date data from the table)
 -redirect and url_for packages are introduced in app.py to connect different endpoints in sync
 -process_json endpoint has been created to demonstrate json data transfer between backend and frontend.
+
+#week8
+-Routing errors fixed and tested to ensure proper operation
+-Endpoint of "employees" is created to fetch all customers from database and display on html page
+-Endpoint of "insert_employee" is created to insert a new customer data into "customer" table
+-HTML page of "employee_insert.html" is created to allow POST requests serving inserts and
+-HTML page of "employee.html" is created to display employee data obtained from database
+-Navbar links updated to provide routing to newly created pages
