@@ -169,6 +169,7 @@ def get_orders():
     for order in db.get_orders_paged(10, page * 10, order_by, t_order):
         rows += f"""
             <tr>
+            <td class="border" hx-post=/delete-order?id={order[0]}>X</td>
             <td class="border">{order[0]}</td>
             <td class="border underline">
                 <a href="/customer?id={order[1]}">{order[1]}</a>
@@ -203,6 +204,36 @@ def get_orders():
         """
     )
 
+@app.route("/delete-order", methods=["POST"])
+def delete_order():
+    order_id = request.args.get("id")
+    db.delete_order(order_id)
+    return redirect(url_for("orders"))
+
+@app.route("/add-order", methods=["POST"])
+def add_order():
+    customer_id = request.form["customer_id"]
+    product_id = request.form["product_id"]
+    store_id = request.form["store_id"]
+    employee_id = request.form["employee_id"]
+    order_date = request.form["order_date"]
+    ship_date = request.form["ship_date"]
+    required_date = request.form["required_date"]
+    order_status = request.form["order_status"]
+    quantity = request.form["quantity"]
+
+    db.insert_order(
+        customer_id,
+        product_id,
+        store_id,
+        employee_id,
+        order_date,
+        ship_date,
+        required_date,
+        order_status,
+        quantity,
+    )
+    return redirect(url_for("orders"))
 
 # Example code snippet for json data transfer. Do not remove.
 @app.route("/process_json", methods=["POST"])
@@ -226,3 +257,4 @@ def process_json():
         # Handle any exceptions or validation errors
         return jsonify({"error": str(e)}), 400
 
+app.run() # don't delete pla, without this line site doesn't work on my computer

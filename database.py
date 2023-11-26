@@ -257,3 +257,44 @@ class Database:
 
             orders = cursor.fetchall()
             return orders
+
+    def delete_order(self, order_id):
+        query = """DELETE FROM orders WHERE order_id = %s"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (order_id,))
+            #self.connection.commit()
+
+    def insert_order(
+        self,
+        customer_id,
+        product_id,
+        store_id,
+        employee_id,
+        order_date,
+        ship_date,
+        required_date,
+        order_status,
+        quantity,
+    ):
+    
+        query = """INSERT INTO orders (customer_id, product_id, store_id,
+        employee_id, order_date, ship_date, required_date, order_status, quantity)
+        VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                query,
+                (
+                    customer_id,
+                    product_id,
+                    store_id,
+                    employee_id,
+                    order_date,
+                    ship_date,
+                    required_date,
+                    order_status,
+                    quantity,
+                ),
+            )
+            #self.connection.commit()
