@@ -4,6 +4,14 @@
 
     <h1>Customers</h1>
     <h2>Insert a Customer</h2>
+    <h2>Delete a Customer</h2>
+    <form id="deleteCustomer" action="/delete_customer" method="post">  
+
+        <label for="customer_id">Customer ID:</label>
+        <input type="text" id="customer_id" name="customer_id" required><br>
+
+        <input type="submit" value="Delete">
+    </form>
     <a href="{{ url_for('insert_customer') }}">Click to insert a customer</a>
     <ul>
         

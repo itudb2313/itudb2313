@@ -37,3 +37,6 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -HTML page of "employee_insert.html" is created to allow POST requests serving inserts and
 -HTML page of "employee.html" is created to display employee data obtained from database
 -Navbar links updated to provide routing to newly created pages
+-Endpoint of "delete_customer" is created to delete a customer data through POST request
+-"delete_customer" query is created to delete a record from "customer" table
+-"customers.html" is modified to manage deletions on UI

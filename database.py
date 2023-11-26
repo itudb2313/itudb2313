@@ -63,6 +63,29 @@ class Database:
         finally:
             cursor.close()
 
+
+    def delete_customer(
+        self,
+        customer_id
+    ):
+
+        query = """DELETE FROM customer WHERE customer_id = %s"""
+        print(customer_id)
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    customer_id
+                ),
+            )
+            self.connection.commit()
+            
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
         try:

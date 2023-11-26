@@ -100,6 +100,19 @@ def insert_employee():
     else:
         return render_template("insert_employee.html")
 
+# insert_customer endpoint to insert new customer record into the customer table
+@app.route("/delete_customer", methods=["GET", "POST"])
+def delete_customer():
+    if request.method == "POST":
+        customer_id = request.form["customer_id"]
+
+        db.delete_customer(
+            customer_id
+        )
+        
+        return render_template("customers.html", customers=db.select_all_customers())
+    
+
 
 # rises endpoint to view content of rise_archive table
 @app.route("/rises", methods=["GET"])
