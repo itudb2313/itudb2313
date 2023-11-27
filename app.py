@@ -262,4 +262,6 @@ def process_json():
         # Handle any exceptions or validation errors
         return jsonify({"error": str(e)}), 400
 
-app.run() # don't delete pla, without this line site doesn't work on my computer
+
+if __name__ == "__main__":
+    app.run()
