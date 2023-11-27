@@ -71,6 +71,11 @@ def insert_customer():
 def employees():
     return render_template("employees.html", employees=db.select_all_employees())
 
+@app.route("/stores")
+def stores():
+    return render_template("stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns())
+
+
 
 # insert_customer endpoint to insert new customer record into the customer table
 @app.route("/insert_employee", methods=["GET", "POST"])
