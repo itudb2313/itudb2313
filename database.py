@@ -11,7 +11,7 @@ class Database:
             password=current_app.config["DB_PASSWORD"],
             database=current_app.config["DB_DATABASE"],
         )
-        
+
     def select_all_categories(self):
         query = """SELECT * FROM category"""
         try:
@@ -23,7 +23,6 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
-
 
     def select_all_customers(self):
         query = """SELECT * FROM customer"""
@@ -49,8 +48,7 @@ class Database:
         city,
         country,
     ):
-
-        query = """INSERT INTO customer 
+        query = """INSERT INTO customer
         (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
         VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
 
@@ -76,24 +74,17 @@ class Database:
         finally:
             cursor.close()
 
-
-    def delete_customer(
-        self,
-        customer_id
-    ):
-
+    def delete_customer(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
         print(customer_id)
         try:
             cursor = self.connection.cursor()
             cursor.execute(
                 query,
-                (
-                    customer_id
-                ),
+                (customer_id),
             )
             self.connection.commit()
-            
+
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -183,9 +174,11 @@ class Database:
     def get_products(self, search):
         select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
-        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s"""
+        search_filters = (
+            """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s"""
+        )
         query = select_clause + join_category + search_filters
-    
+
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, (search, search, search))
@@ -213,14 +206,18 @@ class Database:
             cursor.close()
 
     def get_providers(self, search, start, to):
-        query = """SELECT provider_name, phone, email, country, city, debt from provider """
-        search_filters = """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
+        query = (
+            """SELECT provider_name, phone, email, country, city, debt from provider """
+        )
+        search_filters = (
+            """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
+        )
         debt_filters = ""
-        if start != '':
+        if start != "":
             debt_filters = """AND debt > %s """ % (start)
-        if to != '':
+        if to != "":
             debt_filters += """AND debt < %s """ % (to)
-        
+
         query += search_filters + debt_filters
         try:
             cursor = self.connection.cursor()
@@ -276,7 +273,7 @@ class Database:
 
         with self.connection.cursor() as cursor:
             cursor.execute(query, (order_id,))
-            #self.connection.commit()
+            # self.connection.commit()
 
     def insert_order(
         self,
@@ -290,7 +287,6 @@ class Database:
         order_status,
         quantity,
     ):
-    
         query = """INSERT INTO orders (customer_id, product_id, store_id,
         employee_id, order_date, ship_date, required_date, order_status, quantity)
         VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
@@ -310,4 +306,4 @@ class Database:
                     quantity,
                 ),
             )
-            #self.connection.commit()
+            # self.connection.commit()

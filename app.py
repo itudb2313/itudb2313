@@ -11,6 +11,7 @@ with app.app_context():
 def hello_world():
     return render_template("index.html")
 
+
 # categories endpoint to view content of categories table
 @app.route("/categories", methods=["GET"])
 def categories():
@@ -64,6 +65,7 @@ def insert_customer():
     else:
         return render_template("insert_customer.html")
 
+
 # customers endpoint to view content of customer table
 @app.route("/employees", methods=["GET"])
 def employees():
@@ -99,11 +101,12 @@ def insert_employee():
             salary,
             street,
             city,
-            country
+            country,
         )
         return render_template("employees.html", employees=db.select_all_employees())
     else:
         return render_template("insert_employee.html")
+
 
 # insert_customer endpoint to insert new customer record into the customer table
 @app.route("/delete_customer", methods=["GET", "POST"])
@@ -111,12 +114,9 @@ def delete_customer():
     if request.method == "POST":
         customer_id = request.form["customer_id"]
 
-        db.delete_customer(
-            customer_id
-        )
-        
+        db.delete_customer(customer_id)
+
         return render_template("customers.html", customers=db.select_all_customers())
-    
 
 
 # rises endpoint to view content of rise_archive table
@@ -142,17 +142,19 @@ def insert_rise():
 
 @app.route("/products")
 def get_products():
-    searchword = request.args.get('search', '')
+    searchword = request.args.get("search", "")
     searchword = "%" + searchword + "%"
     return jsonify(db.get_products(search=searchword))
 
+
 @app.route("/providers")
 def get_providers():
-    searchword = request.args.get('search', '')
+    searchword = request.args.get("search", "")
     searchword = "%" + searchword + "%"
-    start_debt = request.args.get('from', '')
-    end_debt = request.args.get('to', '')
+    start_debt = request.args.get("from", "")
+    end_debt = request.args.get("to", "")
     return jsonify(db.get_providers(search=searchword, start=start_debt, to=end_debt))
+
 
 @app.route("/providers/countries")
 def get_proiveder_countries():
@@ -209,11 +211,13 @@ def get_orders():
         """
     )
 
+
 @app.route("/delete-order", methods=["POST"])
 def delete_order():
     order_id = request.args.get("id")
     db.delete_order(order_id)
     return redirect(url_for("orders"))
+
 
 @app.route("/add-order", methods=["POST"])
 def add_order():
@@ -239,6 +243,7 @@ def add_order():
         quantity,
     )
     return redirect(url_for("orders"))
+
 
 # Example code snippet for json data transfer. Do not remove.
 @app.route("/process_json", methods=["POST"])
