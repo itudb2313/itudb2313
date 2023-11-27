@@ -11,6 +11,19 @@ class Database:
             password=current_app.config["DB_PASSWORD"],
             database=current_app.config["DB_DATABASE"],
         )
+        
+    def select_all_categories(self):
+        query = """SELECT * FROM category"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            categories = cursor.fetchall()
+            return categories
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
 
     def select_all_customers(self):
         query = """SELECT * FROM customer"""

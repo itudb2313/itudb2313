@@ -25,6 +25,7 @@ Provide a brief introduction to your project. Explain what it does, why it's use
 
         python3 -m venv .venv
         source .venv/bin/activate
+        (.venv\Scripts\active for Windows)
 
 3. Install the dependencies:
 

@@ -1,4 +1,8 @@
+Mustafa Taha Pamuk- 150200703
 -w5-
 Joined github organization and repository
 Informations added to README.md
--w6-
+-w8-
+Categories tab is created in "layout.html"
+"categories.html" file has been created to view the data of categories table
+ GET functions are implemented in app.py and database.py for Categories table 

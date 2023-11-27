@@ -11,6 +11,11 @@ with app.app_context():
 def hello_world():
     return render_template("index.html")
 
+# categories endpoint to view content of categories table
+@app.route("/categories", methods=["GET"])
+def categories():
+    return render_template("categories.html", categories=db.select_all_categories())
+
 
 # customers endpoint to view content of customer table
 @app.route("/customers", methods=["GET"])
