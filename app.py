@@ -113,15 +113,15 @@ def insert_employee():
         return render_template("insert_employee.html")
 
 
-# insert_customer endpoint to insert new customer record into the customer table
-@app.route("/delete_customer", methods=["GET", "POST"])
-def delete_customer():
+# delete_customer endpoint to delete a customer record by customer_id
+@app.route("/delete_employee", methods=["POST"])
+def delete_employee():
     if request.method == "POST":
-        customer_id = request.form["customer_id"]
+        employee_id = request.form["employee_id"]
 
-        db.delete_customer(customer_id)
+        db.delete_employee(employee_id)
 
-        return render_template("customers.html", customers=db.select_all_customers())
+        return redirect(url_for('employees'))
 
 
 # rises endpoint to view content of rise_archive table
@@ -143,6 +143,16 @@ def insert_rise():
         return redirect(url_for("rises"))
     else:
         return render_template("insert_rise.html", rises=db.select_all_rises())
+    
+# delete_rise endpoint to delete a rise record by rise_id
+@app.route("/delete_rise", methods=["POST"])
+def delete_rise():
+    if request.method == "POST":
+        rise_id = request.form["rise_id"]
+
+        db.delete_rise(rise_id)
+
+        return redirect(url_for('rises'))
 
 
 @app.route("/products")

@@ -40,3 +40,11 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -Endpoint of "delete_customer" is created to delete a customer data through POST request
 -"delete_customer" query is created to delete a record from "customer" table
 -"customers.html" is modified to manage deletions on UI
+
+#week9
+-Query of "delete_rise" is created to delete a record from "rise_archive" table by "rise_id"
+-Endpoint of "delete_rise" is created to perform deletion using HTML form through POST request
+-"rises.html" is modified to add "deleteRise" form to issue POST requests
+-"employees.html" is modified to add "deleteEmployee" form to issue POST requests
+-Query of "delete_employee" is created to delete a record from "employees" table by "employee_id"
+-Endpoint of "delete_employee" is created to perform deletion using HTML form through POST request

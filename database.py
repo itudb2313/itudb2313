@@ -81,7 +81,7 @@ class Database:
             cursor = self.connection.cursor()
             cursor.execute(
                 query,
-                (customer_id),
+                (customer_id,)
             )
             self.connection.commit()
 
@@ -178,6 +178,22 @@ class Database:
         finally:
             cursor.close()
 
+    def delete_employee(self, employee_id):
+        query = """DELETE FROM employee WHERE employee_id = %s"""
+        
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (employee_id,)
+            )
+            self.connection.commit()
+
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def select_all_rises(self):
         query = """SELECT * FROM rise_archive"""
         try:
@@ -198,6 +214,22 @@ class Database:
             cursor = self.connection.cursor()
             cursor.execute(query, (rise_id, amount_by_percent, rise_date, rise_state))
             self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def delete_rise(self, rise_id):
+        query = """DELETE FROM rise_archive WHERE rise_id = %s"""
+        
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (rise_id,)
+            )
+            self.connection.commit()
+
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:

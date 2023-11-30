@@ -2,9 +2,17 @@
 {% block title %}Products{% endblock %}
 {% block content %}
 
-    <h1>Customers</h1>
-    <h2>Insert a Customer</h2>
+    <h1>Employees</h1>
+    <h2>Insert a Employee</h2>
     <a href="{{ url_for('insert_employee') }}">Click to insert a employee</a>
+    <h2>Delete a Employees</h2>
+    <form id="deleteEmployee" action="/delete_employee" method="post">  
+
+        <label for="employee_id">Employee ID:</label>
+        <input type="text" id="employee_id" name="employee_id" required><br>
+
+        <input type="submit" value="Delete">
+    </form>
     <ul>
         
         {% for employee in employees %}

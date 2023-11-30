@@ -4,6 +4,7 @@
 
     <h1>Customers</h1>
     <h2>Insert a Customer</h2>
+    <a href="{{ url_for('insert_customer') }}">Click to insert a customer</a>
     <h2>Delete a Customer</h2>
     <form id="deleteCustomer" action="/delete_customer" method="post">  
 
@@ -12,7 +13,6 @@
 
         <input type="submit" value="Delete">
     </form>
-    <a href="{{ url_for('insert_customer') }}">Click to insert a customer</a>
     <ul>
         
         {% for customer in customers %}

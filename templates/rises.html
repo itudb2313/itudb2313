@@ -5,6 +5,15 @@
     <h1>Rises</h1>
     <h2>Insert a Rise</h2>
     <a href="{{ url_for('insert_rise') }}">Click to insert</a>
+    
+    <h2>Delete a Rise Record</h2>
+    <form id="deleteRise" action="/delete_rise" method="post">  
+
+        <label for="rise_id">Rise ID:</label>
+        <input type="text" id="rise_id" name="rise_id" required><br>
+
+        <input type="submit" value="Delete">
+    </form>
     <ul>
         
         {% for rise in rises %}
