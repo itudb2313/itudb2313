@@ -79,10 +79,7 @@ class Database:
         print(customer_id)
         try:
             cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (customer_id,)
-            )
+            cursor.execute(query, (customer_id,))
             self.connection.commit()
 
         except dbapi.DatabaseError:
@@ -119,8 +116,6 @@ class Database:
             return None
         finally:
             cursor.close()
-
-
 
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
@@ -180,13 +175,9 @@ class Database:
 
     def delete_employee(self, employee_id):
         query = """DELETE FROM employee WHERE employee_id = %s"""
-        
         try:
             cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (employee_id,)
-            )
+            cursor.execute(query, (employee_id,))
             self.connection.commit()
 
         except dbapi.DatabaseError:
@@ -221,13 +212,10 @@ class Database:
 
     def delete_rise(self, rise_id):
         query = """DELETE FROM rise_archive WHERE rise_id = %s"""
-        
+
         try:
             cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (rise_id,)
-            )
+            cursor.execute(query, (rise_id,))
             self.connection.commit()
 
         except dbapi.DatabaseError:
@@ -238,9 +226,7 @@ class Database:
     def get_products(self, search):
         select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
-        search_filters = (
-            """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s"""
-        )
+        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC"""
         query = select_clause + join_category + search_filters
 
         try:
@@ -254,6 +240,24 @@ class Database:
             return None
         finally:
             cursor.close()
+
+    def insert_product(
+        self, product_name, model, year, color, price, km, category_id, provider_id
+    ):
+        query = """INSERT INTO product (product_name, model, year, color, price, km, category_id, provider_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (product_name, model, year, color, price, km, category_id, provider_id),
+            )
+            self.connection.commit()
+            return True
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            cursor.close()
+            return False
 
     def get_provider_countries(self):
         query = """SELECT DISTINCT(country) FROM provider"""
@@ -269,10 +273,8 @@ class Database:
         finally:
             cursor.close()
 
-    def get_providers(self, search, start, to):
-        query = (
-            """SELECT provider_name, phone, email, country, city, debt from provider """
-        )
+    def get_providers(self, search="%%", start="", to=""):
+        query = """SELECT provider_id, provider_name, phone, email, country, city, debt from provider """
         search_filters = (
             """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
         )

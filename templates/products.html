@@ -3,8 +3,8 @@
 {% block content %}
 
     <h1>Products</h1>
+    <a href="{{ url_for('insert_product') }}">Click to insert a product</a>
     <ul>
-        
         {% for product in products %}
         <li>{{product}}</li>
         {% endfor %}

@@ -71,10 +71,12 @@ def insert_customer():
 def employees():
     return render_template("employees.html", employees=db.select_all_employees())
 
+
 @app.route("/stores")
 def stores():
-    return render_template("stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns())
-
+    return render_template(
+        "stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns()
+    )
 
 
 # insert_customer endpoint to insert new customer record into the customer table
@@ -121,7 +123,7 @@ def delete_employee():
 
         db.delete_employee(employee_id)
 
-        return redirect(url_for('employees'))
+        return redirect(url_for("employees"))
 
 
 # rises endpoint to view content of rise_archive table
@@ -143,7 +145,8 @@ def insert_rise():
         return redirect(url_for("rises"))
     else:
         return render_template("insert_rise.html", rises=db.select_all_rises())
-    
+
+
 # delete_rise endpoint to delete a rise record by rise_id
 @app.route("/delete_rise", methods=["POST"])
 def delete_rise():
@@ -152,14 +155,39 @@ def delete_rise():
 
         db.delete_rise(rise_id)
 
-        return redirect(url_for('rises'))
+        return redirect(url_for("rises"))
 
 
 @app.route("/products")
 def get_products():
     searchword = request.args.get("search", "")
     searchword = "%" + searchword + "%"
-    return jsonify(db.get_products(search=searchword))
+    return render_template("products.html", products=db.get_products(search=searchword))
+
+
+@app.route("/insert_product", methods=["GET"])
+def get_insert_product_page():
+    return render_template(
+        "insert_product.html",
+        providers=db.get_providers(),
+        categories=db.select_all_categories(),
+    )
+
+
+@app.route("/insert_product", methods=["POST"])
+def insert_product():
+    product_name = request.form["name"]
+    model = request.form["model"]
+    year = request.form["year"]
+    color = request.form["color"]
+    price = request.form["price"]
+    km = request.form["mileage"]
+    category_id = request.form["category_id"]
+    provider_id = request.form["provider_id"]
+    if db.insert_product(product_name ,model, year, color, price, km, category_id, provider_id):
+        return redirect(url_for("get_products"))
+    else:
+        return ["Error"]
 
 
 @app.route("/providers")
