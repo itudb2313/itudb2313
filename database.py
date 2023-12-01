@@ -229,49 +229,30 @@ class Database:
         search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC"""
         query = select_clause + join_category + search_filters
 
-        try:
-            cursor = self.connection.cursor()
+        with self.connection.cursor() as cursor:
             cursor.execute(query, (search, search, search))
-
             products = cursor.fetchall()
             return products
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            return None
-        finally:
-            cursor.close()
 
     def insert_product(
         self, product_name, model, year, color, price, km, category_id, provider_id
     ):
         query = """INSERT INTO product (product_name, model, year, color, price, km, category_id, provider_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-        try:
-            cursor = self.connection.cursor()
+        with self.connection.cursor() as cursor:
             cursor.execute(
                 query,
                 (product_name, model, year, color, price, km, category_id, provider_id),
             )
             self.connection.commit()
             return True
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            cursor.close()
-            return False
 
     def get_provider_countries(self):
         query = """SELECT DISTINCT(country) FROM provider"""
-        try:
-            cursor = self.connection.cursor()
+        with self.connection.cursor() as cursor:
             cursor.execute(query)
-
             unique_countries = cursor.fetchall()
             return unique_countries
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            return None
-        finally:
-            cursor.close()
 
     def get_providers(self, search="%%", start="", to=""):
         query = """SELECT provider_id, provider_name, phone, email, country, city, debt from provider """
@@ -285,17 +266,10 @@ class Database:
             debt_filters += """AND debt < %s """ % (to)
 
         query += search_filters + debt_filters
-        try:
-            cursor = self.connection.cursor()
+        with self.connection.cursor() as cursor:
             cursor.execute(query, (search, search, search))
-
             providers = cursor.fetchall()
             return providers
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            return None
-        finally:
-            cursor.close()
 
     def get_all_orders(self):
         query = """SELECT * FROM orders"""
