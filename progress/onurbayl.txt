@@ -48,3 +48,5 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -"employees.html" is modified to add "deleteEmployee" form to issue POST requests
 -Query of "delete_employee" is created to delete a record from "employees" table by "employee_id"
 -Endpoint of "delete_employee" is created to perform deletion using HTML form through POST request
+-Query of update_employee_by_id is created in database.py
+-Query of update_rise_by_id is created in database.py

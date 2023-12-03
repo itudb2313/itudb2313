@@ -134,6 +134,52 @@ class Database:
         finally:
             cursor.close()
 
+    def update_employee_by_id(
+        self,
+        employee_id,
+        store_id,
+        firstname,
+        lastname,
+        dof,
+        phone,
+        email,
+        status,
+        salary,
+        street,
+        city,
+        country
+    ):
+        query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
+        lastname=%s, dof=%s, phone=%s, email=%s, status=%s, salary=%s, street=%s, city=%s, country=%s
+        WHERE employee_id=%s
+        """
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    store_id,
+                    firstname,
+                    lastname,
+                    dof,
+                    phone,
+                    email,
+                    status,
+                    salary,
+                    street,
+                    city,
+                    country,
+                    employee_id,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def insert_employee(
         self,
         employee_id,
@@ -213,6 +259,21 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, (rise_id, amount_by_percent, rise_date, rise_state))
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def update_rise_by_id(self, rise_id, amount_by_percent, rise_date, rise_state):
+        query = """UPDATE rise_archive SET rise_id=%s, amount_by_percent=%s,
+        rise_date=%s, rise_state=%s
+        WHERE rise_id=%s
+        """
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id))
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
