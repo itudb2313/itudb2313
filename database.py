@@ -360,7 +360,7 @@ class Database:
                     + order_by
                     + " "
                     + order
-                    + " LIMIT %s OFFSET %s;",
+                    + " LIMIT %s OFFSET %s",
                     (limit, offset),
                 )
             else:
@@ -408,3 +408,14 @@ class Database:
                 ),
             )
             # self.connection.commit()
+
+    def monthly_order(self):
+        query = """
+                SELECT count(*), MONTH(order_date), YEAR(order_date)  FROM orders 
+                GROUP BY MONTH(order_date), YEAR(order_date) ORDER BY YEAR(order_date), MONTH(order_date) ASC
+                """
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            data = cursor.fetchall()
+            return data
