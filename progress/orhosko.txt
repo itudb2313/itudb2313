@@ -23,3 +23,6 @@ Add add new row functionality and create /add-order endpoint
 Create cleaner column sorting
 Create monthly orders graph and its query
 Seperate order endpoints from database
+Clean unnecessary code
+-w10-
+
