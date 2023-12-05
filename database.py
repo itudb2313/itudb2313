@@ -142,7 +142,7 @@ class Database:
         salary,
         street,
         city,
-        country
+        country,
     ):
         query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
         lastname=%s, dof=%s, phone=%s, email=%s, status=%s, salary=%s, street=%s, city=%s, country=%s
@@ -264,7 +264,9 @@ class Database:
 
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id))
+            cursor.execute(
+                query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id)
+            )
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -419,3 +421,38 @@ class Database:
             cursor.execute(query)
             data = cursor.fetchall()
             return data
+
+    def update_order(
+        self,
+        order_id,
+        customer_id,
+        product_id,
+        store_id,
+        employee_id,
+        order_date,
+        ship_date,
+        required_date,
+        order_status,
+        quantity,
+    ):
+        query = """UPDATE orders SET customer_id=%s, product_id=%s, store_id=%s,
+        employee_id=%s, order_date=%s, ship_date=%s, required_date=%s, order_status=%s, quantity=%s WHERE order_id=%s
+        """
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                query,
+                (
+                    customer_id,
+                    product_id,
+                    store_id,
+                    employee_id,
+                    order_date,
+                    ship_date,
+                    required_date,
+                    order_status,
+                    quantity,
+                    order_id,
+                ),
+            )
+            # self.connection.commit()
