@@ -6,3 +6,7 @@ Stores view is created.
 Stores route is setted.
 Store data projected on screen with get stores method.
 -w7-
+Stores page is re-organized.
+Data from the database presented in table. 
+Some basic CRUD operations are examined for stores page.
+Starts working on deletion operation.

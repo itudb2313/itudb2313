@@ -1,0 +1,51 @@
+{% extends "layout.html" %} {% block title %}Insert Product{% endblock %} {%
+block content %}
+
+<style>
+    select {
+        font-size: x-large;
+    }
+    input {
+        font-size: large;
+        height: 20px;
+    }
+    button {
+        font-size: large;
+        height: 30px;
+        width: 200px;
+        margin-top: 20px;
+    }
+</style>
+<h1>Insert Product</h1>
+<form action="{{ url_for('insert_product') }}" method="post" style="display: flex; flex-direction: column;">
+    <div style="width: 200px; display: flex; flex-direction: column; gap: 10px;">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required />
+        <label for="model">Model</label>
+        <input type="text" name="model" id="model" required />
+        <label for="year">Year</label>
+        <input type="number" name="year" step="1" value="2010" id="year" required />
+        <label for="color">Color</label>
+        <input type="text" name="color" id="color" required />
+        <label for="mileage">Mileage</label>
+        <input type="number" min="0" step="1000" name="mileage" id="mileage" required />
+        <label for="price">Price</label>
+        <input type="number" min="0" step="100" name="price" id="price" required />      
+    </div>
+    <div style="display: flex; flex-direction: column; font-size: x-large; width: 300px; gap: 20px;">
+        <label for="category_id">Category</label>
+        <select name="category_id" id="category_id">
+            {% for category in categories %}
+            <option value="{{category[0]}}">{{category[2]}}</option>
+            {% endfor %}
+        </select>
+        <label for="provider_id">Provider</label>
+        <select name="provider_id" id="provider_id">
+            {% for provider in providers %}
+            <option value="{{provider[0]}}">{{provider[1]}}</option>
+            {% endfor %}
+        </select>
+    </div>
+  <button type="submit">Add product</button>
+  {% endblock %}
+</form>

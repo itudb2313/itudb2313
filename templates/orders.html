@@ -3,103 +3,14 @@
 {% block content %}
     <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
 
-    <h1 class="text-4xl font-bold">Orders</h1>
+    <h1 class="text-6xl mx-20 my-6 font-bold">Orders</h1>
 
+    <form id="update" hx-post="/update-order"></form>
     <table class="table-auto border text-center">
-        <thead>
-            <tr>
-                <th class="border w-10"></th>
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=order_id&order=DESC"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_id&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_id&order=ASC');
-                            this.innerHTML = 'Order ID ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_id&order=DESC');
-                            this.innerHTML = 'Order ID ↓';}
-                            htmx.process(this);">
-                    Order ID ↓
-                </th>
-                <th class="border w-28">Customer ID</th>
-                <th class="border w-28">Product ID</th>
-                <th class="border w-28">Store ID</th>
-                <th class="border w-28">Employee ID</th>
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=order_date"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_date&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_date&order=ASC');
-                            this.innerHTML = 'Order Date ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_date&order=DESC');
-                            this.innerHTML = 'Order Date ↓';}
-                            htmx.process(this);">
-                    Order Date ↓
-                </th>
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=ship_date"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=ship_date&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=ship_date&order=ASC');
-                            this.innerHTML = 'Ship Date ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=ship_date&order=DESC');
-                            this.innerHTML = 'Ship Date ↓';}
-                            htmx.process(this);">
-                    Ship Date ↓
-                </th>
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=required_date"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=required_date&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=required_date&order=ASC');
-                            this.innerHTML = 'Required Date ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=required_date&order=DESC');
-                            this.innerHTML = 'Required Date ↓';}
-                            htmx.process(this);">
-                    Required Date ↓
-                </th>
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=order_status"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=order_status&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_status&order=ASC');
-                            this.innerHTML = 'Order Status ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=order_status&order=DESC');
-                            this.innerHTML = 'Order Status ↓';}
-                            htmx.process(this);">
-                    Order Status ↓
-                </th> 
-                <th class="border w-28" 
-                    hx-get="/get-orders?page=0&order_by=quantity"
-                    hx-target="#replace"
-                    hx-swap="innerHTML"
-                    hx-on="htmx:afterRequest: 
-                            if (this.getAttribute('hx-get') == '/get-orders?page=0&order_by=quantity&order=DESC') {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=quantity&order=ASC');
-                            this.innerHTML = 'Quantity ↑'; }
-                            else {
-                            this.setAttribute('hx-get','/get-orders?page=0&order_by=quantity&order=DESC');
-                            this.innerHTML = 'Quantity ↓';}
-                            htmx.process(this);">
-                    Quantity ↓
-                </th> 
-            </tr>
-        </thead>
+        <thead/>
         <tbody id="replace">
 
         <tr>
@@ -107,7 +18,8 @@
                 hx-get="/get-orders?page=0"
                 hx-trigger="load"
                 hx-target="#replace"
-                hx-swap="innerHTML">
+                hx-swap="innerHTML"
+                >
                 for fetch
             </td>
         </tr>
@@ -123,7 +35,6 @@
             </td>
 
             <td class="border">
-                <input type="text" name="order_id" class="w-28 border bg-black " id="order_id">
             </td>
             <td class="border">
                 <input type="text" name="customer_id" class="w-28 border bg-black" id="customer_id">
@@ -152,10 +63,71 @@
             <td class="border">
                 <input type="text" name="quantity" class="w-28 border bg-black" id="quantity">
             </td>
+            <td class="border"/>
             </form>
         </tr>
     </table>
 
+    <p>
     Note: Database does not have auto increment for order_id, so it will be null. And also, since it does not have id you cannot delete it yet.
+    </p>
 
+    <div class="border w-1/3">
+        <canvas id="monthly"></canvas>
+    </div>
+    
+    <script type="module">
+        htmx.config.useTemplateFragments = true;
+        const ctx = document.getElementById('monthly');
+    
+        await new Promise(resolve => setTimeout(resolve, 1000)); // without this database creates multiple cursor and then dies quietly
+        let res = await fetch("/test")
+        res = await res.json()
+
+        let labels = [];
+        let data = [];
+        res.forEach((e) => {
+            labels.push(e[1])
+            data.push(e[0])
+        })
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Monthly Orders',
+                    data: data,
+                    borderWidth: 1
+                    }]
+                },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <style>
+        input {
+            background-color: black;
+            width: 7rem;
+            margin: 0.5rem;
+            padding: 0 0.5rem;
+            outline: thin solid;
+            outline-color: white; 
+            border-radius: 0.25rem;
+        }
+
+        td {
+            border: 1px solid white;
+        }
+
+        table, div, p {
+            margin: 0 0 0 5rem;
+        }
+    </style>
 {% endblock %}

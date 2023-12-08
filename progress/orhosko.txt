@@ -19,4 +19,12 @@ Make sorting both ASC and DESC
 Merge /orders and /products
 Add delete row functionality and create /delete-order endpoint
 Add add new row functionality and create /add-order endpoint
-
+-w9-
+Create cleaner column sorting
+Create monthly orders graph and its query
+Seperate order endpoints from database
+Clean unnecessary code
+-w10-
+Add update functionality to rows and make it interactive
+Add update endpoint and database query
+Add little styling to /orders

@@ -13,7 +13,8 @@
      <header>
       <nav>
         <ul>
-          <li><a href="{{ url_for('hello_world') }}">Home</a></li>    
+          <li><a href="{{ url_for('hello_world') }}">Home</a></li>
+          <li><a href="{{ url_for('categories') }}">Categories</a></li>
           <li><a href="{{ url_for('get_products') }}">Products</a></li>    
           <li><a href="{{ url_for('orders') }}">Orders</a></li> 
           <li><a href="{{ url_for('stores') }}">Stores</a></li>    
@@ -23,6 +24,8 @@
           <li><a href="{{ url_for('insert_customer') }}">Insert New Customer</a></li>
           <li><a href="{{ url_for('employees') }}">Employees</a></li>   
           <li><a href="{{ url_for('insert_employee') }}">Insert New Employee</a></li> 
+          <li><a href="{{ url_for('get_providers') }}">Providers</a></li>
+          <li><a href="{{ url_for('get_proiveder_countries') }}">Countries</a></li>
         </ul>
       </nav>
     </header> 

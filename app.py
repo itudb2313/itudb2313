@@ -6,10 +6,18 @@ app.config.from_object("config")
 with app.app_context():
     db = Database()
 
+import endpoints.orders
+
 
 @app.route("/")
 def hello_world():
     return render_template("index.html")
+
+
+# categories endpoint to view content of categories table
+@app.route("/categories", methods=["GET"])
+def categories():
+    return render_template("categories.html", categories=db.select_all_categories())
 
 
 # customers endpoint to view content of customer table
@@ -59,6 +67,7 @@ def insert_customer():
     else:
         return render_template("insert_customer.html")
 
+
 # customers endpoint to view content of customer table
 @app.route("/employees", methods=["GET"])
 def employees():
@@ -68,6 +77,13 @@ def employees():
 def stores():
     return render_template("stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns())
 
+
+
+@app.route("/stores")
+def stores():
+    return render_template(
+        "stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns()
+    )
 
 
 # insert_customer endpoint to insert new customer record into the customer table
@@ -99,24 +115,22 @@ def insert_employee():
             salary,
             street,
             city,
-            country
+            country,
         )
         return render_template("employees.html", employees=db.select_all_employees())
     else:
         return render_template("insert_employee.html")
 
-# insert_customer endpoint to insert new customer record into the customer table
-@app.route("/delete_customer", methods=["GET", "POST"])
-def delete_customer():
-    if request.method == "POST":
-        customer_id = request.form["customer_id"]
 
-        db.delete_customer(
-            customer_id
-        )
-        
-        return render_template("customers.html", customers=db.select_all_customers())
-    
+# delete_customer endpoint to delete a customer record by customer_id
+@app.route("/delete_employee", methods=["POST"])
+def delete_employee():
+    if request.method == "POST":
+        employee_id = request.form["employee_id"]
+
+        db.delete_employee(employee_id)
+
+        return redirect(url_for("employees"))
 
 
 # rises endpoint to view content of rise_archive table
@@ -140,105 +154,62 @@ def insert_rise():
         return render_template("insert_rise.html", rises=db.select_all_rises())
 
 
+# delete_rise endpoint to delete a rise record by rise_id
+@app.route("/delete_rise", methods=["POST"])
+def delete_rise():
+    if request.method == "POST":
+        rise_id = request.form["rise_id"]
+
+        db.delete_rise(rise_id)
+
+        return redirect(url_for("rises"))
+
+
 @app.route("/products")
 def get_products():
-    searchword = request.args.get('search', '')
+    searchword = request.args.get("search", "")
     searchword = "%" + searchword + "%"
-    return jsonify(db.get_products(search=searchword))
+    return render_template("products.html", products=db.get_products(search=searchword))
+
+
+@app.route("/insert_product", methods=["GET"])
+def get_insert_product_page():
+    return render_template(
+        "insert_product.html",
+        providers=db.get_providers(),
+        categories=db.select_all_categories(),
+    )
+
+
+@app.route("/insert_product", methods=["POST"])
+def insert_product():
+    product_name = request.form["name"]
+    model = request.form["model"]
+    year = request.form["year"]
+    color = request.form["color"]
+    price = request.form["price"]
+    km = request.form["mileage"]
+    category_id = request.form["category_id"]
+    provider_id = request.form["provider_id"]
+    if db.insert_product(product_name ,model, year, color, price, km, category_id, provider_id):
+        return redirect(url_for("get_products"))
+    else:
+        return ["Error"]
+
 
 @app.route("/providers")
 def get_providers():
-    searchword = request.args.get('search', '')
+    searchword = request.args.get("search", "")
     searchword = "%" + searchword + "%"
-    start_debt = request.args.get('from', '')
-    end_debt = request.args.get('to', '')
+    start_debt = request.args.get("from", "")
+    end_debt = request.args.get("to", "")
     return jsonify(db.get_providers(search=searchword, start=start_debt, to=end_debt))
+
 
 @app.route("/providers/countries")
 def get_proiveder_countries():
     return jsonify(db.get_provider_countries())
 
-
-@app.route("/orders")
-def orders():
-    return render_template("orders.html", orders=db.get_orders_paged(10, 0))
-
-
-@app.route("/get-orders", methods=["GET"])
-def get_orders():
-    page = int(request.args.get("page", 1))
-    order_by = request.args.get("order_by", "order_id")
-    t_order = request.args.get("order", "ASC")
-
-    rows = """"""
-    for order in db.get_orders_paged(10, page * 10, order_by, t_order):
-        rows += f"""
-            <tr>
-            <td class="border" hx-post=/delete-order?id={order[0]}>X</td>
-            <td class="border">{order[0]}</td>
-            <td class="border underline">
-                <a href="/customer?id={order[1]}">{order[1]}</a>
-            </td>
-            <td class="border underline">
-                <a href="/products?id={order[2]}">{order[2]}</a>
-            </td>
-            <td class="border underline">
-                <a href="/stores?id={order[3]}">{order[3]}</a>
-            </td>
-            <td class="border underline">
-                <a href="/employees?id={order[4]}">{order[4]}</a>
-            </td>
-            <td class="border">{order[5]}</td>
-            <td class="border">{order[6]}</td>
-            <td class="border">{order[7]}</td>
-            <td class="border">{order[8]}</td>
-            <td class="border">{order[9]}</td>
-        </tr>"""
-
-    return (
-        rows
-        + f"""
-        <tr>
-            <td colspan="10"
-                hx-get="/get-orders?page={page+1}&order_by={order_by}&order={t_order}"
-                hx-target="#replace"
-                hx-swap="innerHTML">
-                click for next page: {page+1}
-            </td>
-        </tr>
-        """
-    )
-
-@app.route("/delete-order", methods=["POST"])
-def delete_order():
-    order_id = request.args.get("id")
-    db.delete_order(order_id)
-    return redirect(url_for("orders"))
-
-@app.route("/add-order", methods=["POST"])
-def add_order():
-    customer_id = request.form["customer_id"]
-    product_id = request.form["product_id"]
-    store_id = request.form["store_id"]
-    employee_id = request.form["employee_id"]
-    order_date = request.form["order_date"]
-    ship_date = request.form["ship_date"]
-    required_date = request.form["required_date"]
-    order_status = request.form["order_status"]
-    quantity = request.form["quantity"]
-
-    db.insert_order(
-        customer_id,
-        product_id,
-        store_id,
-        employee_id,
-        order_date,
-        ship_date,
-        required_date,
-        order_status,
-        quantity,
-    )
-    return redirect(url_for("orders"))
 
 # Example code snippet for json data transfer. Do not remove.
 @app.route("/process_json", methods=["POST"])
@@ -262,4 +233,6 @@ def process_json():
         # Handle any exceptions or validation errors
         return jsonify({"error": str(e)}), 400
 
-app.run() # don't delete pla, without this line site doesn't work on my computer
+
+if __name__ == "__main__":
+    app.run()

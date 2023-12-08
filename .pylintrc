@@ -5,3 +5,5 @@ disable=
     C0116, # missing-function-docstring
     R1705, # unnecessary else after return
     W0718, # too-broad-exception
+    W0611, # unused-import
+    C0413, # wrong-import-position
