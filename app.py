@@ -73,11 +73,17 @@ def insert_customer():
 def employees():
     return render_template("employees.html", employees=db.select_all_employees())
 
-@app.route("/stores")
+@app.route("/stores",methods=["GET"])
 def stores():
-    return render_template("stores.html", stores=db.get_all_stores(), headers=db.get_stores_columns())
+    return render_template("stores.html", stores=db.get_all_stores_table(), headers=db.get_stores_columns() , stores_count = db.get_stores_count())
 
-
+@app.route("/stores_table",methods=["GET"])
+def stores_table():
+    order_opt = request.args.get("order_opt")
+    page_number = request.args.get("page_number")
+    print("hereeeeeeeeeeeeeEEEEEEEEEEEEEEEEe123123ee " + page_number)
+    stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
+    return render_template("stores_table.html", stores=stores, headers=db.get_stores_columns() )
 
 
 # insert_customer endpoint to insert new customer record into the customer table
