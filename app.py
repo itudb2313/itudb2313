@@ -175,6 +175,12 @@ def get_insert_product_page():
         categories=db.select_all_categories(),
     )
 
+@app.route("/delete_product", methods=["POST"])
+def delete_product():
+    product_id = request.json.get("product_id")
+    db.delete_product(product_id)
+    return redirect(url_for("get_products"))
+    
 
 @app.route("/insert_product", methods=["POST"])
 def insert_product():

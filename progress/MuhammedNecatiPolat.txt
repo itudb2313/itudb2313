@@ -19,3 +19,16 @@ improve search funtionality of get products method
 -w9-
 solve app.run() warning
 add routes to layout
+-w10-
+add product method
+add product page
+select filter for category for product creation
+select filter for provider for product creation
+-w11-
+delete product icon
+delete product method
+delete product script
+reloading after delete
+creating a table for styling for products
+styling table for products
+
