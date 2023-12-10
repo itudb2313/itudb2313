@@ -55,3 +55,6 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -customers.py endpoint file is created and endpoints for "customer" table are moved into it for MVC structure
 -employees.py endpoint file is created and endpoints for "employee" table are moved into it for MVC structure
 -rises.py endpoint file is created and endpoints for "rise_archive" table are moved into it for MVC structure
+-4NF is achieved for "customer" table and necessary decomposition is performed
+-4NF is achieved for "employee" table and necessary decomposition is performed
+-4NF is achieved for "rise_archive" table and necessary decomposition is performed
