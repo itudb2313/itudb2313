@@ -6,13 +6,12 @@ app = Flask(__name__)
 app.config.from_object("config")
 with app.app_context():
     db = Database()
-    
+
 
 import endpoints.orders
 import endpoints.customers
 import endpoints.employees
 import endpoints.rises
-
 
 
 @app.route("/")
@@ -26,71 +25,25 @@ def categories():
     return render_template("categories.html", categories=db.select_all_categories())
 
 
-
-# customers endpoint to view content of customer table
-@app.route("/customers", methods=["GET"])
-def customers():
-    return render_template("customers.html", customers=db.select_all_customers())
-
-
-# insert_customer endpoint to insert new customer record into the customer table
-@app.route("/insert_customer", methods=["GET", "POST"])
-def insert_customer():
-    if request.method == "POST":
-        customer_id = request.form["customer_id"]
-        employee_id = request.form["employee_id"]
-        firstname = request.form["firstname"]
-        lastname = request.form["lastname"]
-        dof = request.form["dof"]
-        phone = request.form["phone"]
-        email = request.form["email"]
-        city = request.form["city"]
-        country = request.form["country"]
-
-        print(
-            customer_id,
-            employee_id,
-            firstname,
-            lastname,
-            dof,
-            phone,
-            email,
-            city,
-            country,
-        )
-
-        db.insert_customer(
-            customer_id,
-            employee_id,
-            firstname,
-            lastname,
-            dof,
-            phone,
-            email,
-            city,
-            country,
-        )
-        return render_template("customers.html", customers=db.select_all_customers())
-    else:
-        return render_template("insert_customer.html")
-
-
-# customers endpoint to view content of customer table
-@app.route("/employees", methods=["GET"])
-def employees():
-    return render_template("employees.html", employees=db.select_all_employees())
-
-@app.route("/stores",methods=["GET"])
+@app.route("/stores", methods=["GET"])
 def stores():
-    return render_template("stores.html", stores=db.get_all_stores_table(), headers=db.get_stores_columns() , stores_count = db.get_stores_count())
+    return render_template(
+        "stores.html",
+        stores=db.get_all_stores_table(),
+        headers=db.get_stores_columns(),
+        stores_count=db.get_stores_count(),
+    )
 
-@app.route("/stores_table",methods=["GET"])
+
+@app.route("/stores_table", methods=["GET"])
 def stores_table():
     order_opt = request.args.get("order_opt")
     page_number = request.args.get("page_number")
     print("hereeeeeeeeeeeeeEEEEEEEEEEEEEEEEe123123ee " + page_number)
     stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
-    return render_template("stores_table.html", stores=stores, headers=db.get_stores_columns() )
+    return render_template(
+        "stores_table.html", stores=stores, headers=db.get_stores_columns()
+    )
 
 
 @app.route("/products")
@@ -114,7 +67,7 @@ def delete_product():
     product_id = request.json.get("product_id")
     db.delete_product(product_id)
     return redirect(url_for("get_products"))
-    
+
 
 @app.route("/insert_product", methods=["POST"])
 def insert_product():
@@ -126,7 +79,9 @@ def insert_product():
     km = request.form["mileage"]
     category_id = request.form["category_id"]
     provider_id = request.form["provider_id"]
-    if db.insert_product(product_name ,model, year, color, price, km, category_id, provider_id):
+    if db.insert_product(
+        product_name, model, year, color, price, km, category_id, provider_id
+    ):
         return redirect(url_for("get_products"))
     else:
         return ["Error"]
