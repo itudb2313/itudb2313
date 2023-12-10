@@ -1,12 +1,18 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from database import Database
 
+
 app = Flask(__name__)
 app.config.from_object("config")
 with app.app_context():
     db = Database()
+    
 
 import endpoints.orders
+import endpoints.customers
+import endpoints.employees
+import endpoints.rises
+
 
 
 @app.route("/")
@@ -18,6 +24,7 @@ def hello_world():
 @app.route("/categories", methods=["GET"])
 def categories():
     return render_template("categories.html", categories=db.select_all_categories())
+
 
 
 # customers endpoint to view content of customer table
@@ -86,85 +93,6 @@ def stores_table():
     return render_template("stores_table.html", stores=stores, headers=db.get_stores_columns() )
 
 
-# insert_customer endpoint to insert new customer record into the customer table
-@app.route("/insert_employee", methods=["GET", "POST"])
-def insert_employee():
-    if request.method == "POST":
-        employee_id = request.form["employee_id"]
-        store_id = request.form["store_id"]
-        firstname = request.form["firstname"]
-        lastname = request.form["lastname"]
-        dof = request.form["dof"]
-        phone = request.form["phone"]
-        email = request.form["email"]
-        status = request.form["status"]
-        salary = request.form["salary"]
-        street = request.form["street"]
-        city = request.form["city"]
-        country = request.form["country"]
-
-        db.insert_employee(
-            employee_id,
-            store_id,
-            firstname,
-            lastname,
-            dof,
-            phone,
-            email,
-            status,
-            salary,
-            street,
-            city,
-            country,
-        )
-        return render_template("employees.html", employees=db.select_all_employees())
-    else:
-        return render_template("insert_employee.html")
-
-
-# delete_customer endpoint to delete a customer record by customer_id
-@app.route("/delete_employee", methods=["POST"])
-def delete_employee():
-    if request.method == "POST":
-        employee_id = request.form["employee_id"]
-
-        db.delete_employee(employee_id)
-
-        return redirect(url_for("employees"))
-
-
-# rises endpoint to view content of rise_archive table
-@app.route("/rises", methods=["GET"])
-def rises():
-    return render_template("rises.html", rises=db.select_all_rises())
-
-
-# insert_rise endpoint to insert new rise record into the rise_archive table
-@app.route("/insert_rise", methods=["GET", "POST"])
-def insert_rise():
-    if request.method == "POST":
-        rise_id = request.form["rise_id"]
-        amount_by_percent = request.form["amount_by_percent"]
-        rise_date = request.form["rise_date"]
-        rise_state = request.form["rise_state"]
-
-        db.insert_rise(rise_id, amount_by_percent, rise_date, rise_state)
-        return redirect(url_for("rises"))
-    else:
-        return render_template("insert_rise.html", rises=db.select_all_rises())
-
-
-# delete_rise endpoint to delete a rise record by rise_id
-@app.route("/delete_rise", methods=["POST"])
-def delete_rise():
-    if request.method == "POST":
-        rise_id = request.form["rise_id"]
-
-        db.delete_rise(rise_id)
-
-        return redirect(url_for("rises"))
-
-
 @app.route("/products")
 def get_products():
     searchword = request.args.get("search", "")
@@ -179,6 +107,7 @@ def get_insert_product_page():
         providers=db.get_providers(),
         categories=db.select_all_categories(),
     )
+
 
 @app.route("/delete_product", methods=["POST"])
 def delete_product():
