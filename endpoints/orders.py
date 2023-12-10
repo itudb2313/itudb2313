@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, jsonify
 from app import app, db
-
+#from __main__ import app, db
 
 
 table_columns = [
