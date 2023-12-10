@@ -101,6 +101,20 @@ class Database:
             return None
         finally:
             cursor.close()
+    def get_stores_count(self):
+        query = """select count(*) from store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            store_count = cursor.fetchall()
+            return store_count[0][0]
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
 
     def get_all_stores(self):
         query = """SELECT * FROM store"""
@@ -116,6 +130,38 @@ class Database:
             return None
         finally:
             cursor.close()
+
+    def get_stores_columns(self):
+        query = """show columns from store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            stores_column_names = cursor.fetchall()
+            return stores_column_names
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+    def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
+        query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, 
+                            )
+
+            stores = cursor.fetchall()
+            return stores
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+
 
     def select_all_employees(self):
         query = """SELECT * FROM employee"""

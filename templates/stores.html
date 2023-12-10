@@ -2,23 +2,69 @@
 {% block title %}Stores{% endblock %}
 {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <h1>Stores</h1>
+ <script src="https://unpkg.com/htmx.org@1.9.9"> </script>    
+<h1 >Stores</h1>
 
     
-    <div >
-        <table class="table table-sm table-striped table-dark">
+    <div style="background-color:  black;margin: auto;  border: 3px solid black; padding: 10px;">
+        <table class="table table-sm table-striped table-dark" style="width: 80%; margin: auto">
             <tr>
                 {%for rows in headers%}
-                <th>{{rows[0]}}</th>
+                <th >
+                        <button id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
+                                hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">{{rows[0]}}</button>
+                </th>
                 {%endfor%}
             </tr>
-            {%for rows in stores%}
-                <track>{%for data in rows%}
-                    <td>{{data}}</td>
+            <tbody id = "data">
+                {%for rows in stores%}
+                <tr>
+                    {%for data in rows%}
+                        <td>{{data}}</td>
                     {%endfor%}
                 </tr>
             {%endfor%}
+            </tbody>
         </table>
+        <div style="text-align: center; margin: auto;">   
+            {%if (stores_count) > 20 %}
+                <p style="color: white"> Total of {{stores_count}} records.</p>
+                <p id = "page-number" style="color: white"></p>
+                <button class="btn btn-primary" style="width: 90px" id = 'prev-page' hx-get = "/stores_table" 
+                hx-trigger="click" hx-target="#data" onclick="prevPage()">Previous</button>
+                <button class="btn btn-primary" style="width: 90px" id = 'next-page' hx-get = "/stores_table" 
+                hx-trigger="click" hx-target="#data" onclick="nextPage()">Next</button>
+            {%endif%}
+        </div>
     </div>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script> 
+        let data_obj = {
+            sorted: "store_id",
+            page_number: 1
+        }
+        var x = '{{stores_count}}';
+        document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
+        function sort_by_column(option){
+            data_obj.sorted=option;
+            data_obj.page_number=1;
+            document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
+        }
+        function prevPage() {
+            if (data_obj.page_number >1) {
+                data_obj.page_number--;
+            }
+            document.getElementById("prev-page").setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
+            document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
+          }
+        function nextPage() {
+            var number_of_stores = parseInt(x);
+            if (data_obj.page_number < number_of_stores/ 20 ) {
+                data_obj.page_number++;
+            }
+            document.getElementById("next-page").setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
+            document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
+          }
+    </script>
+      {% endblock %}
+
