@@ -333,9 +333,9 @@ class Database:
             cursor.close()
 
     def get_products(self, search):
-        select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
+        select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
-        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC"""
+        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC LIMIT 10"""
         query = select_clause + join_category + search_filters
 
         with self.connection.cursor() as cursor:
@@ -353,6 +353,13 @@ class Database:
                 query,
                 (product_name, model, year, color, price, km, category_id, provider_id),
             )
+            self.connection.commit()
+            return True
+
+    def delete_product(self, product_id):
+        query = """DELETE FROM product WHERE product_id = %s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (product_id,))
             self.connection.commit()
             return True
 

@@ -1,13 +1,74 @@
 {% extends "layout.html" %}
 {% block title %}Products{% endblock %}
 {% block content %}
+<script>
+    function delete_product(button) {
+        fetch('/delete_product', {
+            method: 'POST',
+            body: JSON.stringify({
+                product_id: button.id
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            if (response.status != 200) {
+                console.log('Error');
+                return false;
+            } else{
+                window.location.reload();
+                return true;
+            }
+        });
+    }
+</script>
 
-    <h1>Products</h1>
-    <a href="{{ url_for('insert_product') }}">Click to insert a product</a>
-    <ul>
-        {% for product in products %}
-        <li>{{product}}</li>
-        {% endfor %}
-    </ul>
-
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #632626;
+    }
+</style>
+<h1>Products</h1>
+<a href="{{ url_for('insert_product') }}">Click to insert a product</a>
+<table>
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Product Price</th>
+        <th>Product Description</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Action</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td>{{product[0]}}</td>
+        <td>{{product[1]}}</td>
+        <td>{{product[2]}}</td>
+        <td>{{product[3]}}</td>
+        <td>{{product[4]}}</td>
+        <td>{{product[5]}}</td>
+        <td><button onclick="delete_product(this)" id="{{product[0]}}">X</button></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Product Price</th>
+        <th>Product Description</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Action</th>
+    </tr>
+</table>
 {% endblock %}
+
