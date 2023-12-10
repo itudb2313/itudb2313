@@ -6,7 +6,9 @@ app.config.from_object("config")
 with app.app_context():
     db = Database()
 
-import endpoints.orders
+from endpoints.orders import orders_bp
+
+app.register_blueprint(orders_bp)
 
 
 @app.route("/")
@@ -186,7 +188,9 @@ def insert_product():
     km = request.form["mileage"]
     category_id = request.form["category_id"]
     provider_id = request.form["provider_id"]
-    if db.insert_product(product_name ,model, year, color, price, km, category_id, provider_id):
+    if db.insert_product(
+        product_name, model, year, color, price, km, category_id, provider_id
+    ):
         return redirect(url_for("get_products"))
     else:
         return ["Error"]

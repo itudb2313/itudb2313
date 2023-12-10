@@ -1,6 +1,14 @@
-from flask import render_template, request, redirect, url_for, jsonify
-from __main__ import app, db
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    Blueprint,
+)
+from app import db
 
+orders_bp = Blueprint("orders_bp", __name__)
 
 table_columns = [
     {"name": "Order ID", "order_by": "order_id", "sortable": True},
@@ -16,7 +24,7 @@ table_columns = [
 ]
 
 
-@app.route("/orders")
+@orders_bp.route("/orders")
 def orders():
     return render_template("orders.html", orders=db.get_orders_paged(10, 0))
 
@@ -45,10 +53,10 @@ def create_update_button(id):
   <path fill="white" d="M2.453 9.297C1.754 9.996 1 13.703 1 14c0 .521.406 1 1 1 .297 0 4.004-.754 4.703-1.453l5.722-5.722-4.25-4.25-5.722 5.722zM12 1c-.602 0-1.449.199-2.141.891l-.284.284 4.25 4.25.284-.284A3.04 3.04 0 0 0 15 4a3 3 0 0 0-3-3z"/>
 </svg>
 <div>
-"""
+  """
 
 
-@app.route("/get-orders", methods=["GET"])
+@orders_bp.route("/get-orders", methods=["GET"])
 def get_orders():
     page = int(request.args.get("page", 1))
     order_by = request.args.get("order_by", "order_id")
@@ -109,14 +117,14 @@ def get_orders():
     )
 
 
-@app.route("/delete-order", methods=["POST"])
+@orders_bp.route("/delete-order", methods=["POST"])
 def delete_order():
     order_id = request.args.get("id")
     db.delete_order(order_id)
     return redirect(url_for("orders"))
 
 
-@app.route("/add-order", methods=["POST"])
+@orders_bp.route("/add-order", methods=["POST"])
 def add_order():
     customer_id = request.form["customer_id"]
     product_id = request.form["product_id"]
@@ -142,12 +150,12 @@ def add_order():
     return redirect(url_for("orders"))
 
 
-@app.route("/test", methods=["GET"])
+@orders_bp.route("/test", methods=["GET"])
 def test():
     return jsonify(db.monthly_order())
 
 
-@app.route("/update-order", methods=["GET", "POST"])
+@orders_bp.route("/update-order", methods=["GET", "POST"])
 def update_order():
     if request.method == "POST":
         order_id = request.form["order_id"]
