@@ -101,6 +101,20 @@ class Database:
             return None
         finally:
             cursor.close()
+    def get_stores_count(self):
+        query = """select count(*) from store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            store_count = cursor.fetchall()
+            return store_count[0][0]
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
 
     def get_all_stores(self):
         query = """SELECT * FROM store"""
@@ -116,6 +130,38 @@ class Database:
             return None
         finally:
             cursor.close()
+
+    def get_stores_columns(self):
+        query = """show columns from store"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            stores_column_names = cursor.fetchall()
+            return stores_column_names
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+    def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
+        query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, 
+                            )
+
+            stores = cursor.fetchall()
+            return stores
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+            return None
+        finally:
+            cursor.close()
+
+
 
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
@@ -287,9 +333,9 @@ class Database:
             cursor.close()
 
     def get_products(self, search):
-        select_clause = """SELECT product_name, model, category_name, year, color, km, price FROM product """
+        select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
-        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC"""
+        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC LIMIT 10"""
         query = select_clause + join_category + search_filters
 
         with self.connection.cursor() as cursor:
@@ -307,6 +353,13 @@ class Database:
                 query,
                 (product_name, model, year, color, price, km, category_id, provider_id),
             )
+            self.connection.commit()
+            return True
+
+    def delete_product(self, product_id):
+        query = """DELETE FROM product WHERE product_id = %s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (product_id,))
             self.connection.commit()
             return True
 
