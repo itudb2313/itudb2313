@@ -5,6 +5,7 @@ app = Flask(__name__)
 app.config.from_object("config")
 with app.app_context():
     db = Database()
+    app.config["db"] = db
 
 from endpoints.orders import orders_bp
 

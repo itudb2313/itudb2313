@@ -4,9 +4,9 @@ from flask import (
     redirect,
     url_for,
     jsonify,
+    current_app,
     Blueprint,
 )
-from app import db
 
 orders_bp = Blueprint("orders_bp", __name__)
 
@@ -26,6 +26,11 @@ table_columns = [
 
 @orders_bp.route("/orders")
 def orders():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     return render_template("orders.html", orders=db.get_orders_paged(10, 0))
 
 
@@ -58,6 +63,11 @@ def create_update_button(id):
 
 @orders_bp.route("/get-orders", methods=["GET"])
 def get_orders():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     page = int(request.args.get("page", 1))
     order_by = request.args.get("order_by", "order_id")
     t_order = request.args.get("order", "ASC")
@@ -119,6 +129,11 @@ def get_orders():
 
 @orders_bp.route("/delete-order", methods=["POST"])
 def delete_order():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     order_id = request.args.get("id")
     db.delete_order(order_id)
     return redirect(url_for("orders"))
@@ -126,6 +141,11 @@ def delete_order():
 
 @orders_bp.route("/add-order", methods=["POST"])
 def add_order():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     customer_id = request.form["customer_id"]
     product_id = request.form["product_id"]
     store_id = request.form["store_id"]
@@ -152,11 +172,21 @@ def add_order():
 
 @orders_bp.route("/test", methods=["GET"])
 def test():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     return jsonify(db.monthly_order())
 
 
 @orders_bp.route("/update-order", methods=["GET", "POST"])
 def update_order():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     if request.method == "POST":
         order_id = request.form["order_id"]
         customer_id = request.form["customer_id"]
