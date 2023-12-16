@@ -35,12 +35,31 @@ def stores():
         stores_count=db.get_stores_count(),
     )
 
+@app.route("/stores/delete", methods=["POST"])
+def delete_store():
+    store_id = request.form.get("store_id")
+    print("store_id: " + str(store_id))
+    db.delete_store(store_id)
+    return "Deleted"
+
+@app.route("/stores/insert", methods=["POST"])
+def insert_store():
+    employee_id = request.form.get("employee_id")
+    store_name = request.form.get("store_name")
+    phone = request.form.get("phone")
+    street = request.form.get("street")
+    city = request.form.get("city")
+    country = request.form.get("country")
+    email = request.form.get("email")
+    post_code = request.form.get("post_code")
+    #db.insert_store(store_name, store_address, store_country, store_city, store_phone, store_email, store_manager)
+    #return redirect(url_for("stores"))
+    return "OK"
 
 @app.route("/stores_table", methods=["GET"])
 def stores_table():
     order_opt = request.args.get("order_opt")
     page_number = request.args.get("page_number")
-    print("hereeeeeeeeeeeeeEEEEEEEEEEEEEEEEe123123ee " + page_number)
     stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
     return render_template(
         "stores_table.html", stores=stores, headers=db.get_stores_columns()

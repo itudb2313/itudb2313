@@ -146,6 +146,45 @@ class Database:
         finally:
             cursor.close()
 
+    def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
+        query = """UPDATE store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    store_name,
+                    phone,
+                    street,
+                    city,
+                    country,
+                    email,
+                    post_code,
+                    store_id,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+
+    def delete_store(self, store_id):
+        query = """DELETE FROM store WHERE store_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (store_id,))
+            self.connection.commit()
+
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+    
     def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
         query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
         try:
