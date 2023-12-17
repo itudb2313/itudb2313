@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}Products{% endblock %}
+{% block title %}Rise{% endblock %}
 {% block content %}
 
     <h1>Rises</h1>
     <h2>Insert a Rise</h2>
-    <a href="{{ url_for('insert_rise') }}">Click to insert</a>
+    <a href="{{ url_for('rises_bp.insert_rise') }}">Click to insert</a>
     
     <h2>Delete a Rise Record</h2>
     <form id="deleteRise" action="/delete_rise" method="post">  

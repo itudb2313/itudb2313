@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}Products{% endblock %}
+{% block title %}Employee{% endblock %}
 {% block content %}
 
     <h1>Employees</h1>
     <h2>Insert a Employee</h2>
-    <a href="{{ url_for('insert_employee') }}">Click to insert a employee</a>
+    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a>
     <h2>Delete a Employees</h2>
     <form id="deleteEmployee" action="/delete_employee" method="post">  
 

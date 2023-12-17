@@ -42,15 +42,14 @@ class Database:
         employee_id,
         firstname,
         lastname,
-        dof,
-        phone,
+        dob,
         email,
         city,
         country,
     ):
         query = """INSERT INTO customer
-        (customer_id,employee_id,firstname,lastname,dof,phone,email,city,country)
-        VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s)"""
+        (customer_id,employee_id,firstname,lastname,dob,email,city,country)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
 
         try:
             cursor = self.connection.cursor()
@@ -61,8 +60,7 @@ class Database:
                     employee_id,
                     firstname,
                     lastname,
-                    dof,
-                    phone,
+                    dob,
                     email,
                     city,
                     country,
@@ -181,17 +179,15 @@ class Database:
         store_id,
         firstname,
         lastname,
-        dof,
-        phone,
+        dob,
         email,
         status,
         salary,
-        street,
         city,
         country,
     ):
         query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
-        lastname=%s, dof=%s, phone=%s, email=%s, status=%s, salary=%s, street=%s, city=%s, country=%s
+        lastname=%s, dob=%s, email=%s, status=%s, salary=%s, city=%s, country=%s
         WHERE employee_id=%s
         """
 
@@ -204,12 +200,10 @@ class Database:
                     store_id,
                     firstname,
                     lastname,
-                    dof,
-                    phone,
+                    dob,
                     email,
                     status,
                     salary,
-                    street,
                     city,
                     country,
                     employee_id,
@@ -227,18 +221,16 @@ class Database:
         store_id,
         firstname,
         lastname,
-        dof,
-        phone,
+        dob,
         email,
         status,
         salary,
-        street,
         city,
         country,
     ):
         query = """INSERT INTO employee (employee_id, store_id, firstname,
-        lastname, dof, phone, email, status, salary, street, city, country)
-        VALUES (%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s)"""
+        lastname, dob, email, status, salary, city, country)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 
         try:
             cursor = self.connection.cursor()
@@ -249,12 +241,10 @@ class Database:
                     store_id,
                     firstname,
                     lastname,
-                    dof,
-                    phone,
+                    dob,
                     email,
                     status,
                     salary,
-                    street,
                     city,
                     country,
                 ),
