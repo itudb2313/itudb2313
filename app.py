@@ -41,6 +41,19 @@ def delete_store():
     print("store_id: " + str(store_id))
     db.delete_store(store_id)
     return "Deleted"
+@app.route("/stores/update", methods=["POST"])
+def update_store():
+    store_id = request.form.get("store_id")
+    employee_id = request.form.get("employee_id")
+    store_name = request.form.get("store_name")
+    phone = request.form.get("phone")
+    street = request.form.get("street")
+    city = request.form.get("city")
+    country = request.form.get("country")
+    email = request.form.get("email")
+    post_code = request.form.get("post_code")
+    db.update_store(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
+    return "OK"
 
 @app.route("/stores/insert", methods=["POST"])
 def insert_store():
