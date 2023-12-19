@@ -9,11 +9,15 @@ with app.app_context():
     app.config["db"] = db
 
 from endpoints.orders import orders_bp
-import endpoints.customers
-import endpoints.employees
-import endpoints.rises
+from endpoints.customers import customers_bp
+from endpoints.employees import employees_bp
+from endpoints.rises import rises_bp
+
 
 app.register_blueprint(orders_bp)
+app.register_blueprint(customers_bp)
+app.register_blueprint(employees_bp)
+app.register_blueprint(rises_bp)
 
 @app.route("/")
 def hello_world():

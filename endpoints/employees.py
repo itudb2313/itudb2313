@@ -1,28 +1,46 @@
-from flask import render_template, request, redirect, url_for, jsonify
-from app import app, db
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify,
+    current_app,
+    Blueprint,
+)
 
+employees_bp = Blueprint("employees_bp", __name__)
 
 
 # customers endpoint to view content of customer table
-@app.route("/employees", methods=["GET"])
+@employees_bp.route("/employees", methods=["GET"])
 def employees():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     return render_template("employees.html", employees=db.select_all_employees())
 
 
 # insert_employee endpoint to insert new employee record into the employee table
-@app.route("/insert_employee", methods=["GET", "POST"])
+@employees_bp.route("/insert_employee", methods=["GET", "POST"])
 def insert_employee():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     if request.method == "POST":
         employee_id = request.form["employee_id"]
         store_id = request.form["store_id"]
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
-        dof = request.form["dof"]
-        phone = request.form["phone"]
+        dob = request.form["dob"]
         email = request.form["email"]
         status = request.form["status"]
         salary = request.form["salary"]
-        street = request.form["street"]
         city = request.form["city"]
         country = request.form["country"]
 
@@ -31,12 +49,10 @@ def insert_employee():
             store_id,
             firstname,
             lastname,
-            dof,
-            phone,
+            dob,
             email,
             status,
             salary,
-            street,
             city,
             country,
         )
@@ -46,8 +62,13 @@ def insert_employee():
 
 
 # delete_employee endpoint to delete an employee record by employee_id
-@app.route("/delete_employee", methods=["POST"])
+@employees_bp.route("/delete_employee", methods=["POST"])
 def delete_employee():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
     if request.method == "POST":
         employee_id = request.form["employee_id"]
 
