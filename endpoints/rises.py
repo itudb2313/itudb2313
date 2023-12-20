@@ -10,6 +10,11 @@ from flask import (
 
 rises_bp = Blueprint("rises_bp", __name__)
 
+def paginate(data, page, per_page):
+    start = (page - 1) * per_page
+    end = start + per_page
+    return data[start:end]
+
 # rises endpoint to view content of rise_archive table
 @rises_bp.route("/rises", methods=["GET"])
 def rises():
@@ -17,8 +22,20 @@ def rises():
 
     if db is None:
         return "No database found"
+    
+    # Fething all rises from database
+    rises=db.select_all_rises()
+    
+    # Parsing page number parameter
+    page = int(request.args.get('page', 1))
+    # Number of items per page
+    per_page = 10  
 
-    return render_template("rises.html", rises=db.select_all_rises())
+    # Paginate the data
+    paginated_items = paginate(rises, page, per_page)
+
+
+    return render_template("rises.html", rises=paginated_items, page=page)
 
 
 # insert_rise endpoint to insert new rise record into the rise_archive table

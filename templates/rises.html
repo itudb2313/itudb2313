@@ -21,4 +21,17 @@
         {% endfor %}
     </ul>
 
+    <div class="button-container">
+        {% if page > 1 %}
+            <a class="previous-button" href="?page={{ page - 1 }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page }}</span>
+
+        {% if rises|length == 10 %}
+            <a class="next-button" href="?page={{ page + 1 }}">Next</a>
+        {% endif %}
+
+    </div>
+
 {% endblock %}

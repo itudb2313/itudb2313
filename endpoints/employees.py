@@ -10,8 +10,12 @@ from flask import (
 
 employees_bp = Blueprint("employees_bp", __name__)
 
+def paginate(data, page, per_page):
+    start = (page - 1) * per_page
+    end = start + per_page
+    return data[start:end]
 
-# customers endpoint to view content of customer table
+# employees endpoint to view content of customer table
 @employees_bp.route("/employees", methods=["GET"])
 def employees():
 
@@ -19,8 +23,20 @@ def employees():
 
     if db is None:
         return "No database found"
+    
+    # Fething all employees from database
+    employees=db.select_all_employees()
+    
+    # Parsing page number parameter
+    page = int(request.args.get('page', 1))
+    # Number of items per page
+    per_page = 10  
 
-    return render_template("employees.html", employees=db.select_all_employees())
+    # Paginate the data
+    paginated_items = paginate(employees, page, per_page)
+
+
+    return render_template("employees.html", employees=paginated_items, page=page)
 
 
 # insert_employee endpoint to insert new employee record into the employee table

@@ -66,3 +66,11 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -"employess.html" is adapted to Blueprint routing style
 -Endpoints in rises.py are reorganized to operate using Blueprint structure
 -"rises.html" is adapted to Blueprint routing style
+
+#week12
+-Pagination feature has been introduced for customers endpoint 
+-"customers.html" is modified for pagination
+-Pagination feature has been introduced for employees endpoint 
+-"employees.html" is modified for pagination
+-Pagination feature has been introduced for rises endpoint 
+-"rises.html" is modified for pagination
