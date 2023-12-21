@@ -322,14 +322,15 @@ class Database:
         finally:
             cursor.close()
 
-    def get_products(self, search):
+    def get_products(self, search = "%%", lowest = 0, highest = 1000000000):
         select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
-        search_filters = """WHERE product_name LIKE %s OR model LIKE %s OR category_name LIKE %s ORDER BY product_id DESC LIMIT 10"""
-        query = select_clause + join_category + search_filters
-
+        price_filters = """WHERE price > %s AND price < %s AND """
+        search_filters = """product_name LIKE %s OR model LIKE %s OR category_name LIKE %s """
+        order_by = """ORDER BY product_id DESC LIMIT 10"""
+        query = select_clause + join_category + price_filters + search_filters + order_by
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (search, search, search))
+            cursor.execute(query, (lowest, highest, search, search, search))
             products = cursor.fetchall()
             return products
 
