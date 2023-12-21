@@ -85,3 +85,4 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -employee.html, customer.html and rises.html are modified to display fetched data in a html table
 -CSS codes for html tables in employee.html, customer.html and rises.html are written in layout.css
 -Bootstrap is also used for table creation and styling
+-Pop-Up modal is introduced to insert new data to the tables of customer, employee and rise_archive. Also general styling applied in layout.css

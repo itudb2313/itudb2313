@@ -119,7 +119,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_customer(self, customer_id):
+    def delete_customer_by_id(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
         print(customer_id)
         try:
@@ -342,7 +342,7 @@ class Database:
                 
                 # add the dictionary to the dict_array
                 rises.append(row_dict)
-                
+
             return rises
         except dbapi.DatabaseError:
             self.connection.rollback()

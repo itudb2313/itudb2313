@@ -4,17 +4,19 @@
 
 
     <h1>Employees</h1>
-    <h2>Insert a Employee</h2>
-    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a>
+    <!-- <h2>Insert a Employee</h2>
+    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a> -->
     <h2>Delete a Employees</h2>
     <form id="deleteEmployee" action="/delete_employee" method="post">  
 
         <label for="employee_id">Employee ID:</label>
         <input type="text" id="employee_id" name="employee_id" required><br>
 
-        <input type="submit" value="Delete">
+        <input type="submit" class="delete-button" value="Delete">
     </form>
 
+     <!-- Trigger/Open The Modal -->
+<button id="myBtn" class="edit-button">Insert</button>
 
     <table class="table">
         <thead>
@@ -65,6 +67,99 @@
             <a class="next-button" href="?page={{ page + 1 }}" >Next &raquo;</a>
         {% endif %}
     </div>
+
+
+    <!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        
+       <span class="close">&times;</span>
+       
+       <div class="insert-container">
+        
+            
+           <!-- Insert data form -->
+           <form id="raiseForm" action="/insert_employee" method="post">  
+            <div class="row">
+            <div class="col-md-6">
+            <label for="employee_id">Employee ID:</label>
+            <input type="text" id="employee_id" name="employee_id" required><br>
+    
+            <label for="store_id">Store ID:</label>
+            <input type="text" id="store_id" name="store_id" required><br>
+    
+            <label for="firstname">Firstname:</label>
+            <input type="text" id="firstname" name="firstname" required><br>
+    
+            <label for="lastname">Lastname:</label>
+            <input type="text" id="lastname" name="lastname" required><br>
+    
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required><br>
+
+           </div>
+            <div class="col-md-6">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+    
+            
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="Active">Active</option>
+                <option value="Off">Off</option>
+            </select><br>
+            
+            
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" required><br>
+    
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required><br>
+    
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required><br>
+    
+            
+            <input type="submit" value="Submit">
+            </div>
+        </form>
+   
+   
+       
+       </div>
+    </div>
+   
+   </div>
+   
+   <script>
+   // Get the modal
+   var modal = document.getElementById("myModal");
+   
+   // Get the button that opens the modal
+   var btn = document.getElementById("myBtn");
+   
+   // Get the <span> element that closes the modal
+   var span = document.getElementsByClassName("close")[0];
+   
+   // When the user clicks the button, open the modal 
+   btn.onclick = function() {
+    modal.style.display = "flex";
+   }
+   
+   // When the user clicks on <span> (x), close the modal
+   span.onclick = function() {
+    modal.style.display = "none";
+   }
+   
+   // When the user clicks anywhere outside of the modal, close it
+   window.onclick = function(event) {
+    if (event.target == modal) {
+       modal.style.display = "none";
+    }
+   }
+   </script>
 
 
 {% endblock %}

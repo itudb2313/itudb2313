@@ -20,56 +20,139 @@ a, a:link, a:visited {
   text-decoration: none;
 }
 
+.delete-button {
+    background-color: #f44336; /* red */
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.edit-button {
+    background-color: #4CAF50; /* green */
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.pagination {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.pagination a {
+    background-color: #f4f4f4;
+    color: black;
+    text-align: center;
+    padding: 5px 10px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    color: black;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 
 
-    .delete-button {
-        background-color: #f44336; /* red */
-        color: white;
-        text-align: center;
-        padding: 5px 10px;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
 
-    .edit-button {
-        background-color: #4CAF50; /* green */
-        color: white;
-        text-align: center;
-        padding: 5px 10px;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-
-    .pagination {
-        text-align: center;
-        padding: 20px 0;
-    }
-
-    .pagination a {
-        background-color: #f4f4f4;
-        color: black;
-        text-align: center;
-        padding: 5px 10px;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-
-    .pagination a:hover {
-        background-color: #ddd;
-    }
-
-    .pagination a.active {
-        background-color: #4CAF50;
-        color: white;
-    }
+#raiseForm {
+    background-color: #f9f9f9;
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
 
 
+#raiseForm label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#raiseForm input[type="text"],
+#raiseForm input[type="date"],
+#raiseForm input[type="email"],
+#raiseForm select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#raiseForm input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#raiseForm input[type="submit"]:hover {
+    background-color: #45a049;
+} 
+
+
+
+    
