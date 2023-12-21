@@ -29,7 +29,19 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            customers = cursor.fetchall()
+
+            customers = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                customers.append(row_dict)
+            
             return customers
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -201,7 +213,19 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            employees = cursor.fetchall()
+            
+            employees = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                employees.append(row_dict)
+            
             return employees
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -307,7 +331,18 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            rises = cursor.fetchall()
+            rises = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                rises.append(row_dict)
+                
             return rises
         except dbapi.DatabaseError:
             self.connection.rollback()

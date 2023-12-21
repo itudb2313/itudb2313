@@ -14,24 +14,43 @@
 
         <input type="submit" value="Delete">
     </form>
-    <ul>
-        
-        {% for rise in rises %}
-        <li>{{rise}}</li>
-        {% endfor %}
-    </ul>
+    
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Rise ID</th>
+            <th scope="col">Amount (%)</th>
+            <th scope="col">Date</th>
+            <th scope="col">State</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for rise in rises %}
+          <tr>
+            <th scope="row">{{rise.rise_id}}</th>
+            <td>{{rise.amount_by_percent}}</td>
+            <td>{{rise.rise_date}}</td>
+            <td>{{rise.rise_state}}</td>
+            <td><a class="edit-button" href="?rise_id={{rise.rise_id}}">Edit</a></td>
+            <td><a class="delete-button" href="?rise_id={{rise.rise_id}}">Delete</a></td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
 
-    <div class="button-container">
+      <div class="pagination">
         {% if page > 1 %}
-            <a class="previous-button" href="?page={{ page - 1 }}">Previous</a>
+            <a class="previous-button" href="?page={{ page - 1 }}" >&laquo; Previous</a>
         {% endif %}
 
         <span>Page {{ page }}</span>
 
         {% if rises|length == 10 %}
-            <a class="next-button" href="?page={{ page + 1 }}">Next</a>
+            <a class="next-button" href="?page={{ page + 1 }}" >Next &raquo;</a>
         {% endif %}
-
     </div>
 
 {% endblock %}

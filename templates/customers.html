@@ -2,6 +2,7 @@
 {% block title %}Customer{% endblock %}
 {% block content %}
 
+
     <h1>Customers</h1>
     <h2>Insert a Customer</h2>
     <a href="{{ url_for('customers_bp.insert_customer') }}">Click to insert a customer</a>
@@ -14,27 +15,50 @@
         <input type="submit" value="Delete">
     </form>
 
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Customer ID</th>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Email</th>
+            <th scope="col">City</th>
+            <th scope="col">Country</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+          <tr>
+            <th scope="row">{{customer.customer_id}}</th>
+            <td>{{customer.employee_id}}</td>
+            <td>{{customer.firstname}}</td>
+            <td>{{customer.lastname}}</td>   
+            <td>{{customer.dob}}</td>
+            <td>{{customer.email}}</td>
+            <td>{{customer.city}}</td>
+            <td>{{customer.country}}</td>
+            <td><a class="edit-button" href="?customer_id={{customer.customer_id}}">Edit</a></td>
+            <td><a class="delete-button" href="?customer_id={{customer.customer_id}}">Delete</a></td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
 
-
-    <ul>
-        
-        {% for customer in customers %}
-        <li>{{customer}}</li>
-        {% endfor %}
-    </ul>
-
-    <div class="button-container">
+      <div class="pagination">
         {% if page > 1 %}
-            <a class="previous-button" href="?page={{ page - 1 }}">Previous</a>
+            <a class="previous-button" href="?page={{ page - 1 }}" >&laquo; Previous</a>
         {% endif %}
 
         <span>Page {{ page }}</span>
 
         {% if customers|length == 10 %}
-            <a class="next-button" href="?page={{ page + 1 }}">Next</a>
+            <a class="next-button" href="?page={{ page + 1 }}" >Next &raquo;</a>
         {% endif %}
-
     </div>
-
 
 {% endblock %}

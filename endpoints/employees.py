@@ -34,6 +34,7 @@ def employees():
 
     # Paginate the data
     paginated_items = paginate(employees, page, per_page)
+    
 
 
     return render_template("employees.html", employees=paginated_items, page=page)

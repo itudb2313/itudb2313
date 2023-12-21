@@ -2,6 +2,7 @@
 {% block title %}Employee{% endblock %}
 {% block content %}
 
+
     <h1>Employees</h1>
     <h2>Insert a Employee</h2>
     <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a>
@@ -13,24 +14,57 @@
 
         <input type="submit" value="Delete">
     </form>
-    <ul>
-        
-        {% for employee in employees %}
-        <li>{{employee}}</li>
-        {% endfor %}
-    </ul>
 
-    <div class="button-container">
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Store ID</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Salary</th>
+            <th scope="col">City</th>
+            <th scope="col">Country</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+          <tr>
+            <th scope="row">{{employee.employee_id}}</th>
+            <td>{{employee.store_id}}</td>
+            <td>{{employee.firstname}}</td>
+            <td>{{employee.lastname}}</td>   
+            <td>{{employee.dob}}</td>
+            <td>{{employee.email}}</td>
+            <td>{{employee.status}}</td>
+            <td>{{employee.salary}}</td>
+            <td>{{employee.city}}</td>
+            <td>{{employee.country}}</td>
+            <td><a class="edit-button" href="?employee_id={{employee.employee_id}}">Edit</a></td>
+            <td><a class="delete-button" href="?employee_id={{employee.employee_id}}">Delete</a></td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+
+      <div class="pagination">
         {% if page > 1 %}
-            <a class="previous-button" href="?page={{ page - 1 }}">Previous</a>
+            <a class="previous-button" href="?page={{ page - 1 }}" >&laquo; Previous</a>
         {% endif %}
 
         <span>Page {{ page }}</span>
 
         {% if employees|length == 10 %}
-            <a class="next-button" href="?page={{ page + 1 }}">Next</a>
+            <a class="next-button" href="?page={{ page + 1 }}" >Next &raquo;</a>
         {% endif %}
-
     </div>
+
 
 {% endblock %}

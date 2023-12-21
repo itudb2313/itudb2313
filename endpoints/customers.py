@@ -70,7 +70,8 @@ def insert_customer():
             city,
             country,
         )
-        return render_template("customers.html", customers=db.select_all_customers())
+        
+        return redirect(url_for('customers_bp.customers'))
     else:
         return render_template("insert_customer.html")
     

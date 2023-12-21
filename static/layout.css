@@ -19,3 +19,57 @@ a, a:link, a:visited {
   color: #FFFAFA;
   text-decoration: none;
 }
+
+
+
+    .delete-button {
+        background-color: #f44336; /* red */
+        color: white;
+        text-align: center;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .edit-button {
+        background-color: #4CAF50; /* green */
+        color: white;
+        text-align: center;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .pagination {
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .pagination a {
+        background-color: #f4f4f4;
+        color: black;
+        text-align: center;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .pagination a:hover {
+        background-color: #ddd;
+    }
+
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+
