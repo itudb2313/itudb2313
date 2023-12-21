@@ -38,7 +38,19 @@
     }
 </style>
 <h1>Products</h1>
-<a href="{{ url_for('insert_product') }}">Click to insert a product</a>
+<!-- Write a search bar for me -->
+<form action="{{ url_for('products_bp.get_products') }}" method="POST">
+    <input type="text" name="search" placeholder="Search for a product">
+    <input type="number" name="min_price" placeholder="Min price">
+    <input type="number" name="max_price" placeholder="Max price">
+    <select name="category_id">
+        <option value="">All categories</option>
+        {% for category in categories %}
+        <option value="{{category[0]}}">{{category[2]}}</option>
+        {% endfor %}
+    <input type="submit" value="Search">
+</form>
+<a href="{{ url_for('products_bp.insert_product') }}">Click to insert a product</a>
 <table>
     <tr>
         <th>Product ID</th>

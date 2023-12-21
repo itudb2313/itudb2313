@@ -17,7 +17,7 @@ block content %}
     }
 </style>
 <h1>Insert Product</h1>
-<form action="{{ url_for('insert_product') }}" method="post" style="display: flex; flex-direction: column;">
+<form action="{{ url_for('products_bp.insert_product') }}" method="post" style="display: flex; flex-direction: column;">
     <div style="width: 200px; display: flex; flex-direction: column; gap: 10px;">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" required />
