@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Information Update Form</title>
+</head>
+<body>
+    <h2>Customer Information Form</h2>
+    <form id="raiseForm" action="/update_customer" method="post">  
+        <label for="customer_id">Customer ID:</label>
+        <input type="text" id="customer_id" name="customer_id" required><br>
+
+        <label for="employee_id">Employee ID:</label>
+        <input type="text" id="employee_id" name="employee_id" required><br>
+
+        <label for="firstname">Firstname:</label>
+        <input type="text" id="firstname" name="firstname" required><br>
+
+        <label for="lastname">Lastname:</label>
+        <input type="text" id="lastname" name="lastname" required><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required><br>
+
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

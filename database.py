@@ -72,6 +72,41 @@ class Database:
         finally:
             cursor.close()
 
+    def update_customer_by_id(
+        self,
+        customer_id,
+        employee_id,
+        firstname,
+        lastname,
+        dob,
+        email,
+        city,
+        country,
+    ):
+        query = """UPDATE customer SET employee_id = %s, firstname = %s, lastname = %s, dob = %s, email = %s, city = %s, country = %s
+        WHERE customer_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    firstname,
+                    lastname,
+                    dob,
+                    email,
+                    city,
+                    country,
+                    customer_id,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def delete_customer(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
         print(customer_id)
@@ -186,7 +221,7 @@ class Database:
         city,
         country,
     ):
-        query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
+        query = """UPDATE employee SET store_id=%s, firstname=%s,
         lastname=%s, dob=%s, email=%s, status=%s, salary=%s, city=%s, country=%s
         WHERE employee_id=%s
         """
@@ -196,7 +231,6 @@ class Database:
             cursor.execute(
                 query,
                 (
-                    employee_id,
                     store_id,
                     firstname,
                     lastname,
@@ -212,6 +246,7 @@ class Database:
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
+            print(dbapi.DatabaseError)
         finally:
             cursor.close()
 
@@ -255,7 +290,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_employee(self, employee_id):
+    def delete_employee_by_id(self, employee_id):
         query = """DELETE FROM employee WHERE employee_id = %s"""
         try:
             cursor = self.connection.cursor()
@@ -293,7 +328,7 @@ class Database:
             cursor.close()
 
     def update_rise_by_id(self, rise_id, amount_by_percent, rise_date, rise_state):
-        query = """UPDATE rise_archive SET rise_id=%s, amount_by_percent=%s,
+        query = """UPDATE rise_archive SET amount_by_percent=%s,
         rise_date=%s, rise_state=%s
         WHERE rise_id=%s
         """
@@ -301,7 +336,7 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(
-                query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id)
+                query, (amount_by_percent, rise_date, rise_state, rise_id)
             )
             self.connection.commit()
         except dbapi.DatabaseError:
@@ -309,7 +344,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_rise(self, rise_id):
+    def delete_rise_by_id(self, rise_id):
         query = """DELETE FROM rise_archive WHERE rise_id = %s"""
 
         try:

@@ -53,7 +53,26 @@ def insert_rise():
         rise_state = request.form["rise_state"]
 
         db.insert_rise(rise_id, amount_by_percent, rise_date, rise_state)
-        return redirect(url_for("rises"))
+        return redirect(url_for("rises_bp.rises"))
+    else:
+        return render_template("insert_rise.html", rises=db.select_all_rises())
+    
+
+@rises_bp.route("/update_rise", methods=["GET", "POST"])
+def update_rise():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    if request.method == "POST":
+        rise_id = request.form["rise_id"]
+        amount_by_percent = request.form["amount_by_percent"]
+        rise_date = request.form["rise_date"]
+        rise_state = request.form["rise_state"]
+
+        db.update_rise_by_id(rise_id, amount_by_percent, rise_date, rise_state)
+        return redirect(url_for("rises_bp.rises"))
     else:
         return render_template("insert_rise.html", rises=db.select_all_rises())
 
@@ -69,6 +88,6 @@ def delete_rise():
     if request.method == "POST":
         rise_id = request.form["rise_id"]
 
-        db.delete_rise(rise_id)
+        db.delete_rise_by_id(rise_id)
 
-        return redirect(url_for("rises"))
+        return redirect(url_for("rises_bp.rises"))

@@ -74,3 +74,8 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -"employees.html" is modified for pagination
 -Pagination feature has been introduced for rises endpoint 
 -"rises.html" is modified for pagination
+-update_customer endpoint and update_customer_by_id query is created
+-update_customer.html is created
+-update_employee.html is created
+-update_rise endpoint and update_rise_by_id query is created
+-delete_customer endpoint is created

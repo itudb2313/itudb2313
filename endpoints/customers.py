@@ -73,3 +73,52 @@ def insert_customer():
         return render_template("customers.html", customers=db.select_all_customers())
     else:
         return render_template("insert_customer.html")
+    
+
+@customers_bp.route("/update_customer", methods=["GET", "POST"])
+def update_customer():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    if request.method == "POST":
+        customer_id = request.form["customer_id"]
+        employee_id = request.form["employee_id"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        dob = request.form["dob"]
+        email = request.form["email"]
+        city = request.form["city"]
+        country = request.form["country"]
+
+        db.update_customer_by_id(
+            customer_id,
+            employee_id,
+            firstname,
+            lastname,
+            dob,
+            email,
+            city,
+            country,
+        )
+        return redirect(url_for('customers_bp.customers'))
+    else:
+        return render_template("update_customer.html")
+    
+
+
+@customers_bp.route("/delete_customer", methods=["POST"])
+def delete_customer():
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    if request.method == "POST":
+        customer_id = request.form["customer_id"]
+
+        db.delete_customer_by_id(customer_id)
+
+        return redirect(url_for("customers_bp.customers"))
