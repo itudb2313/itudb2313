@@ -332,7 +332,6 @@ class Database:
         with self.connection.cursor() as cursor:
             cursor.execute(query, (lowest, highest, search, search, search))
             products = cursor.fetchall()
-            print(products)
             return products
 
     def insert_product(
