@@ -8,7 +8,6 @@ from flask import (
     Blueprint,
 )
 
-
 orders_bp = Blueprint("orders_bp", __name__)
 
 table_columns = [
@@ -62,6 +61,9 @@ def create_update_button(id):
   """
 
 
+x_svg = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns:v="https://vecta.io/nano"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>"""
+
+
 @orders_bp.route("/get-orders", methods=["GET"])
 def get_orders():
     db = current_app.config.get("db")
@@ -90,7 +92,7 @@ def get_orders():
     for order in db.get_orders_paged(10, page * 10, order_by, t_order):
         rows += f"""
             <tr id="o{order[0]}">
-            <td class="border" hx-post=/delete-order?id={order[0]}>X</td>
+            <td class="border" hx-post=/delete-order?id={order[0]}>{x_svg}</td>
             <td class="border">{order[0]}</td>
             <td class="border underline">
                 <a href="/customer?id={order[1]}">{order[1]}</a>
@@ -116,11 +118,22 @@ def get_orders():
         rows
         + f"""
         <tr>
-            <td colspan="12"
-                hx-get="/get-orders?page={page+1}&order_by={order_by}&order={t_order}"
-                hx-target="#replace"
-                hx-swap="innerHTML">
-                click for next page: {page+1}
+            <td colspan="12" >
+                <div class="flex justify-center gap-4">
+                    <div
+                    hx-get="/get-orders?page={page-1}&order_by={order_by}&order={t_order}"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    <
+                    </div>
+                    <div>Page {page+1}</div>
+                    <div
+                    hx-get="/get-orders?page={page+1}&order_by={order_by}&order={t_order}"
+                    hx-target="#replace"
+                    hx-swap="innerHTML">
+                    >
+                    </div>
+                </div>
             </td>
         </tr>
         """
@@ -137,7 +150,7 @@ def delete_order():
 
     order_id = request.args.get("id")
     db.delete_order(order_id)
-    return redirect(url_for("orders"))
+    return redirect(url_for(".orders"))  # don't lose page
 
 
 @orders_bp.route("/add-order", methods=["POST"])
@@ -213,8 +226,8 @@ def update_order():
             quantity,
         )
         return f"""
-        <tr hx-swap-oob="outerHTML:#o{order_id}">
-            <td class="border" hx-post=/delete-order?id={order_id}>X</td>
+        <tr hx-swap-oob="outerHTML:#o{order_id}" id="o{order_id}">
+            <td class="border" hx-post=/delete-order?id={order_id}>{x_svg}</td>
             <td class="border">{order_id}</td>
             <td class="border underline">
                 <a href="/customer?id={customer_id}">{customer_id}</a>
@@ -258,9 +271,7 @@ def update_order():
             <td class="border underline">
                 <input type="text" value="1" name="store_id" form="update">
             </td>
-            <td class="border underline">
-                <input type="text" value="1" name="employee_id" form="update">
-            </td>
+            {create_select_element("update")}
             <td class="border">
                 <input type="date" name="order_date" form="update">
             </td>
@@ -280,3 +291,30 @@ def update_order():
                 <button form="update" type="submit">Update</button>
             </td>
             """
+
+
+def create_select_element(form_name):
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    store_id = request.args.get("store_id")
+
+    res = db.get_all_employee_ids_and_names(store_id)
+
+    if res is None:
+        return "No employees found"
+
+    select = f"""<select hx-swap-oob="#employee_id" hx-swap="outerHTML" name='employee_id' id="employee_id" form={form_name}>"""
+
+    for employee in res:
+        select += f"<option value='{employee[0]}'>{employee[1]} {employee[2]}</option>"
+    select += "</select>"
+
+    return select
+
+
+@orders_bp.route("/employee-selection", methods=["GET"])
+def employee_selection():
+    return create_select_element("add")

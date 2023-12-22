@@ -170,6 +170,7 @@ class Database:
             return None
         finally:
             cursor.close()
+
     def get_stores_count(self):
         query = """select count(*) from store"""
 
@@ -215,12 +216,18 @@ class Database:
         finally:
             cursor.close()
 
-    def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
-        query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
+    def get_all_stores_table(self, order_opt="store_id", page_number=1):
+        query = (
+            "SELECT * FROM store order by "
+            + order_opt
+            + " limit 20 offset "
+            + str((int(page_number) - 1) * 20)
+        )
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query, 
-                            )
+            cursor.execute(
+                query,
+            )
 
             stores = cursor.fetchall()
             return stores
@@ -229,8 +236,6 @@ class Database:
             return None
         finally:
             cursor.close()
-
-
 
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
@@ -639,3 +644,11 @@ class Database:
                 ),
             )
             # self.connection.commit()
+
+    def get_all_employee_ids_and_names(self, store_id):
+        query = """SELECT DISTINCT employee_id, firstname, lastname FROM employee WHERE store_id = %s"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (store_id,))
+            employee_ids = cursor.fetchall()
+            return employee_ids
