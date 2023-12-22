@@ -322,15 +322,19 @@ class Database:
         finally:
             cursor.close()
 
-    def get_products(self, search = "%%", lowest = 0, highest = 1000000000):
+    def get_products(self, search = "%%", lowest_price = 0, highest_price = 1000000000, lowest_km = 0, highest_km = 1000000000, color = "%%", lowest_year = 0, highest_year = 3000, page=0, order="product_id"):
+        
         select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
         price_filters = """WHERE (price > %s AND price < %s) AND """
-        search_filters = """(product_name LIKE %s OR model LIKE %s OR category_name LIKE %s )"""
-        order_by = """ORDER BY product_id DESC LIMIT 10"""
-        query = select_clause + join_category + price_filters + search_filters + order_by
+        search_filters = """(product_name LIKE %s OR model LIKE %s OR category_name LIKE %s) """
+        color_filters = """AND color LIKE %s """
+        km_filters = """AND (km > %s AND km < %s) """
+        year_filters = """AND (year > %s AND year < %s) """
+        order_by = """ORDER BY """ + order + """ LIMIT 10 OFFSET %s"""
+        query = select_clause + join_category + price_filters + search_filters + color_filters + km_filters + year_filters + order_by
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (lowest, highest, search, search, search))
+            cursor.execute(query, (lowest_price, highest_price, search, search, search, color, lowest_km, highest_km, lowest_year, highest_year, page * 10))
             products = cursor.fetchall()
             return products
 
@@ -353,6 +357,13 @@ class Database:
             cursor.execute(query, (product_id,))
             self.connection.commit()
             return True
+
+    def get_colors(self):
+        query = """SELECT DISTINCT(color) FROM product"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            unique_colors = cursor.fetchall()
+            return unique_colors
 
     def get_provider_countries(self):
         query = """SELECT DISTINCT(country) FROM provider"""

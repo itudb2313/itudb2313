@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Products{% endblock %}
 {% block content %}
-<script>
+<script defer>
     function delete_product(button) {
         fetch('/delete_product', {
             method: 'POST',
@@ -16,11 +16,75 @@
                 console.log('Error');
                 return false;
             } else{
-                window.location.reload();
+                const getFilteredProductsButton = document.getElementById("getFilteredProductsButton");
+                getFilteredProductsButton.click()
                 return true;
             }
         });
     }
+    
+    const handle_products = (table, form) => {
+        const formData = new FormData(form);
+        fetch('/products', {
+            method: "POST",
+            body: formData,
+        }).then( (async response => {
+            const products = await response.json()
+            fillProductTable(table, products)
+        }))
+    }
+    
+    const fillProductTable = (table, products) => {
+        const productTableBody = (products.map(product => {
+            return (`
+                <tr>
+                    <td>${product[0]}</td>
+                    <td>${product[1]}</td>
+                    <td>${product[2]}</td>
+                    <td>${product[3]}</td>
+                    <td>${product[4]}</td>
+                    <td>${product[5]}</td>
+                    <td>${product[6]}</td>
+                    <td>${product[7]}</td>
+                    <td><button onclick="delete_product(this)" id="${product[0]}">X</button></td>
+                </tr>
+            `)})).join("")
+        const headerFooter = (`
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                <th>Product Description</th>
+                <th>Year</th>
+                <th>Color</th>
+                <th>Km</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        `)
+        const productTableHtml = headerFooter + productTableBody + headerFooter;
+        table.innerHTML = productTableHtml;
+    }
+
+    addEventListener("DOMContentLoaded", () => {
+        const productFiltersForm = document.getElementById("productFiltersForm");
+        const getFilteredProductsButton = document.getElementById("getFilteredProductsButton");
+        const productTable = document.getElementById("productTable")
+        const pager = document.getElementById("page")
+        page.addEventListener("change", () => {
+            handle_products(productTable, productFiltersForm)
+        })
+        getFilteredProductsButton.addEventListener("click", () => {
+            handle_products(productTable, productFiltersForm)
+        })
+        addEventListener("keypress", (event) => {
+            console.log(event.key)
+            if (event.key === "Enter") {
+                handle_products(productTable, productFiltersForm)
+            }
+        })
+    })
+
 </script>
 
 <style>
@@ -39,24 +103,44 @@
 </style>
 <h1>Products</h1>
 <!-- Write a search bar for me -->
-<form action="{{ url_for('products_bp.get_products') }}" method="POST">
+<form id="productFiltersForm">
     <input type="text" name="search" placeholder="Search for a product">
     <input type="number" name="min_price" placeholder="Min price">
     <input type="number" name="max_price" placeholder="Max price">
-    <select name="category_id">
-        <option value="">All categories</option>
-        {% for category in categories %}
-        <option value="{{category[0]}}">{{category[2]}}</option>
+    <input type="number" name="min_km" placeholder="Min Km">
+    <input type="number" name="max_km" placeholder="Max Km">
+    <input type="number" name="min_year" placeholder="Min Year">
+    <input type="number" name="max_year" placeholder="Max Year">
+    <input type="number" step="1" min="0" placeholder="Page" id="page" name="page">
+    <select name="color">
+        <option value="">All colors</option>
+        {% for color in colors %}
+        <option value="{{color[0]}}">{{color[0]}}</option>
         {% endfor %}
-    <input type="submit" value="Search">
+    </select>
+    <label for="order">Order By</label>
+    <select name="order" id="order">
+        <option value="0">Product ID</option>
+        <option value="1">Brand</option>
+        <option value="2">Model</option>
+        <option value="3">Year</option>
+        <option value="4">Color</option>
+        <option value="5">Km</option>
+        <option value="6">Price</option>
+    </select>
+    <label for="order_type">Type</label>
+    <select name="order_type" id="order_type">
+        <option value="0">ASC</option>
+        <option value="1">DESC</option>
+    <input type="button" id="getFilteredProductsButton" value="Search">
 </form>
 <a href="{{ url_for('products_bp.insert_product') }}">Click to insert a product</a>
-<table>
+<table id="productTable">
     <tr>
         <th>Product ID</th>
-        <th>Product Name</th>
-        <th>Product Price</th>
-        <th>Product Description</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Category</th>
         <th>Year</th>
         <th>Color</th>
         <th>Km</th>
@@ -78,14 +162,14 @@
     {% endfor %}
     <tr>
         <th>Product ID</th>
-        <th>Product Name</th>
-        <th>Product Price</th>
-        <th>Product Description</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Category</th>
         <th>Year</th>
         <th>Color</th>
-        <th>Action</th>
         <th>Km</th>
         <th>Price</th>
+        <th>Action</th>
     </tr>
 </table>
 {% endblock %}
