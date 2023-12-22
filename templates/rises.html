@@ -17,8 +17,9 @@
 
           <!-- Trigger/Open The Modal -->
 <button id="myBtn" class="edit-button">Insert</button>
+
     
-    <table class="table">
+    <table id="riseTable" class="table">
         <thead>
           <tr>
             <th scope="col">Rise ID</th>
@@ -36,8 +37,8 @@
             <td>{{rise.amount_by_percent}}</td>
             <td>{{rise.rise_date}}</td>
             <td>{{rise.rise_state}}</td>
-            <td><a class="edit-button" href="?rise_id={{rise.rise_id}}">Edit</a></td>
-            <td><a class="delete-button" href="?rise_id={{rise.rise_id}}">Delete</a></td>
+            <td><a id="updateBtn" class="edit-button" value="{{rise.rise_id}}" href="get_rise_by_id?rise_id={{rise.rise_id}}">Update</a></td>
+            <td><a class="delete-button" href="/delete_rise?rise_id={{rise.rise_id}}">Delete</a></td>
           </tr>
           {% endfor %}
           
@@ -63,7 +64,7 @@
 
  <!-- Modal content -->
  <div class="modal-content">
-    <span class="close">&times;</span>
+    <span class="close x">&times;</span>
     <div class="insert-container">
         <!-- Insert data form -->
         <form id="raiseForm" action="/insert_rise" method="post">
@@ -91,6 +92,40 @@
 
 </div>
 
+
+<!-- The Modal -->
+<div id="secondModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+     <span class="close close-second">&times;</span>
+     <div class="insert-container">
+         <!-- Insert data form -->
+         <form id="raiseForm" action="/update_rise" method="post">
+           <label for="rise_idUpdate">Raise ID:</label>
+           <input type="text" id="rise_idUpdate" name="rise_id" readonly><br>
+   
+           <label for="amount_by_percentUpdate">Amount by Percent:</label>
+           <input type="text" id="amount_by_percentUpdate" name="amount_by_percent" required><br>
+   
+           <label for="rise_dateUpdate">Raise Date:</label>
+           <input type="date" id="rise_dateUpdate" name="rise_date" required><br>
+   
+           <label for="rise_stateUpdate">Raise State:</label>
+           <select id="rise_stateUpdate" name="rise_state" required>
+               <option value="Suspended">Suspended</option>
+               <option value="Confirmed">Confirmed</option>
+           </select><br>
+   
+           <input type="submit" value="Submit">
+       </form>
+ 
+ 
+     </div>
+  </div>
+ 
+ </div>
+
 <script>
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -112,11 +147,86 @@ span.onclick = function() {
 }
 
 // When the user clicks anywhere outside of the modal, close it
+
 window.onclick = function(event) {
  if (event.target == modal) {
     modal.style.display = "none";
  }
 }
+</script>
+
+
+
+
+<script>
+
+function convertDateFormat(originalDateString) {
+    // Parse the original date string
+    const originalDate = new Date(originalDateString);
+
+    // Format the date as "yyyy-MM-dd"
+    const formattedDate = originalDate.toISOString().split('T')[0];
+
+    return formattedDate;
+}
+
+// UPDATE MODAL
+  var table = document.getElementById('riseTable');
+    var second_modal = document.getElementById('secondModal');
+    var closeButton = document.querySelector('.close-second');
+    
+
+  table.addEventListener('click', async function(event) {
+      
+        // Check if the clicked element is a button with the class 'editButton'
+        if (event.target.classList.contains('edit-button')) {
+          //event.stopPropagation();
+          event.preventDefault()
+            // Get the value (row number) of the clicked button
+            const rise_id = event.target.getAttribute('value');
+
+            second_modal.style.display = "flex";
+            
+            const url = `http://localhost:5000/get_rise_by_id?rise_id=${rise_id}`;
+
+            try {
+            const response = await fetch(url);
+
+            // Check if the request was successful (status code 200)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Parse the response as JSON
+            const data = await response.json();
+            
+            document.getElementById('rise_idUpdate').defaultValue = data.rise[0].rise_id;
+            //document.getElementById('rise_idUpdate').disabled = true
+            document.getElementById('amount_by_percentUpdate').defaultValue = data.rise[0].amount_by_percent;
+            document.getElementById('rise_dateUpdate').defaultValue = convertDateFormat(data.rise[0].rise_date);
+            document.getElementById('rise_stateUpdate').value = data.rise[0].rise_state;
+            
+            
+            } catch (error) {
+                // Handle errors during the fetch
+                console.error('Error during fetch:', error);
+            }
+
+            console.log(url)
+        }
+    });
+
+    closeButton.addEventListener('click', function() {
+        // Close the modal when the X button is clicked
+        second_modal.style.display = 'none';
+    });
+
+    // Close the modal if the user clicks outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === second_modal) {
+            second_modal.style.display = 'none';
+        }
+    });
 </script>
 
 {% endblock %}

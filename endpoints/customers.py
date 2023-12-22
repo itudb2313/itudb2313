@@ -110,7 +110,7 @@ def update_customer():
     
 
 
-@customers_bp.route("/delete_customer", methods=["POST"])
+@customers_bp.route("/delete_customer", methods=["GET","POST"])
 def delete_customer():
     db = current_app.config.get("db")
 
@@ -121,5 +121,12 @@ def delete_customer():
         customer_id = request.form["customer_id"]
 
         db.delete_customer_by_id(customer_id)
+
+        return redirect(url_for("customers_bp.customers"))
+    
+    else:
+        if request.args.get('customer_id') is not None:
+            customer_id = int(request.args.get('customer_id'))
+            db.delete_customer_by_id(customer_id)
 
         return redirect(url_for("customers_bp.customers"))

@@ -37,6 +37,19 @@ def rises():
 
     return render_template("rises.html", rises=paginated_items, page=page)
 
+@rises_bp.route("/get_rise_by_id", methods=["GET"])
+def get_rise_by_id():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+    
+    rise_id = request.args.get('rise_id')
+    
+    rise = db.get_rise_by_id(rise_id)
+
+    return jsonify({"rise": rise})
 
 # insert_rise endpoint to insert new rise record into the rise_archive table
 @rises_bp.route("/insert_rise", methods=["GET", "POST"])
@@ -78,7 +91,7 @@ def update_rise():
 
 
 # delete_rise endpoint to delete a rise record by rise_id
-@rises_bp.route("/delete_rise", methods=["POST"])
+@rises_bp.route("/delete_rise", methods=["GET","POST"])
 def delete_rise():
     db = current_app.config.get("db")
 
@@ -89,5 +102,13 @@ def delete_rise():
         rise_id = request.form["rise_id"]
 
         db.delete_rise_by_id(rise_id)
+
+        return redirect(url_for("rises_bp.rises"))
+    else:
+        print("REQQQ")
+        if request.args.get('rise_id') is not None:
+            print("OKK")
+            rise_id = request.args.get('rise_id')
+            db.delete_rise_by_id(rise_id)
 
         return redirect(url_for("rises_bp.rises"))

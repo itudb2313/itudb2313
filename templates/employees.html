@@ -48,8 +48,8 @@
             <td>{{employee.salary}}</td>
             <td>{{employee.city}}</td>
             <td>{{employee.country}}</td>
-            <td><a class="edit-button" href="?employee_id={{employee.employee_id}}">Edit</a></td>
-            <td><a class="delete-button" href="?employee_id={{employee.employee_id}}">Delete</a></td>
+            <td><a class="edit-button" href="/edit_employee?employee_id={{employee.employee_id}}">Edit</a></td>
+            <td><a class="delete-button" href="/delete_employee?employee_id={{employee.employee_id}}">Delete</a></td>
           </tr>
           {% endfor %}
           

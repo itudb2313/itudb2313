@@ -86,3 +86,8 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -CSS codes for html tables in employee.html, customer.html and rises.html are written in layout.css
 -Bootstrap is also used for table creation and styling
 -Pop-Up modal is introduced to insert new data to the tables of customer, employee and rise_archive. Also general styling applied in layout.css
+-Delete endpoints of customers, employees, rises are modified to enable in-line deleting
+-For rise_archive in-line delete and update buttons are fully activated.
+-Pop-Up update modal is completed for update_rise endpoint and introduced for update_employee and update_customer
+-Query of select_rise_by_id is introduced
+-CORS package is installed and integrated in app.py to allow CROSS-Origin requests

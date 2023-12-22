@@ -45,8 +45,8 @@
             <td>{{customer.email}}</td>
             <td>{{customer.city}}</td>
             <td>{{customer.country}}</td>
-            <td><a class="edit-button" href="?customer_id={{customer.customer_id}}">Edit</a></td>
-            <td><a class="delete-button" href="?customer_id={{customer.customer_id}}">Delete</a></td>
+            <td><a class="edit-button" href="/edit_customer?customer_id={{customer.customer_id}}">Edit</a></td>
+            <td><a class="delete-button" href="/delete_customer?customer_id={{customer.customer_id}}">Delete</a></td>
           </tr>
           {% endfor %}
           

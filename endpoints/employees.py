@@ -118,7 +118,7 @@ def update_employee():
 
 
 # delete_employee endpoint to delete an employee record by employee_id
-@employees_bp.route("/delete_employee", methods=["POST"])
+@employees_bp.route("/delete_employee", methods=["GET","POST"])
 def delete_employee():
     db = current_app.config.get("db")
 
@@ -129,5 +129,11 @@ def delete_employee():
         employee_id = request.form["employee_id"]
 
         db.delete_employee_by_id(employee_id)
+
+        return redirect(url_for("employees_bp.employees"))
+    else:
+        if request.args.get('employee_id') is not None:
+            employee_id = int(request.args.get('employee_id'))
+            db.delete_employee_by_id(employee_id)
 
         return redirect(url_for("employees_bp.employees"))

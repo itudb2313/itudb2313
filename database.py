@@ -349,6 +349,29 @@ class Database:
         finally:
             cursor.close()
 
+    def get_rise_by_id(self, rise_id):
+        query = """SELECT * FROM rise_archive WHERE rise_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (rise_id,))
+            rise = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                rise.append(row_dict)
+
+            return rise
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def insert_rise(self, rise_id, amount_by_percent, rise_date, rise_state):
         query = """INSERT INTO rise_archive (rise_id, amount_by_percent,
         rise_date, rise_state) VALUES (%s, %s,%s, %s)"""
