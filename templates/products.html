@@ -157,7 +157,7 @@
         <td>{{product[5]}}</td>
         <td>{{product[6]}}</td>
         <td>{{product[7]}}</td>
-        <td><button onclick="delete_product(this)" id="{{product[0]}}">X</button></td>
+        <td><button onclick="delete_product(this)" id="{{product[0]}}">X</button><button><a href="{{url_for('products_bp.update_product') + '?product_id=' + product[0]|string}}">Edit</a></button></td>
     </tr>
     {% endfor %}
     <tr>

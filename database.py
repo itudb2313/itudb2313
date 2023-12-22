@@ -321,7 +321,12 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
-
+    def get_product(self, product_id):
+        query = """SELECT * FROM product WHERE product_id = %s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (product_id,))
+            product = cursor.fetchone()
+            return product
     def get_products(self, search = "%%", lowest_price = 0, highest_price = 1000000000, lowest_km = 0, highest_km = 1000000000, color = "%%", lowest_year = 0, highest_year = 3000, page=0, order="product_id"):
         
         select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
@@ -357,7 +362,13 @@ class Database:
             cursor.execute(query, (product_id,))
             self.connection.commit()
             return True
-
+    def update_product(self, product_id, product_name, model, year, color, price, km, category_id, provider_id):
+        query = """UPDATE product SET product_name=%s, model=%s, year=%s, color=%s, price=%s, km=%s, category_id=%s, provider_id=%s WHERE product_id=%s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (product_name, model, year, color, price, km, category_id, provider_id, product_id))
+            self.connection.commit()
+            return True
+            
     def get_colors(self):
         query = """SELECT DISTINCT(color) FROM product"""
         with self.connection.cursor() as cursor:

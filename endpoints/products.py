@@ -93,6 +93,34 @@ def insert_product():
     if db.insert_product(
         product_name, model, year, color, price, km, category_id, provider_id
     ):
-        return redirect(url_for("get_products"))
+        return redirect(url_for("products_bp.get_products"))
     else:
         return ["Error"]
+
+
+
+@products_bp.route("/update_product", methods=["GET","POST"])
+def update_product():
+    product_id = request.args.get("product_id")
+    if request.method == "GET":
+        db = current_app.config.get("db")
+        return render_template(
+            "update_product.html",
+            product=db.get_product(product_id),
+            providers=db.get_providers(),
+            categories=db.select_all_categories(),
+        )
+    elif request.method == "POST":
+        db = current_app.config.get("db")
+        product_name = request.form["brand"]
+        model = request.form["model"]
+        year = request.form["year"]
+        color = request.form["color"]
+        price = request.form["price"]
+        km = request.form["km"]
+        category_id = request.form["category_id"]
+        provider_id = request.form["provider_id"]
+        if db.update_product(product_id, product_name, model, year, color, price, km, category_id, provider_id):
+            return redirect(url_for("products_bp.get_products"))
+        else:
+            return ["Error"]
