@@ -1,11 +1,13 @@
 {%for rows in (stores)%}
-    <tr id="{{rows[0]}}">
+    <tr id="row{{rows[0]}}">
         {%for data in rows%}
             <td>{{data}}</td>
         {%endfor%}
         <td>
             <button class="btn btn-primary" hx-post="/stores/delete" hx-vals='{"store_id": "{{rows[0]}}"}' hx-trigger="click" hx-target="this" hx-swap="outerHTML" onclick="delete_trigger(this)">Delete</button>
-            <button class="btn btn-primary"  onclick="edit_trigger(this)">Edit</button>
+        </td>
+        <td>
+            <button class="btn btn-primary" hx-post="/stores/update" hx-vals='{"data": "{{rows}}"}' hx-trigger="click" hx-target="#row{{rows[0]}}" hx-swap="outerHTML">Edit</button>     
         </td>
     </tr>
     

@@ -12,12 +12,13 @@ from endpoints.orders import orders_bp
 from endpoints.customers import customers_bp
 from endpoints.employees import employees_bp
 from endpoints.rises import rises_bp
-
+from endpoints.stores import stores_bp
 
 app.register_blueprint(orders_bp)
 app.register_blueprint(customers_bp)
 app.register_blueprint(employees_bp)
 app.register_blueprint(rises_bp)
+app.register_blueprint(stores_bp)
 
 @app.route("/")
 def hello_world():
@@ -30,57 +31,6 @@ def categories():
     return render_template("categories.html", categories=db.select_all_categories())
 
 
-@app.route("/stores", methods=["GET"])
-def stores():
-    return render_template(
-        "stores.html",
-        stores=db.get_all_stores_table(),
-        headers=db.get_stores_columns(),
-        stores_count=db.get_stores_count(),
-    )
-
-@app.route("/stores/delete", methods=["POST"])
-def delete_store():
-    store_id = request.form.get("store_id")
-    print("store_id: " + str(store_id))
-    db.delete_store(store_id)
-    return "Deleted"
-@app.route("/stores/update", methods=["POST"])
-def update_store():
-    store_id = request.form.get("store_id")
-    employee_id = request.form.get("employee_id")
-    store_name = request.form.get("store_name")
-    phone = request.form.get("phone")
-    street = request.form.get("street")
-    city = request.form.get("city")
-    country = request.form.get("country")
-    email = request.form.get("email")
-    post_code = request.form.get("post_code")
-    db.update_store(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
-    return "OK"
-
-@app.route("/stores/insert", methods=["POST"])
-def insert_store():
-    employee_id = request.form.get("employee_id")
-    store_name = request.form.get("store_name")
-    phone = request.form.get("phone")
-    street = request.form.get("street")
-    city = request.form.get("city")
-    country = request.form.get("country")
-    email = request.form.get("email")
-    post_code = request.form.get("post_code")
-    #db.insert_store(store_name, store_address, store_country, store_city, store_phone, store_email, store_manager)
-    #return redirect(url_for("stores"))
-    return "OK"
-
-@app.route("/stores_table", methods=["GET"])
-def stores_table():
-    order_opt = request.args.get("order_opt")
-    page_number = request.args.get("page_number")
-    stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
-    return render_template(
-        "stores_table.html", stores=stores, headers=db.get_stores_columns()
-    )
 
 
 @app.route("/products")
