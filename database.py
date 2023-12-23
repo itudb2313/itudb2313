@@ -384,7 +384,7 @@ class Database:
             return unique_countries
 
     def get_providers(self, search="%%", start="", to=""):
-        query = """SELECT provider_id, provider_name, phone, email, country, city, debt from provider """
+        query = """SELECT provider_id, provider_name, email, country, city, debt from provider """
         search_filters = (
             """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
         )
@@ -394,7 +394,8 @@ class Database:
         if to != "":
             debt_filters += """AND debt < %s """ % (to)
 
-        query += search_filters + debt_filters
+        limit = """LIMIT 10"""
+        query += search_filters + debt_filters + limit
         with self.connection.cursor() as cursor:
             cursor.execute(query, (search, search, search))
             providers = cursor.fetchall()
