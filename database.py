@@ -377,29 +377,34 @@ class Database:
             return unique_colors
 
     def get_provider_countries(self):
-        query = """SELECT DISTINCT(country) FROM provider"""
+        query = """SELECT DISTINCT(country) FROM provider ORDER BY country"""
         with self.connection.cursor() as cursor:
             cursor.execute(query)
             unique_countries = cursor.fetchall()
             return unique_countries
-
-    def get_providers(self, search="%%", start="", to=""):
+    def get_provider_cities(self):
+        query = """SELECT DISTINCT(city) FROM provider ORDER BY city"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            unique_cities = cursor.fetchall()
+            return unique_cities
+        
+    def get_providers(self, search="%%", start=0, to=999999, country="%%", city="%%"):
         query = """SELECT provider_id, provider_name, email, country, city, debt from provider """
         search_filters = (
-            """WHERE (provider_name LIKE %s OR country LIKE %s OR city LIKE %s) """
+            """WHERE (provider_name LIKE %s OR email LIKE %s) """
         )
-        debt_filters = ""
-        if start != "":
-            debt_filters = """AND debt > %s """ % (start)
-        if to != "":
-            debt_filters += """AND debt < %s """ % (to)
+        debt_filters = """AND (debt > %s AND debt < %s) """
+        country_city_filters = """AND country LIKE %s AND city LIKE %s """
+
 
         limit = """ORDER BY provider_id DESC LIMIT 10"""
-        query += search_filters + debt_filters + limit
+        query += search_filters + debt_filters + country_city_filters + limit
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (search, search, search))
+            cursor.execute(query, (search, search, start, to, country, city))
             providers = cursor.fetchall()
             return providers
+        
 
     def get_provider(self, provider_id):
         query = """SELECT provider_id, provider_name, email, country, city, debt FROM provider WHERE provider_id = %s"""

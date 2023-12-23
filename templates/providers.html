@@ -1,32 +1,112 @@
 {% extends "layout.html" %} {% block title %}Products{% endblock %} {% block
 content %}
-<script>
-  function delete_provider(button) {
-    fetch("/providers/delete", {
-      method: "POST",
-      body: JSON.stringify({
-        provider_id: button.id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (response) => {
+<head>
+  <script>
+    function delete_provider(button) {
+      fetch("/providers/delete", {
+        method: "POST",
+        body: JSON.stringify({
+          provider_id: button.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (response) => {
         let response_body = await response.json();
-        if(response_body == "Error"){
-            alert("Referential Constraint Violation");
+        if (response_body == "Error") {
+          alert("Referential Constraint Violation");
         } else {
-            alert("Provider deleted successfully");
-            location.reload();
+          alert("Provider deleted successfully");
+          location.reload();
         }
-    }
-    )
-  }
-</script>
-<link rel="stylesheet" href="../static/table.css" />
-<h1>Providers</h1>
-<a href="{{ url_for('providers_bp.insert_provider') }}">Click to insert a product</a>
+      });}
+      const handle_providers = (table, form) => {
+        const formData = new FormData(form);
+        fetch("/providers", {
+          method: "POST",
+          body: formData,
+        }).then(async (response) => {
+          const providers = await response.json();
+          fillProviderTable(table, providers);
+        });
+      };
 
-<table>
+      const fillProviderTable = (table, providers) => {
+        const providerTableBody = providers
+          .map((provider) => {
+            return `
+                  <tr>
+                      <td>${provider[0]}</td>
+                      <td>${provider[1]}</td>
+                      <td>${provider[2]}</td>
+                      <td>${provider[3]}</td>
+                      <td>${provider[4]}</td>
+                      <td>${provider[5]}</td>
+                      <td><button onclick="delete_provider(this)" id="${provider[0]}">X</button><button><a href="{{url_for('providers_bp.update_provider') + '?provider_id=${provider[0]}'}}">Edit</a></button></td>
+                  </tr>
+              `;
+          })
+          .join("");
+        const headerFooter = `
+              <tr>
+                  <th>Provider Id</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Country</th>
+                  <th>City</th>
+                  <th>Debt</th>
+                  <th>Action</th>
+              </tr>
+          `;
+        table.innerHTML = headerFooter + providerTableBody + headerFooter;
+      };
+
+      addEventListener("DOMContentLoaded", () => {
+        const table = document.getElementById("providers_table");
+        const form = document.getElementById("providers_form");
+        const button = document.getElementById("getFilteredProvidersButton");
+        button.addEventListener("click", (event) => {
+          handle_providers(table, form);
+        });
+        addEventListener("keypress", (event) => {
+            console.log(event.key)
+            if (event.key === "Enter") {
+                handle_providers(table, form)
+            }
+        })
+      });
+  </script>
+  <link rel="stylesheet" href="../static/table.css" />
+</head>
+
+<h1>Providers</h1>
+<a href="{{ url_for('providers_bp.insert_provider') }}"
+  >Click to insert a product</a
+>
+<form action="" id="providers_form">
+  <label for="provider_name">Search</label>
+  <input type="text" name="search" id="search" />
+  <label for="country">Country</label>
+  <select name="country" id="country">
+    <option value="">All</option>
+    {% for country in countries %}
+    <option value="{{country[0]}}">{{country[0]}}</option>
+    {% endfor %}
+  </select>
+  <label for="city">City</label>
+  <select name="city" id="city">
+    <option value="">All</option>
+    {% for city in cities %}
+    <option value="{{city[0]}}">{{city[0]}}</option>
+    {% endfor %}
+  </select>
+  <label for="min_debt">Min Debt</label>
+  <input type="number" min="0" step="1" name="min_debt" id="min_debt" />
+  <label for="max_debt">Max Debt</label>
+  <input type="number" min="0" step="1" name="max_debt" id="max_debt" />
+  <button type="button" id="getFilteredProvidersButton">Search</button>
+</form>
+<table id="providers_table">
   <tr>
     <th>Provider Id</th>
     <th>Name</th>

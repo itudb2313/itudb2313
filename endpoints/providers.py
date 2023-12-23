@@ -11,14 +11,24 @@ from flask import (
 providers_bp = Blueprint("providers_bp", __name__)
 
 
-@providers_bp.route("/providers")
+@providers_bp.route("/providers", methods=["GET", "POST"])
 def get_providers():
     db = current_app.config.get("db")
-    searchword = request.args.get("search", "")
-    searchword = "%" + searchword + "%"
-    start_debt = request.args.get("from", "")
-    end_debt = request.args.get("to", "")
-    return render_template("providers.html", providers = db.get_providers(search=searchword, start=start_debt, to=end_debt))
+    if request.method == "GET":
+        return render_template("providers.html", providers = db.get_providers(), countries = db.get_provider_countries(), cities = db.get_provider_cities())
+    elif request.method == "POST":
+        searchword = "%" + request.form["search"] + "%"
+        country = "%" + request.form["country"] + "%"
+        city = "%" + request.form["city"] + "%"
+        if request.form["min_debt"] == "":
+            min_debt = 0
+        else:
+            min_debt = int(request.form["min_debt"])
+        if request.form["max_debt"] == "":
+            max_debt = 10000000000
+        else:
+            max_debt = int(request.form["max_debt"])
+        return jsonify(db.get_providers(search=searchword, start=min_debt, to=max_debt, country=country, city=city))
 
 
 @providers_bp.route("/providers/countries")
