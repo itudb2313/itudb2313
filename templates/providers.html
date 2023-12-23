@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="../static/table.css">
+<h1>Providers</h1>
+<table>
+    <tr>
+        <th>Provider Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Debt</th>
+    </tr>
+    {% for provider in providers %}
+    <tr>
+        <td>{{provider[0]}}</td>
+        <td>{{provider[1]}}</td>
+        <td>{{provider[2]}}</td>
+        <td>{{provider[3]}}</td>
+        <td>{{provider[4]}}</td>
+        <td>{{provider[5]}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <th>Provider Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Debt</th>
+    </tr>
+</table>
+{% endblock %}

@@ -18,7 +18,7 @@ def get_providers():
     searchword = "%" + searchword + "%"
     start_debt = request.args.get("from", "")
     end_debt = request.args.get("to", "")
-    return jsonify(db.get_providers(search=searchword, start=start_debt, to=end_debt))
+    return render_template("providers.html", providers = db.get_providers(search=searchword, start=start_debt, to=end_debt))
 
 
 @providers_bp.route("/providers/countries")
