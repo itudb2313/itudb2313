@@ -394,12 +394,42 @@ class Database:
         if to != "":
             debt_filters += """AND debt < %s """ % (to)
 
-        limit = """LIMIT 10"""
+        limit = """ORDER BY provider_id DESC LIMIT 10"""
         query += search_filters + debt_filters + limit
         with self.connection.cursor() as cursor:
             cursor.execute(query, (search, search, search))
             providers = cursor.fetchall()
             return providers
+
+    def get_provider(self, provider_id):
+        query = """SELECT provider_id, provider_name, email, country, city, debt FROM provider WHERE provider_id = %s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (provider_id,))
+            provider = cursor.fetchone()
+            return provider
+
+    def update_provider(self, provider_id, provider_name, email, country, city, debt):
+        query = """UPDATE provider SET provider_name=%s, email=%s, country=%s, city=%s, debt=%s WHERE provider_id=%s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                query, (provider_name, email, country, city, debt, provider_id)
+            )
+            self.connection.commit()
+            return True
+
+    def insert_provider(self, provider_name, email, country, city, debt):
+        query = """INSERT INTO provider (provider_name, email, country, city, debt) VALUES (%s, %s, %s, %s, %s)"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (provider_name, email, country, city, debt))
+            self.connection.commit()
+            return True
+
+    def delete_provider(self, provider_id):
+        query = """DELETE FROM provider WHERE provider_id = %s"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (provider_id,))
+            self.connection.commit()
+            return True
 
     def get_all_orders(self):
         query = """SELECT * FROM orders"""

@@ -1,0 +1,21 @@
+{% extends "layout.html" %} 
+{% block title %}
+Insert Product
+{% endblock %} 
+{% block content %}
+<link rel="stylesheet" href="../static/forms.css">
+<h1>Insert Product</h1>
+<form action="{{url_for("providers_bp.insert_provider")}}" method="post">
+    <label for="provider_name">Provider Name</label>
+    <input type="text" name="provider_name" id="provider_name" required />
+    <label for="email">Provider Email</label>
+    <input type="email" name="email" id="email" required />
+    <label for="country">Provider Country</label>
+    <input type="text" name="country" id="country" required />
+    <label for="city">Provider City</label>
+    <input type="text" name="city" id="city" required />
+    <label for="debt">Provider Debt</label>
+    <input type="number" min="0" step="1" name="debt" id="debt" required />
+    <button type="submit">Add Provider</button>
+</form>
+{% endblock %}

@@ -1,23 +1,9 @@
 {% extends "layout.html" %} {% block title %}Insert Product{% endblock %} {%
 block content %}
 
-<style>
-    select {
-        font-size: x-large;
-    }
-    input {
-        font-size: large;
-        height: 20px;
-    }
-    button {
-        font-size: large;
-        height: 30px;
-        width: 200px;
-        margin-top: 20px;
-    }
-</style>
+<link rel="stylesheet" href="../static/forms.css">
 <h1>Insert Product</h1>
-<form action="{{ url_for('products_bp.insert_product') }}" method="post" style="display: flex; flex-direction: column;">
+<form action="{{ url_for('products_bp.insert_product') }}" method="post">
     <div style="width: 200px; display: flex; flex-direction: column; gap: 10px;">
         <label for="name">Brand</label>
         <input type="text" name="name" id="name" required />
@@ -47,5 +33,5 @@ block content %}
         </select>
     </div>
   <button type="submit">Add product</button>
-  {% endblock %}
 </form>
+{% endblock %}

@@ -1,34 +1,68 @@
-{% extends "layout.html" %}
-{% block title %}Products{% endblock %}
-{% block content %}
-<link rel="stylesheet" href="../static/table.css">
+{% extends "layout.html" %} {% block title %}Products{% endblock %} {% block
+content %}
+<script>
+  function delete_provider(button) {
+    fetch("/providers/delete", {
+      method: "POST",
+      body: JSON.stringify({
+        provider_id: button.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(async (response) => {
+        let response_body = await response.json();
+        if(response_body == "Error"){
+            alert("Referential Constraint Violation");
+        } else {
+            alert("Provider deleted successfully");
+            location.reload();
+        }
+    }
+    )
+  }
+</script>
+<link rel="stylesheet" href="../static/table.css" />
 <h1>Providers</h1>
+<a href="{{ url_for('providers_bp.insert_provider') }}">Click to insert a product</a>
+
 <table>
-    <tr>
-        <th>Provider Id</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Country</th>
-        <th>City</th>
-        <th>Debt</th>
-    </tr>
-    {% for provider in providers %}
-    <tr>
-        <td>{{provider[0]}}</td>
-        <td>{{provider[1]}}</td>
-        <td>{{provider[2]}}</td>
-        <td>{{provider[3]}}</td>
-        <td>{{provider[4]}}</td>
-        <td>{{provider[5]}}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <th>Provider Id</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Country</th>
-        <th>City</th>
-        <th>Debt</th>
-    </tr>
+  <tr>
+    <th>Provider Id</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Country</th>
+    <th>City</th>
+    <th>Debt</th>
+    <th>Action</th>
+  </tr>
+  {% for provider in providers %}
+  <tr>
+    <td>{{provider[0]}}</td>
+    <td>{{provider[1]}}</td>
+    <td>{{provider[2]}}</td>
+    <td>{{provider[3]}}</td>
+    <td>{{provider[4]}}</td>
+    <td>{{provider[5]}}</td>
+    <td>
+      <button onclick="delete_provider(this)" id="{{provider[0]}}">X</button
+      ><button>
+        <a
+          href="{{url_for('providers_bp.update_provider') + '?provider_id=' + provider[0]|string}}"
+          >Edit</a
+        >
+      </button>
+    </td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <th>Provider Id</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Country</th>
+    <th>City</th>
+    <th>Debt</th>
+    <th>Action</th>
+  </tr>
 </table>
 {% endblock %}
