@@ -7,8 +7,23 @@
             <button class="btn btn-primary" hx-post="/stores/delete" hx-vals='{"store_id": "{{rows[0]}}"}' hx-trigger="click" hx-target="this" hx-swap="outerHTML" onclick="delete_trigger(this)">Delete</button>
         </td>
         <td>
-            <button class="btn btn-primary" hx-post="/stores/update" hx-vals='{"data": "{{rows}}"}' hx-trigger="click" hx-target="#row{{rows[0]}}" hx-swap="outerHTML">Edit</button>     
-        </td>
+            <button class="btn btn-primary" hx-get="/stores/update" hx-vals='"data":"{{rows}}"' hx-target="#row{{rows[0]}}" hx-swap="outerHTML">Edit</button>     
+        </td> 
     </tr>
     
+    
 {%endfor%}
+<tr id="insert-row">
+    <form id="insert-form" hx-post="/stores/insert" hx-swap="beforebegin" hx-target="#insert-row">
+    <td></td>
+    <td><input class="edit" type="text"   name="emp_id"  ></td>
+    <td><input class="edit" type="text"   name="store_name" ></td>
+    <td><input class="edit" type="text"   name="phone" ></td>
+    <td><input class="edit" type="text"   name="street" ></td>
+    <td><input class="edit" type="text"   name="city" ></td>
+    <td><input class="edit" type="text"   name="country" ></td>
+    <td><input class="edit" type="text"   name="email" ></td>
+    <td><input class="edit" type="text"   name="post_code" ></td>
+    <td><button class="btn btn-primary"  id="insert-button" type="submit" >Insert</button></td>
+    </form>
+</tr>

@@ -2,8 +2,8 @@
 {% block title %}Stores{% endblock %}
 {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
- <script src="https://unpkg.com/htmx.org@1.9.9"> </script>    
- <style>
+<script src="https://unpkg.com/htmx.org@1.9.9"> </script> 
+<style>
     .deleted {
         background-color: rgb(231, 112, 112); 
       }
@@ -61,7 +61,12 @@
    .edit{
     align-self: center;
    }
-    
+   .list {
+    background-color: salmon;
+    opacity: 1;
+    -webkit-transition: opacity 1500ms linear;
+    transition: opacity 1500ms linear;
+    }
             
  </style>
 
@@ -84,10 +89,25 @@
                         {%endfor%}
                         <td>
                             <button class="btn btn-primary" hx-post="/stores/delete" hx-vals='{"store_id": "{{rows[0]}}"}' hx-trigger="click" hx-target="this" hx-swap="outerHTML" onclick="delete_trigger(this)">Delete</button>
-                            <button class="btn btn-primary"  onclick="edit_trigger(this)">Edit</button>
                         </td>
-                    </tr>
+                        <td>
+                            <button class="btn btn-primary" hx-get="/stores/update" hx-vals='"data":"{{rows}}"' hx-target="#row{{rows[0]}}" hx-swap="outerHTML">Edit</button>     
+                        </td> 
                 {%endfor%}
+                <tr id="insert-row">
+                    <form id="insert-form" hx-post="/stores/insert" hx-swap="beforebegin" hx-target="#insert-row">
+                    <td><input class="edit" type="text"   name="store_id" ></td>
+                    <td><input class="edit" type="text"   name="emp_id"></td>
+                    <td><input class="edit" type="text"   name="store_name"></td>
+                    <td><input class="edit" type="text"   name="phone"></td>
+                    <td><input class="edit" type="text"   name="street"></td>
+                    <td><input class="edit" type="text"   name="city"></td>
+                    <td><input class="edit" type="text"   name="country"></td>
+                    <td><input class="edit" type="text"   name="email"></td>
+                    <td><input class="edit" type="text"   name="post_code"></td>
+                    <td><button class="btn btn-primary"  id="insert-button" type="submit">Insert</button></td>
+                    </form>
+                </tr>
             </tbody>
         </table>
         <div style="text-align: center; margin: auto;">   
@@ -129,13 +149,24 @@
             document.getElementById("next-page").setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
             document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
           }
+        function cancel_edit(button) {
+            button.setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
+            }  
         function delete_trigger(button) {
             var row = button.closest('tr');
 
             // Toggle the 'highlight' class to change the background color
+            row.classList.add('list');
             row.style.backgroundColor = 'salmon';
+            row.style.opacity = '0';
+            setTimeout(() => row.remove(), 1500);
             }
             
+        function update_trigger(button) {
+            store_id = button.id
+            button.setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'","store_id": "'+ String(store_id) +'"}');    
+        }
+
     </script>
       {% endblock %}
 
