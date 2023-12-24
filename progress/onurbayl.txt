@@ -74,3 +74,29 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -"employees.html" is modified for pagination
 -Pagination feature has been introduced for rises endpoint 
 -"rises.html" is modified for pagination
+-update_customer endpoint and update_customer_by_id query is created
+-update_customer.html is created
+-update_employee.html is created
+-update_rise endpoint and update_rise_by_id query is created
+-delete_customer endpoint is created
+-select_all_customers query is modified to return array of dictionary data
+-select_all_employees query is modified to return array of dictionary data
+-select_all_rises query is modified to return array of dictionary data
+-employee.html, customer.html and rises.html are modified to display fetched data in a html table
+-CSS codes for html tables in employee.html, customer.html and rises.html are written in layout.css
+-Bootstrap is also used for table creation and styling
+-Pop-Up modal is introduced to insert new data to the tables of customer, employee and rise_archive. Also general styling applied in layout.css
+-Delete endpoints of customers, employees, rises are modified to enable in-line deleting
+-For rise_archive in-line delete and update buttons are fully activated.
+-Pop-Up update modal is completed for update_rise endpoint and introduced for update_employee and update_customer
+-Query of get_rise_by_id is introduced
+-CORS package is installed and integrated in app.py to allow CROSS-Origin requests
+-Pop-Up update modal is completed for update_employee endpoint
+-Query of get_employee_by_id is created
+-In employees.html file, new javascript code and html block are created for Pop-Up modal
+-Pop-Up update modal is completed for update_customer endpoint
+-Query of get_customer_by_id is created
+-In customers.html file, new javascript code and html block are created for Pop-Up modal
+-layout.css is modified for accurate view to the user
+-get_employee_by_id endpoint is created that fetches data from database
+-get_customer_by_id endpoint is created that fetches data from database

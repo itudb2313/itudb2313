@@ -2,35 +2,297 @@
 {% block title %}Employee{% endblock %}
 {% block content %}
 
-    <h1>Employees</h1>
-    <h2>Insert a Employee</h2>
-    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a>
-    <h2>Delete a Employees</h2>
-    <form id="deleteEmployee" action="/delete_employee" method="post">  
 
-        <label for="employee_id">Employee ID:</label>
-        <input type="text" id="employee_id" name="employee_id" required><br>
+<h1>Employees</h1>
+<!-- <h2>Insert a Employee</h2>
+    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a> -->
+<h2>Delete a Employees</h2>
+<form id="deleteEmployee" action="/delete_employee" method="post">
 
-        <input type="submit" value="Delete">
-    </form>
-    <ul>
-        
-        {% for employee in employees %}
-        <li>{{employee}}</li>
-        {% endfor %}
-    </ul>
+  <label for="employee_id">Employee ID:</label>
+  <input type="text" id="employee_id" name="employee_id" required><br>
 
-    <div class="button-container">
-        {% if page > 1 %}
-            <a class="previous-button" href="?page={{ page - 1 }}">Previous</a>
-        {% endif %}
+  <input type="submit" class="delete-button" value="Delete">
+</form>
 
-        <span>Page {{ page }}</span>
+<!-- Trigger/Open The Modal -->
+<button id="myBtn" class="edit-button">Insert</button>
 
-        {% if employees|length == 10 %}
-            <a class="next-button" href="?page={{ page + 1 }}">Next</a>
-        {% endif %}
+<table id="employeeTable" class="table">
+  <thead>
+    <tr>
+      <th scope="col">Employee ID</th>
+      <th scope="col">Store ID</th>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Date of Birth</th>
+      <th scope="col">Email</th>
+      <th scope="col">Status</th>
+      <th scope="col">Salary</th>
+      <th scope="col">City</th>
+      <th scope="col">Country</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for employee in employees %}
+    <tr>
+      <th scope="row">{{employee.employee_id}}</th>
+      <td>{{employee.store_id}}</td>
+      <td>{{employee.firstname}}</td>
+      <td>{{employee.lastname}}</td>
+      <td>{{employee.dob}}</td>
+      <td>{{employee.email}}</td>
+      <td>{{employee.status}}</td>
+      <td>{{employee.salary}}</td>
+      <td>{{employee.city}}</td>
+      <td>{{employee.country}}</td>
+      <td><a class="edit-button" value="{{employee.employee_id}}">Update</a></td>
+      <td><a class="delete-button" href="/delete_employee?employee_id={{employee.employee_id}}">Delete</a></td>
+    </tr>
+    {% endfor %}
 
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% if page > 1 %}
+  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
+  {% endif %}
+
+  <span>Page {{ page }}</span>
+
+  {% if employees|length == 10 %}
+  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
+  {% endif %}
+</div>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close">&times;</span>
+
+    <div class="insert-container">
+
+
+      <!-- Insert data form -->
+      <form class="raiseForm" action="/insert_employee" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="employee_id">Employee ID:</label>
+            <input type="text" id="employee_id" name="employee_id" required><br>
+
+            <label for="store_id">Store ID:</label>
+            <input type="text" id="store_id" name="store_id" required><br>
+
+            <label for="firstname">Firstname:</label>
+            <input type="text" id="firstname" name="firstname" required><br>
+
+            <label for="lastname">Lastname:</label>
+            <input type="text" id="lastname" name="lastname" required><br>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required><br>
+
+          </div>
+          <div class="col-md-6">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+
+
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+              <option value="Active">Active</option>
+              <option value="Off">Off</option>
+            </select><br>
+
+
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" required><br>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required><br>
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required><br>
+
+
+            <input type="submit" value="Submit">
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+
+
+<!-- The Modal -->
+<div id="secondModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close close-second">&times;</span>
+
+    <div class="insert-container">
+
+
+      <!-- Insert data form -->
+      <form class="raiseForm" action="/update_employee" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="employee_idUpdate">Employee ID:</label>
+            <input type="text" id="employee_idUpdate" name="employee_id" readonly><br>
+
+            <label for="store_idUpdate">Store ID:</label>
+            <input type="text" id="store_idUpdate" name="store_id" required><br>
+
+            <label for="firstnameUpdate">Firstname:</label>
+            <input type="text" id="firstnameUpdate" name="firstname" required><br>
+
+            <label for="lastnameUpdate">Lastname:</label>
+            <input type="text" id="lastnameUpdate" name="lastname" required><br>
+
+            <label for="dobUpdate">Date of Birth:</label>
+            <input type="date" id="dobUpdate" name="dob" required><br>
+
+          </div>
+          <div class="col-md-6">
+            <label for="emailUpdate">Email:</label>
+            <input type="email" id="emailUpdate" name="email" required><br>
+
+
+            <label for="statusUpdate">Status:</label>
+            <select id="statusUpdate" name="status" required>
+              <option value="Active">Active</option>
+              <option value="Off">Off</option>
+            </select><br>
+
+
+            <label for="salaryUpdate">Salary:</label>
+            <input type="text" id="salaryUpdate" name="salary" required><br>
+
+            <label for="cityUpdate">City:</label>
+            <input type="text" id="cityUpdate" name="city" required><br>
+
+            <label for="countryUpdate">Country:</label>
+            <input type="text" id="countryUpdate" name="country" required><br>
+
+
+            <input type="submit" value="Submit">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = function () {
+    modal.style.display = "flex";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+
+<script>
+
+  function convertDateFormat(originalDateString) {
+    // Parse the original date string
+    const originalDate = new Date(originalDateString);
+
+    // Format the date as "yyyy-MM-dd"
+    const formattedDate = originalDate.toISOString().split('T')[0];
+
+    return formattedDate;
+  }
+
+  // UPDATE MODAL
+  var table = document.getElementById('employeeTable');
+  var second_modal = document.getElementById('secondModal');
+  var closeButton = document.querySelector('.close-second');
+
+
+  table.addEventListener('click', async function (event) {
+
+    // Check if the clicked element is a button with the class 'editButton'
+    if (event.target.classList.contains('edit-button')) {
+
+      // Get the value (row number) of the clicked button
+      const employee_id = event.target.getAttribute('value');
+      second_modal.style.display = "flex";
+
+      const url = `http://localhost:5000/get_employee_by_id?employee_id=${employee_id}`;
+
+      try {
+        const response = await fetch(url);
+
+        // Check if the request was successful (status code 200)
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        // Parse the response as JSON
+        const data = await response.json();
+
+        document.getElementById('employee_idUpdate').defaultValue = data.employee[0].employee_id;
+        document.getElementById('store_idUpdate').defaultValue = data.employee[0].store_id;
+        document.getElementById('firstnameUpdate').defaultValue = data.employee[0].firstname;
+        document.getElementById('lastnameUpdate').value = data.employee[0].lastname;
+        document.getElementById('dobUpdate').value = convertDateFormat(data.employee[0].dob);
+        document.getElementById('emailUpdate').value = data.employee[0].email;
+        document.getElementById('statusUpdate').value = data.employee[0].status;
+        document.getElementById('salaryUpdate').value = data.employee[0].salary;
+        document.getElementById('cityUpdate').value = data.employee[0].city;
+        document.getElementById('countryUpdate').value = data.employee[0].country;
+
+      } catch (error) {
+        // Handle errors during the fetch
+        console.error('Error during fetch:', error);
+      }
+
+
+    }
+  });
+
+  closeButton.addEventListener('click', function () {
+    // Close the modal when the X button is clicked
+    second_modal.style.display = 'none';
+  });
+
+  // Close the modal if the user clicks outside of it
+  window.addEventListener('click', function (event) {
+    if (event.target === second_modal) {
+      second_modal.style.display = 'none';
+    }
+  });
+</script>
+
 
 {% endblock %}
