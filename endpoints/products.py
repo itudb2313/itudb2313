@@ -71,7 +71,7 @@ def get_insert_product_page():
     )
 
 
-@products_bp.route("/product/delete", methods=["POST"])
+@products_bp.route("/delete_product", methods=["POST"])
 def delete_product():
     db = current_app.config.get("db")
     product_id = request.json.get("product_id")
