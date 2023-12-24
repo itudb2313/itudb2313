@@ -278,8 +278,6 @@ def update_order():
         # TODO: db.get_order(order_id) yaratıp oradaki
         # değerleri inputlara yazdırabilirsim
 
-        values = db.get_order(order_id)
-
         return f"""
             <td/>
             <td class="border">
