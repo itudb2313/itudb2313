@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from database import Database
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) 
 app.config.from_object("config")
 with app.app_context():
     db = Database()
