@@ -25,7 +25,6 @@ def stores():
 def delete_store():
     db = current_app.config.get("db")
     store_id = request.form.get("store_id")
-    print("store_id: " + str(store_id))
     db.delete_store(store_id)
     return "Deleted"
     
@@ -36,7 +35,11 @@ def edit_store():
         data=request.args.get("data")[1:-1].split(",")
         l=[]
         for i in data:
+            if(i[0] == " "):
+                i = i[1:]
             l.append(i.replace("'", ''))
+            
+        print(l)
         return f"""
                 <tr id="edit">
                 <td id= "store_id_cell">{l[0]}</td>
@@ -64,10 +67,9 @@ def edit_store():
         country = request.form.get("country")
         email = request.form.get("email")
         post_code = request.form.get("post_code")
-
-        db.update_store(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
         order_opt = request.form.get("order_opt")
         page_number = request.form.get("page_number")
+        db.update_store(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
         stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
         return render_template("stores_table.html", 
                                 stores=stores, 
@@ -79,7 +81,6 @@ def edit_store():
 @stores_bp.route("/stores/insert", methods=["POST"])
 def insert_store():
     db = current_app.config.get("db")
-    store_id = request.form.get("store_id")
     emp_id = request.form.get("emp_id")
     store_name = request.form.get("store_name")
     phone = request.form.get("phone")
@@ -90,6 +91,7 @@ def insert_store():
     post_code = request.form.get("post_code")
     db.insert_store(emp_id, store_name, phone, street, city, country, email, post_code)
     store_id = db.get_store_by_name(store_name,country,phone,street,city,email,post_code)[0][0]
+    print(store_id)
     return f"""<tr>
                     <td>{store_id}</td>
                     <td>{emp_id}</td>

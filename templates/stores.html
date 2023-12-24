@@ -70,7 +70,7 @@
             
  </style>
 
-    
+
     <div style="background-color:  black;margin: auto;  border: 3px solid black; padding: 10px;height: fixed;">
         <table>
             <tr>
@@ -87,7 +87,6 @@
                             hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">manager_id</button>
                  </th>
                 {%endif%}
-                
                 {%endfor%}
             </tr>
             <tbody id = "data" >
@@ -105,7 +104,7 @@
                 {%endfor%}
                 <tr id="insert-row">
                     <form id="insert-form" hx-post="/stores/insert" hx-swap="beforebegin" hx-target="#insert-row">
-                    <td><input class="edit" type="text"   name="store_id" ></td>
+                    <td></td>
                     <td><input class="edit" type="text"   name="emp_id"></td>
                     <td><input class="edit" type="text"   name="store_name"></td>
                     <td><input class="edit" type="text"   name="phone"></td>
@@ -158,6 +157,24 @@
             document.getElementById("next-page").setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
             document.getElementById("page-number").innerHTML = "Page: " + data_obj.page_number;
           }
+        function cancel_edit(button) {
+            button.setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
+            }  
+        function delete_trigger(button) {
+            var row = button.closest('tr');
+
+            // Toggle the 'highlight' class to change the background color
+            row.classList.add('list');
+            row.style.backgroundColor = 'salmon';
+            row.style.opacity = '0';
+            setTimeout(() => row.remove(), 1500);
+            }
+            
+        function update_trigger(button) {
+            store_id = button.id
+            button.setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'","store_id": "'+ String(store_id) +'"}');    
+        }
+
         function cancel_edit(button) {
             button.setAttribute("hx-vals", 'js:{"order_opt": "' + data_obj.sorted + '"'+',"page_number": "' +String(data_obj.page_number)+'"}');
             }  
