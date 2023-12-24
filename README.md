@@ -12,7 +12,7 @@ CRN:12166
 
 ## Introduction
 
-Provide a brief introduction to your project. Explain what it does, why it's useful, and any other relevant context.
+All-in-one system for car retailers.
 
 ## Quick Start
 
@@ -31,9 +31,19 @@ Provide a brief introduction to your project. Explain what it does, why it's use
 
         pip install -r requirements.txt
 
-4. Run the development server(--debug mode provides auto-reload and interactive debugger):
+4. Create config.py file with these inside:
 
-        flask run --debug
+        DB_HOST = "localhost"
+        DB_USER = "root"
+        DB_PASSWORD = "******"
+        DB_DATABASE = "test"
+
+        PORT = 8080
+        DEBUG = True
+
+5. Run the development server:
+
+        flask run
 
 ## Features
 
