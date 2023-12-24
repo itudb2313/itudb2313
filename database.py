@@ -29,8 +29,43 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            customers = cursor.fetchall()
+
+            customers = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                customers.append(row_dict)
+            
             return customers
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_customer_by_id(self, customer_id):
+        query = """SELECT * FROM customer WHERE customer_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (customer_id,))
+            customer = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                customer.append(row_dict)
+
+            return customer
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -72,7 +107,43 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_customer(self, customer_id):
+    def update_customer_by_id(
+        self,
+        customer_id,
+        employee_id,
+        firstname,
+        lastname,
+        dob,
+        email,
+        city,
+        country,
+    ):
+        query = """UPDATE customer SET employee_id = %s, firstname = %s, lastname = %s, dob = %s, email = %s, city = %s, country = %s
+        WHERE customer_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    firstname,
+                    lastname,
+                    dob,
+                    email,
+                    city,
+                    country,
+                    customer_id,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+
+    def delete_customer_by_id(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
         print(customer_id)
         try:
@@ -256,8 +327,43 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            employees = cursor.fetchall()
+            
+            employees = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                employees.append(row_dict)
+            
             return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_employee_by_id(self, employee_id):
+        query = """SELECT * FROM employee WHERE employee_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (employee_id,))
+            employee = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                employee.append(row_dict)
+
+            return employee
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -276,7 +382,7 @@ class Database:
         city,
         country,
     ):
-        query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
+        query = """UPDATE employee SET store_id=%s, firstname=%s,
         lastname=%s, dob=%s, email=%s, status=%s, salary=%s, city=%s, country=%s
         WHERE employee_id=%s
         """
@@ -286,7 +392,6 @@ class Database:
             cursor.execute(
                 query,
                 (
-                    employee_id,
                     store_id,
                     firstname,
                     lastname,
@@ -302,6 +407,7 @@ class Database:
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
+            print(dbapi.DatabaseError)
         finally:
             cursor.close()
 
@@ -345,7 +451,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_employee(self, employee_id):
+    def delete_employee_by_id(self, employee_id):
         query = """DELETE FROM employee WHERE employee_id = %s"""
         try:
             cursor = self.connection.cursor()
@@ -362,8 +468,42 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            rises = cursor.fetchall()
+            rises = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                rises.append(row_dict)
+
             return rises
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_rise_by_id(self, rise_id):
+        query = """SELECT * FROM rise_archive WHERE rise_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (rise_id,))
+            rise = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                rise.append(row_dict)
+
+            return rise
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -383,7 +523,7 @@ class Database:
             cursor.close()
 
     def update_rise_by_id(self, rise_id, amount_by_percent, rise_date, rise_state):
-        query = """UPDATE rise_archive SET rise_id=%s, amount_by_percent=%s,
+        query = """UPDATE rise_archive SET amount_by_percent=%s,
         rise_date=%s, rise_state=%s
         WHERE rise_id=%s
         """
@@ -391,7 +531,7 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(
-                query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id)
+                query, (amount_by_percent, rise_date, rise_state, rise_id)
             )
             self.connection.commit()
         except dbapi.DatabaseError:
@@ -399,7 +539,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_rise(self, rise_id):
+    def delete_rise_by_id(self, rise_id):
         query = """DELETE FROM rise_archive WHERE rise_id = %s"""
 
         try:
