@@ -1,0 +1,23 @@
+{% extends "layout.html" %} 
+{% block title %}Edit Product{% endblock %} 
+{%block content %}
+<script></script>
+<h1>
+    Update Provider
+</h1>
+<link rel="stylesheet" href="../static/forms.css">
+<form action="{{url_for('providers_bp.update_provider') + '?provider_id=' + provider[0]|string}}" method="post">
+    <label for="provider_name">Provider Name</label>
+    <input type="text" name="provider_name" id="provider_name" value="{{provider[1]}}" required />
+    <label for="email">Provider Email</label>
+    <input type="email" name="email" id="email" value="{{provider[2]}}" required />
+    <label for="country">Provider Country</label>
+    <input type="text" name="country" id="country" value="{{provider[3]}}" required />
+    <label for="city">Provider City</label>
+    <input type="text" name="city" id="city" value="{{provider[4]}}" required />
+    <label for="debt">Provider Debt</label>
+    <input type="number" min="0" step="1" name="debt" id="debt" value="{{provider[5]|int}}" required />
+    <button type="submit">Update Provider</button>
+</form>
+
+{% endblock %}

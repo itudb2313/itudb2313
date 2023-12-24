@@ -1,0 +1,44 @@
+{% extends "layout.html" %} 
+{% block title %}Edit Product{% endblock %} 
+{%block content %}
+<script></script>
+<h1>
+    Update Product
+</h1>
+<style>
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 20%;
+}
+</style>
+<form action="{{url_for('products_bp.update_product') + '?product_id=' + product[0]|string}}" method="post">
+    <label for="brand">Name</label>
+    <input type="text" name="brand" value="{{product[3]}}">
+    <label for="model">Model</label>
+    <input type="text" name="model" value="{{product[4]}}">
+    <label for="category_id">Category</label>
+    <select name="category_id" id="category">
+        {% for category in categories %}
+        <option value="{{category[0]}}">{{category[2]}}</option>
+        {% endfor %}
+    </select>
+    <label for="provider_id">Provider</label>
+    <select name="provider_id" id="provider">
+        {% for provider in providers %}
+        <option value="{{provider[0]}}">{{provider[1]}}</option>
+        {% endfor %}
+    </select>
+    <label for="year">Year</label>
+    <input type="number" name="year" value="{{product[5]}}">
+    <label for="color">Color</label>
+    <input type="text" name="color" value="{{product[6]}}">
+    <label for="km">Km</label>
+    <input type="number" name="km" value="{{product[7]}}">
+    <label for="price">Price</label>
+    <input type="number" name="price" value="{{product[8]}}">
+    <input type="submit">
+</form>
+
+{% endblock %}
