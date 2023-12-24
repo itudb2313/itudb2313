@@ -70,84 +70,12 @@
             
  </style>
 
-    
-    <div style="background-color:  black;margin: auto;  border: 3px solid black; padding: 10px;height: fixed;">
-        <table>
-<script src="https://unpkg.com/htmx.org@1.9.9"> </script> 
-<style>
-    .deleted {
-        background-color: rgb(231, 112, 112); 
-      }
-    table{
-        border: 2px solid;
-        border-color: rgb(0, 0, 0);
-        width: 85%;
-        height: 50%;
-        margin: auto;
-        color: #ffffff;
-        font-family: Verdana, sans-serif;
-        font-size: 12px;
-        text-align: left;
-        table-layout: auto;
-        }
-    tr{
-        border: 2px solid;
-        border-color: rgb(0, 0, 0);
-        height: 10px;
-        width:auto;
-        }
-    td{
-        border: 2px solid;
-        border-color: rgb(0, 0, 0);
-        }
-    td:nth-child(-n+2) {
-        width: 8%;
-        text-align: center;
-        }
-    td:nth-child(3) {
-        width: 12%;
-        text-align: left;
-        }   
-    tr:nth-child(even) {
-        background-color: rgb(54, 54, 54);
-        }
-    tr:nth-child(odd) {
-        background-color: rgb(31, 30, 30);
-        }    
-    .headers{
-        margin:auto;
-        display:block;
-        font-family: system-ui, sans-serif;
-        font-size: 20px;
-        color: #ffffff;
-        cursor: pointer;
-        font-weight: bold;  
-        border: none;
-        background-color: rgb(59, 50, 50);
-        }
-    th{
-        background-color: rgb(59, 50, 50);
-        border: 2px solid;
-        }
-   .edit{
-    align-self: center;
-   }
-   .list {
-    background-color: salmon;
-    opacity: 1;
-    -webkit-transition: opacity 1500ms linear;
-    transition: opacity 1500ms linear;
-    }
-            
- </style>
 
-    
     <div style="background-color:  black;margin: auto;  border: 3px solid black; padding: 10px;height: fixed;">
         <table>
             <tr>
                 {%for rows in headers%}
                 {%if rows[0] != "employee_id" %}
-                {%if rows[0] != "employee_id" %}
                 <th >
                     <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
                             hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">{{rows[0]}}</button>
@@ -159,18 +87,6 @@
                             hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">manager_id</button>
                  </th>
                 {%endif%}
-                
-                    <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
-                            hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">{{rows[0]}}</button>
-                 </th>
-                {%endif%}
-                {%if rows[0] == "employee_id" %}
-                <th >
-                    <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
-                            hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">manager_id</button>
-                 </th>
-                {%endif%}
-                
                 {%endfor%}
             </tr>
             <tbody id = "data" >
@@ -188,7 +104,7 @@
                 {%endfor%}
                 <tr id="insert-row">
                     <form id="insert-form" hx-post="/stores/insert" hx-swap="beforebegin" hx-target="#insert-row">
-                    <td><input class="edit" type="text"   name="store_id" ></td>
+                    <td></td>
                     <td><input class="edit" type="text"   name="emp_id"></td>
                     <td><input class="edit" type="text"   name="store_name"></td>
                     <td><input class="edit" type="text"   name="phone"></td>
