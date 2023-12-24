@@ -18,53 +18,65 @@
                     hx-get="/get-orders?page=0"
                     hx-trigger="load"
                     hx-target="#replace"
-                    hx-swap="innerHTML">for fetch</td>
+                    hx-swap="innerHTML" />
             </tr>
         </tbody>
         <tr>
-            <form hx-post="/add-order">
+            <form hx-post="/add-order" id="add">
                 <td class="border">
-                    <button class="button">+</button>
+                    <button class="button">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="24"
+                             height="24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             xmlns:v="https://vecta.io/nano">
+                            <path d="M12 5v14" />
+                            <path d="M5 12h14" />
+                        </svg>
+                    </button>
                 </td>
                 <td class="border"></td>
                 <td class="border">
                     <input type="text"
                            name="customer_id"
                            class="w-28 border bg-black"
-                           id="customer_id">
+                           id="replace_customer_add">
                 </td>
                 <td class="border">
                     <input type="text"
                            name="product_id"
                            class="w-28 border bg-black"
-                           id="product_id">
+                           id="replace_product_add">
                 </td>
                 <td class="border">
                     <input type="text"
                            name="store_id"
                            class="w-28 border bg-black"
-                           id="store_id">
+                           id="replace_store_add"
+                           hx-get="/employee-selection"
+                           hx-trigger="keyup, change">
                 </td>
                 <td class="border">
-                    <input type="text"
-                           name="employee_id"
-                           class="w-28 border bg-black"
-                           id="employee_id">
+                    <select id="replace_employee_add" disabled></select>
                 </td>
                 <td class="border">
-                    <input type="text"
+                    <input type="date"
                            name="order_date"
                            class="w-28 border bg-black"
                            id="order_date">
                 </td>
                 <td class="border">
-                    <input type="text"
+                    <input type="date"
                            name="ship_date"
                            class="w-28 border bg-black"
                            id="ship_date">
                 </td>
                 <td class="border">
-                    <input type="text"
+                    <input type="date"
                            name="required_date"
                            class="w-28 border bg-black"
                            id="required_date">
@@ -93,6 +105,7 @@
     </div>
     <script type="module">
         htmx.config.useTemplateFragments = true;
+        htmx.logAll();
         const ctx = document.getElementById('monthly');
     
         await new Promise(resolve => setTimeout(resolve, 1000)); // without this database creates multiple cursor and then dies quietly
@@ -126,7 +139,7 @@
         });
     </script>
     <style>
-        input {
+        input, select {
             background-color: black;
             width: 7rem;
             margin: 0.5rem;
@@ -140,7 +153,7 @@
             border: 1px solid white;
         }
 
-        table, div, p {
+        table, p {
             margin: 0 0 0 5rem;
         }
     </style>

@@ -29,8 +29,43 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            customers = cursor.fetchall()
+
+            customers = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+
+                # add the dictionary to the dict_array
+                customers.append(row_dict)
+
             return customers
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_customer_by_id(self, customer_id):
+        query = """SELECT * FROM customer WHERE customer_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (customer_id,))
+            customer = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                customer.append(row_dict)
+
+            return customer
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -72,7 +107,43 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_customer(self, customer_id):
+    def update_customer_by_id(
+        self,
+        customer_id,
+        employee_id,
+        firstname,
+        lastname,
+        dob,
+        email,
+        city,
+        country,
+    ):
+        query = """UPDATE customer SET employee_id = %s, firstname = %s, lastname = %s, dob = %s, email = %s, city = %s, country = %s
+        WHERE customer_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    firstname,
+                    lastname,
+                    dob,
+                    email,
+                    city,
+                    country,
+                    customer_id,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+
+    def delete_customer_by_id(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
         print(customer_id)
         try:
@@ -99,6 +170,7 @@ class Database:
             return None
         finally:
             cursor.close()
+
     def get_stores_count(self):
         query = """select count(*) from store"""
 
@@ -144,12 +216,18 @@ class Database:
         finally:
             cursor.close()
 
-    def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
-        query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
+    def get_all_stores_table(self, order_opt="store_id", page_number=1):
+        query = (
+            "SELECT * FROM store order by "
+            + order_opt
+            + " limit 20 offset "
+            + str((int(page_number) - 1) * 20)
+        )
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query, 
-                            )
+            cursor.execute(
+                query,
+            )
 
             stores = cursor.fetchall()
             return stores
@@ -159,15 +237,48 @@ class Database:
         finally:
             cursor.close()
 
-
-
     def select_all_employees(self):
         query = """SELECT * FROM employee"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            employees = cursor.fetchall()
+
+            employees = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+
+                # add the dictionary to the dict_array
+                employees.append(row_dict)
+
             return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_employee_by_id(self, employee_id):
+        query = """SELECT * FROM employee WHERE employee_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (employee_id,))
+            employee = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                employee.append(row_dict)
+
+            return employee
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -186,7 +297,7 @@ class Database:
         city,
         country,
     ):
-        query = """UPDATE employee SET employee_id=%s, store_id=%s, firstname=%s,
+        query = """UPDATE employee SET store_id=%s, firstname=%s,
         lastname=%s, dob=%s, email=%s, status=%s, salary=%s, city=%s, country=%s
         WHERE employee_id=%s
         """
@@ -196,7 +307,6 @@ class Database:
             cursor.execute(
                 query,
                 (
-                    employee_id,
                     store_id,
                     firstname,
                     lastname,
@@ -212,6 +322,7 @@ class Database:
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
+            print(dbapi.DatabaseError)
         finally:
             cursor.close()
 
@@ -255,7 +366,7 @@ class Database:
         finally:
             cursor.close()
 
-    def delete_employee(self, employee_id):
+    def delete_employee_by_id(self, employee_id):
         query = """DELETE FROM employee WHERE employee_id = %s"""
         try:
             cursor = self.connection.cursor()
@@ -272,8 +383,42 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            rises = cursor.fetchall()
+            rises = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+
+                # add the dictionary to the dict_array
+                rises.append(row_dict)
+
             return rises
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_rise_by_id(self, rise_id):
+        query = """SELECT * FROM rise_archive WHERE rise_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (rise_id,))
+            rise = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+
+                # add the dictionary to the dict_array
+                rise.append(row_dict)
+
+            return rise
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
@@ -293,23 +438,21 @@ class Database:
             cursor.close()
 
     def update_rise_by_id(self, rise_id, amount_by_percent, rise_date, rise_state):
-        query = """UPDATE rise_archive SET rise_id=%s, amount_by_percent=%s,
+        query = """UPDATE rise_archive SET amount_by_percent=%s,
         rise_date=%s, rise_state=%s
         WHERE rise_id=%s
         """
 
         try:
             cursor = self.connection.cursor()
-            cursor.execute(
-                query, (rise_id, amount_by_percent, rise_date, rise_state, rise_id)
-            )
+            cursor.execute(query, (amount_by_percent, rise_date, rise_state, rise_id))
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
             cursor.close()
 
-    def delete_rise(self, rise_id):
+    def delete_rise_by_id(self, rise_id):
         query = """DELETE FROM rise_archive WHERE rise_id = %s"""
 
         try:
@@ -460,7 +603,8 @@ class Database:
             # execute() will put single quotes around the column name
             if order_by in sortable_columns and order in ["ASC", "DESC"]:
                 cursor.execute(
-                    "SELECT * FROM orders ORDER BY "
+                    """select orders.*, customer.firstname, customer.lastname, product.product_name, store.store_name, employee.firstname, employee.lastname from orders inner join customer using(customer_id) inner join product using(product_id) inner join store using(store_id) inner join employee on orders.employee_id=employee.employee_id  ORDER BY """
+                    + "orders."
                     + order_by
                     + " "
                     + order
@@ -558,3 +702,35 @@ class Database:
                 ),
             )
             # self.connection.commit()
+
+    def get_all_employee_ids_and_names(self, store_id):
+        query = """SELECT DISTINCT employee_id, firstname, lastname FROM employee WHERE store_id = %s"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, (store_id,))
+            employee_ids = cursor.fetchall()
+            return employee_ids
+
+    def get_all_store_ids_and_names(self):
+        query = """SELECT store_id, store_name FROM store"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            store_ids = cursor.fetchall()
+            return store_ids
+
+    def get_all_product_ids_and_names(self):
+        query = """SELECT MIN(product_id), product_name FROM product GROUP BY product_name"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            product_ids = cursor.fetchall()
+            return product_ids
+
+    def get_all_customer_ids_and_names(self):
+        query = """SELECT MIN(customer_id), firstname, lastname FROM customer GROUP BY firstname, lastname"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            customer_ids = cursor.fetchall()
+            return customer_ids
