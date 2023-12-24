@@ -215,32 +215,7 @@ class Database:
         finally:
             cursor.close()
 
-    def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """UPDATE store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (
-                    employee_id,
-                    store_name,
-                    phone,
-                    street,
-                    city,
-                    country,
-                    email,
-                    post_code,
-                    store_id,
-                ),
-            )
-            self.connection.commit()
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-        finally:
-            cursor.close()
-
-
+    
     def delete_store(self, store_id):
         query = """DELETE FROM store WHERE store_id = %s"""
 
@@ -253,57 +228,9 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
-    def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """UPDATE store SET employee_id=%s, store_name='%s', phone='%s', street='%s', city='%s', country='%s', email='%s', post_code=%s WHERE store_id=%s"""
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (
-                    employee_id,
-                    store_name,
-                    phone,
-                    street,
-                    city,
-                    country,
-                    email,
-                    post_code,
-                    store_id,
-                ),
-            )
-            self.connection.commit()
-        except dbapi.DatabaseError:
-            print("error")
-            self.connection.rollback()
-        finally:
-            cursor.close()
+    
 
-
-    def insert_store(self, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (
-                    employee_id,
-                    store_name,
-                    phone,
-                    street,
-                    city,
-                    country,
-                    email,
-                    post_code,
-                ),
-            )
-            self.connection.commit()
-        except dbapi.DatabaseError:
-            print("error")
-            self.connection.rollback()
-        finally:
-            cursor.close()
-
+    
     def get_all_stores_table(self, order_opt="store_id", page_number=1):
         query = (
             "SELECT * FROM store order by "
@@ -312,45 +239,8 @@ class Database:
             + str((int(page_number) - 1) * 20)
         )
     def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """UPDATE store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(
-                query,
-                (
-                    employee_id,
-                    store_name,
-                    phone,
-                    street,
-                    city,
-                    country,
-                    email,
-                    post_code,
-                    store_id,
-                ),
-            )
-            self.connection.commit()
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-        finally:
-            cursor.close()
-
-
-    def delete_store(self, store_id):
-        query = """DELETE FROM store WHERE store_id = %s"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(query, (store_id,))
-            self.connection.commit()
-
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-        finally:
-            cursor.close()
-    def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """UPDATE store SET employee_id=%s, store_name='%s', phone='%s', street='%s', city='%s', country='%s', email='%s', post_code=%s WHERE store_id=%s"""
+        query = """UPDATE test.store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s;"""
+        print(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -373,6 +263,21 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
+
+
+    def delete_store(self, store_id):
+        query = """DELETE FROM store WHERE store_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (store_id,))
+            self.connection.commit()
+
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
 
     def get_store_by_name(self, store_name,country,phone,street,city,email,post_code):
         query = """SELECT store_id FROM store WHERE store_name=%s AND phone=%s AND street=%s AND city=%s 
