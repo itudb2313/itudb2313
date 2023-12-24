@@ -827,7 +827,7 @@ class Database:
                 INNER JOIN store USING(store_id)
                 GROUP BY store.store_name
                 ORDER BY SUM(orders.quantity * product.price) DESC
-                LIMIT 10
+                LIMIT 20
                 """
 
         query_total_sales = """
