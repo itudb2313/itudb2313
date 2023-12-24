@@ -381,7 +381,7 @@ def create_select_element_products(form_name):
         select = f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" name="product_id" id="{replace_elm_id}" form={form_name} hx-get="/employee-selection" hx-trigger="change" hx-swap="none">"""
 
     for product in res:
-        select += f"<option value='{product[0]}'>{product[1]}</option>"
+        select += f"<option value='{product[0]}'>{product[1]} {product[2]}</option>"
     select += "</select>"
 
     return select
