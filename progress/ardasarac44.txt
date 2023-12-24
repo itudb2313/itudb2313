@@ -1,12 +1,41 @@
 -w5-
 Joined github organization and repository
 Added my information to README.MD
+
 -w6-
 Stores view is created.
 Stores route is setted.
 Store data projected on screen with get stores method.
+
 -w7-
 Stores page is re-organized.
 Data from the database presented in table. 
 Some basic CRUD operations are examined for stores page.
 Starts working on deletion operation.
+
+-w8-
+Midterms week, couldnt do much on project.
+
+-w9-
+-Main table for stores page is updated
+-Stores table presents data now 20 per page.
+-Page changing buttons added.
+-Non-functional delete Button is added.
+-Queries for page changing is established.
+-Database functions are added to databse.py
+-Query for count of the records is created
+-Total number of records is now shown in the page.
+-Page changing functions are implemented in js. 
+
+-w10-
+-Delete button is updated
+-Style for delete button is setted
+-Functionalities for delete button is setted
+-Route for delete button is setted
+-Deleting query is now working
+
+-w11-
+-After deletion style is added
+-Style for table is changed.
+-Start working on edit button.
+-Route for update is setted.

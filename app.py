@@ -13,14 +13,15 @@ from endpoints.orders import orders_bp
 from endpoints.customers import customers_bp
 from endpoints.employees import employees_bp
 from endpoints.rises import rises_bp
+from endpoints.stores import stores_bp
 from endpoints.products import products_bp
 from endpoints.providers import providers_bp
-
 
 app.register_blueprint(orders_bp)
 app.register_blueprint(customers_bp)
 app.register_blueprint(employees_bp)
 app.register_blueprint(rises_bp)
+app.register_blueprint(stores_bp)
 app.register_blueprint(products_bp)
 app.register_blueprint(providers_bp)
 
@@ -35,25 +36,6 @@ def categories():
     return render_template("categories.html", categories=db.select_all_categories())
 
 
-@app.route("/stores", methods=["GET"])
-def stores():
-    return render_template(
-        "stores.html",
-        stores=db.get_all_stores_table(),
-        headers=db.get_stores_columns(),
-        stores_count=db.get_stores_count(),
-    )
-
-
-@app.route("/stores_table", methods=["GET"])
-def stores_table():
-    order_opt = request.args.get("order_opt")
-    page_number = request.args.get("page_number")
-    print("hereeeeeeeeeeeeeEEEEEEEEEEEEEEEEe123123ee " + page_number)
-    stores = db.get_all_stores_table(order_opt=order_opt, page_number=page_number)
-    return render_template(
-        "stores_table.html", stores=stores, headers=db.get_stores_columns()
-    )
 
 
 # Example code snippet for json data transfer. Do not remove.
