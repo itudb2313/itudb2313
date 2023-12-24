@@ -61,7 +61,7 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 customer.append(row_dict)
 
@@ -141,7 +141,6 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
-
 
     def delete_customer_by_id(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
@@ -274,7 +273,7 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 employee.append(row_dict)
 
@@ -464,25 +463,64 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
+
     def get_product(self, product_id):
         query = """SELECT * FROM product WHERE product_id = %s"""
         with self.connection.cursor() as cursor:
             cursor.execute(query, (product_id,))
             product = cursor.fetchone()
             return product
-    def get_products(self, search = "%%", lowest_price = 0, highest_price = 1000000000, lowest_km = 0, highest_km = 1000000000, color = "%%", lowest_year = 0, highest_year = 3000, page=0, order="product_id"):
-        
+
+    def get_products(
+        self,
+        search="%%",
+        lowest_price=0,
+        highest_price=1000000000,
+        lowest_km=0,
+        highest_km=1000000000,
+        color="%%",
+        lowest_year=0,
+        highest_year=3000,
+        page=0,
+        order="product_id",
+    ):
         select_clause = """SELECT product_id, product_name, model, category_name, year, color, km, price FROM product """
         join_category = """INNER JOIN category USING (category_id) """
         price_filters = """WHERE (price > %s AND price < %s) AND """
-        search_filters = """(product_name LIKE %s OR model LIKE %s OR category_name LIKE %s) """
+        search_filters = (
+            """(product_name LIKE %s OR model LIKE %s OR category_name LIKE %s) """
+        )
         color_filters = """AND color LIKE %s """
         km_filters = """AND (km > %s AND km < %s) """
         year_filters = """AND (year > %s AND year < %s) """
         order_by = """ORDER BY """ + order + """ LIMIT 10 OFFSET %s"""
-        query = select_clause + join_category + price_filters + search_filters + color_filters + km_filters + year_filters + order_by
+        query = (
+            select_clause
+            + join_category
+            + price_filters
+            + search_filters
+            + color_filters
+            + km_filters
+            + year_filters
+            + order_by
+        )
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (lowest_price, highest_price, search, search, search, color, lowest_km, highest_km, lowest_year, highest_year, page * 10))
+            cursor.execute(
+                query,
+                (
+                    lowest_price,
+                    highest_price,
+                    search,
+                    search,
+                    search,
+                    color,
+                    lowest_km,
+                    highest_km,
+                    lowest_year,
+                    highest_year,
+                    page * 10,
+                ),
+            )
             products = cursor.fetchall()
             return products
 
@@ -505,13 +543,38 @@ class Database:
             cursor.execute(query, (product_id,))
             self.connection.commit()
             return True
-    def update_product(self, product_id, product_name, model, year, color, price, km, category_id, provider_id):
+
+    def update_product(
+        self,
+        product_id,
+        product_name,
+        model,
+        year,
+        color,
+        price,
+        km,
+        category_id,
+        provider_id,
+    ):
         query = """UPDATE product SET product_name=%s, model=%s, year=%s, color=%s, price=%s, km=%s, category_id=%s, provider_id=%s WHERE product_id=%s"""
         with self.connection.cursor() as cursor:
-            cursor.execute(query, (product_name, model, year, color, price, km, category_id, provider_id, product_id))
+            cursor.execute(
+                query,
+                (
+                    product_name,
+                    model,
+                    year,
+                    color,
+                    price,
+                    km,
+                    category_id,
+                    provider_id,
+                    product_id,
+                ),
+            )
             self.connection.commit()
             return True
-            
+
     def get_colors(self):
         query = """SELECT DISTINCT(color) FROM product"""
         with self.connection.cursor() as cursor:
@@ -525,21 +588,19 @@ class Database:
             cursor.execute(query)
             unique_countries = cursor.fetchall()
             return unique_countries
+
     def get_provider_cities(self):
         query = """SELECT DISTINCT(city) FROM provider ORDER BY city"""
         with self.connection.cursor() as cursor:
             cursor.execute(query)
             unique_cities = cursor.fetchall()
             return unique_cities
-        
+
     def get_providers(self, search="%%", start=0, to=999999, country="%%", city="%%"):
         query = """SELECT provider_id, provider_name, email, country, city, debt from provider """
-        search_filters = (
-            """WHERE (provider_name LIKE %s OR email LIKE %s) """
-        )
+        search_filters = """WHERE (provider_name LIKE %s OR email LIKE %s) """
         debt_filters = """AND (debt > %s AND debt < %s) """
         country_city_filters = """AND country LIKE %s AND city LIKE %s """
-
 
         limit = """ORDER BY provider_id DESC LIMIT 10"""
         query += search_filters + debt_filters + country_city_filters + limit
@@ -547,7 +608,6 @@ class Database:
             cursor.execute(query, (search, search, start, to, country, city))
             providers = cursor.fetchall()
             return providers
-        
 
     def get_provider(self, provider_id):
         query = """SELECT provider_id, provider_name, email, country, city, debt FROM provider WHERE provider_id = %s"""
@@ -720,7 +780,7 @@ class Database:
             return store_ids
 
     def get_all_product_ids_and_names(self):
-        query = """SELECT MIN(product_id), product_name FROM product GROUP BY product_name"""
+        query = """SELECT MIN(product_id), product_name, model FROM product GROUP BY product_name, model"""
 
         with self.connection.cursor() as cursor:
             cursor.execute(query)
