@@ -79,7 +79,6 @@ def edit_store():
 @stores_bp.route("/stores/insert", methods=["POST"])
 def insert_store():
     db = current_app.config.get("db")
-    store_id = request.form.get("store_id")
     emp_id = request.form.get("emp_id")
     store_name = request.form.get("store_name")
     phone = request.form.get("phone")
@@ -88,8 +87,9 @@ def insert_store():
     country = request.form.get("country")
     email = request.form.get("email")
     post_code = request.form.get("post_code")
-    print(store_id, emp_id, store_name, phone, street, city, country, email, post_code)
-    db.insert_store(store_id, emp_id, store_name, phone, street, city, country, email, post_code)
+    db.insert_store(emp_id, store_name, phone, street, city, country, email, post_code)
+    store_id = db.get_store_by_name(store_name,country,phone,street,city,email,post_code)[0][0]
+    print(store_id)
     return f"""<tr>
                     <td>{store_id}</td>
                     <td>{emp_id}</td>

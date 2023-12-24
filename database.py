@@ -278,16 +278,28 @@ class Database:
         finally:
             cursor.close()
 
+    def get_store_by_name(self, store_name,country,phone,street,city,email,post_code):
+        query = """SELECT store_id FROM store WHERE store_name=%s AND phone=%s AND street=%s AND city=%s 
+                    AND country=%s  AND email=%s AND post_code=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (store_name,phone,street,city,country,email,post_code))
+            store = cursor.fetchall()
 
-    def insert_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """INSERT INTO store (store_id, employee_id, store_name, phone, street, city, country, email, post_code)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            return store
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def insert_store(self, employee_id, store_name, phone, street, city, country, email, post_code):
+        query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
+        VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(
                 query,
                 (
-                    store_id,
                     employee_id,
                     store_name,
                     phone,
