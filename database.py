@@ -258,6 +258,7 @@ class Database:
     def insert_store(self, employee_id, store_name, phone, street, city, country, email, post_code):
         query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
         VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)"""
+        
         try:
             cursor = self.connection.cursor()
             cursor.execute(
