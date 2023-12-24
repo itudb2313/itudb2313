@@ -88,6 +88,8 @@ def get_orders():
 
     thead += "<th class='border w-10'>Update</th></tr>"
 
+    # | order_id | customer_id | product_id | store_id | employee_id | order_date | ship_date  | required_date | order_status | quantity | firstname | lastname | product_name | store_name | firstname | lastname |
+
     rows = """"""
     for order in db.get_orders_paged(10, page * 10, order_by, t_order):
         rows += f"""
@@ -95,16 +97,16 @@ def get_orders():
             <td class="border" hx-post=/delete-order?id={order[0]}>{x_svg}</td>
             <td class="border">{order[0]}</td>
             <td class="border underline">
-                <a href="/customer?id={order[1]}">{order[1]}</a>
+                <a href="/customer?id={order[1]}">{order[10]} {order[11]}</a>
             </td>
             <td class="border underline">
-                <a href="/products?id={order[2]}">{order[2]}</a>
+                <a href="/products?id={order[2]}">{order[12]}</a>
             </td>
             <td class="border underline">
-                <a href="/stores?id={order[3]}">{order[3]}</a>
+                <a href="/stores?id={order[3]}">{order[13]}</a>
             </td>
             <td class="border underline">
-                <a href="/employees?id={order[4]}">{order[4]}</a>
+                <a href="/employees?id={order[4]}">{order[14]} {order[15]}</a>
             </td>
             <td class="border">{order[5]}</td>
             <td class="border">{order[6]}</td>
@@ -136,8 +138,12 @@ def get_orders():
                 </div>
             </td>
         </tr>
+        
         """
         + thead
+        + create_select_element_stores("add")
+        + create_select_element_products("add")
+        + create_select_element_customers("add")
     )
 
 
@@ -150,7 +156,13 @@ def delete_order():
 
     order_id = request.args.get("id")
     db.delete_order(order_id)
-    return redirect(url_for(".orders"))  # don't lose page
+
+    # flask redirect creates glitchy behaviour
+    redirect_obj = redirect(url_for(".orders"))
+    redirect_obj.status_code = 200
+    redirect_obj.headers["HX-Redirect"] = url_for(".orders")
+    return redirect_obj
+    # return redirect(url_for(".orders"))
 
 
 @orders_bp.route("/add-order", methods=["POST"])
@@ -181,7 +193,7 @@ def add_order():
         order_status,
         quantity,
     )
-    return redirect(url_for("orders"))
+    return redirect(url_for(".orders"))
 
 
 @orders_bp.route("/test", methods=["GET"])
@@ -225,6 +237,12 @@ def update_order():
             order_status,
             quantity,
         )
+        redirect_obj = redirect(url_for(".orders"))
+        redirect_obj.status_code = 200
+        redirect_obj.headers["HX-Redirect"] = url_for(".orders")
+        return redirect_obj
+
+        return redirect(url_for(".orders"))
         return f"""
         <tr hx-swap-oob="outerHTML:#o{order_id}" id="o{order_id}">
             <td class="border" hx-post=/delete-order?id={order_id}>{x_svg}</td>
@@ -262,16 +280,18 @@ def update_order():
             {order_id}
             <input type="hidden" name="order_id" value="{order_id}" form="update">
             </td>
-            <td class="border underline">
-                <input type="text" value="1" name="customer_id" form="update">
+            <td>
+            {create_select_element_customers("update")}
             </td>
-            <td class="border underline">
-                <input type="text" value="1" name="product_id" form="update">
+            <td>
+            {create_select_element_products("update")}
             </td>
-            <td class="border underline">
-                <input type="text" value="1" name="store_id" form="update">
+            <td>
+            {create_select_element_stores("update")}
             </td>
-            {create_select_element("update")}
+            <td>
+            <select name="employee_id" form="update" id="replace_employee_update" disabled></select>
+            </td>
             <td class="border">
                 <input type="date" name="order_date" form="update">
             </td>
@@ -303,10 +323,12 @@ def create_select_element(form_name):
 
     res = db.get_all_employee_ids_and_names(store_id)
 
-    if res is None:
-        return "No employees found"
+    replace_elm_id = "replace_employee_" + form_name
 
-    select = f"""<select hx-swap-oob="#employee_id" hx-swap="outerHTML" name='employee_id' id="employee_id" form={form_name}>"""
+    if len(res) == 0:
+        return f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" id="{replace_elm_id}" disabled></select>"""
+
+    select = f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" name="employee_id" id="{replace_elm_id}" form={form_name}> """
 
     for employee in res:
         select += f"<option value='{employee[0]}'>{employee[1]} {employee[2]}</option>"
@@ -315,6 +337,85 @@ def create_select_element(form_name):
     return select
 
 
+def create_select_element_stores(form_name):
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    res = db.get_all_store_ids_and_names()
+
+    replace_elm_id = "replace_store_" + form_name
+
+    if len(res) == 0:
+        return f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" id="{replace_elm_id}" disabled></select>"""
+
+    if form_name == "update":
+        select = f"""<select name="store_id"  form={form_name} hx-get="/employee-selection?form=update" hx-trigger="keyup, change" hx-swap="none">"""
+    else:
+        select = f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" name="store_id" id="{replace_elm_id}" form={form_name} hx-get="/employee-selection" hx-trigger="change" hx-swap="none">"""
+
+    for store in res:
+        select += f"<option value='{store[0]}'>{store[1]}</option>"
+    select += "</select>"
+
+    return select
+
+
+def create_select_element_products(form_name):
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    res = db.get_all_product_ids_and_names()
+
+    replace_elm_id = "replace_product_" + form_name
+
+    if len(res) == 0:
+        return f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" id="{replace_elm_id}" disabled></select>"""
+
+    if form_name == "update":
+        select = f"""<select name="product_id"  form={form_name} hx-get="/employee-selection?form=update" change" hx-swap="none">"""
+    else:
+        select = f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" name="product_id" id="{replace_elm_id}" form={form_name} hx-get="/employee-selection" hx-trigger="change" hx-swap="none">"""
+
+    for product in res:
+        select += f"<option value='{product[0]}'>{product[1]}</option>"
+    select += "</select>"
+
+    return select
+
+
+def create_select_element_customers(form_name):
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+
+    res = db.get_all_customer_ids_and_names()
+
+    replace_elm_id = "replace_customer_" + form_name
+
+    if len(res) == 0:
+        return f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" id="{replace_elm_id}" disabled></select>"""
+
+    if form_name == "update":
+        select = f"""<select name="customer_id"  form={form_name} hx-get="/employee-selection?form=update" change" hx-swap="none">"""
+    else:
+        select = f"""<select hx-swap-oob="outerHTML:#{replace_elm_id}" name="customer_id" id="{replace_elm_id}" form={form_name} hx-get="/employee-selection" hx-trigger="change" hx-swap="none">"""
+
+    for customer in res:
+        select += f"<option value='{customer[0]}'>{customer[1]} {customer[2]}</option>"
+    select += "</select>"
+
+    return select
+
+
 @orders_bp.route("/employee-selection", methods=["GET"])
 def employee_selection():
-    return create_select_element("add")
+    form = request.args.get("form")
+    if form == "update":
+        return create_select_element("update")
+    else:
+        return create_select_element("add")

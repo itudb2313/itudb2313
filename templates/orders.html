@@ -18,7 +18,7 @@
                     hx-get="/get-orders?page=0"
                     hx-trigger="load"
                     hx-target="#replace"
-                    hx-swap="innerHTML"/>
+                    hx-swap="innerHTML" />
             </tr>
         </tbody>
         <tr>
@@ -44,24 +44,24 @@
                     <input type="text"
                            name="customer_id"
                            class="w-28 border bg-black"
-                           id="customer_id">
+                           id="replace_customer_add">
                 </td>
                 <td class="border">
                     <input type="text"
                            name="product_id"
                            class="w-28 border bg-black"
-                           id="product_id">
+                           id="replace_product_add">
                 </td>
                 <td class="border">
                     <input type="text"
                            name="store_id"
                            class="w-28 border bg-black"
-                           id="store_id"
+                           id="replace_store_add"
                            hx-get="/employee-selection"
-                           hx-trigger="keyup ">
+                           hx-trigger="keyup, change">
                 </td>
                 <td class="border">
-                    <select name="employee_id" id="employee_id" disabled></select>
+                    <select id="replace_employee_add" disabled></select>
                 </td>
                 <td class="border">
                     <input type="date"
@@ -105,6 +105,7 @@
     </div>
     <script type="module">
         htmx.config.useTemplateFragments = true;
+        htmx.logAll();
         const ctx = document.getElementById('monthly');
     
         await new Promise(resolve => setTimeout(resolve, 1000)); // without this database creates multiple cursor and then dies quietly
