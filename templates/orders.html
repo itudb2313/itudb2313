@@ -39,87 +39,89 @@
                         </svg>
                     </button>
                 </td>
-                <td class="border"></td>
-                <td class="border">
-                    <input type="text"
-                           name="customer_id"
-                           class="w-28 border bg-black"
-                           id="replace_customer_add">
+                <td></td>
+                <td>
+                    <input type="text" name="customer_id" id="replace_customer_add">
                 </td>
-                <td class="border">
-                    <input type="text"
-                           name="product_id"
-                           class="w-28 border bg-black"
-                           id="replace_product_add">
+                <td>
+                    <input type="text" name="product_id" id="replace_product_add">
                 </td>
-                <td class="border">
+                <td>
                     <input type="text"
                            name="store_id"
-                           class="w-28 border bg-black"
                            id="replace_store_add"
                            hx-get="/employee-selection"
                            hx-trigger="keyup, change">
                 </td>
-                <td class="border">
+                <td>
                     <select id="replace_employee_add" disabled></select>
                 </td>
-                <td class="border">
-                    <input type="date"
-                           name="order_date"
-                           class="w-28 border bg-black"
-                           id="order_date">
+                <td>
+                    <input type="date" name="order_date" id="order_date">
                 </td>
-                <td class="border">
-                    <input type="date"
-                           name="ship_date"
-                           class="w-28 border bg-black"
-                           id="ship_date">
+                <td>
+                    <input type="date" name="ship_date" id="ship_date">
                 </td>
-                <td class="border">
-                    <input type="date"
-                           name="required_date"
-                           class="w-28 border bg-black"
-                           id="required_date">
+                <td>
+                    <input type="date" name="required_date" id="required_date">
                 </td>
-                <td class="border">
-                    <input type="text"
-                           name="order_status"
-                           class="w-28 border bg-black"
-                           id="order_status">
+                <td>
+                    <input type="text" name="order_status" id="order_status">
                 </td>
-                <td class="border">
-                    <input type="text"
-                           name="quantity"
-                           class="w-28 border bg-black"
-                           id="quantity">
+                <td>
+                    <input type="text" name="quantity" id="quantity">
                 </td>
-                <td class="border" />
+                <td />
             </form>
         </tr>
     </table>
-    <p>
-        Note: Database does not have auto increment for order_id, so it will be null. And also, since it does not have id you cannot delete it yet.
-    </p>
-    <div class="border w-1/3">
-        <canvas id="monthly"></canvas>
+    <div class="mx-16 mt-16 flex flex-wrap gap-8">
+        <div class="w-2/5 border">
+            <canvas id="monthly"></canvas>
+        </div>
+        <div class="w-2/5 border">
+            <canvas id="daily"></canvas>
+        </div>
+        <div class="w-2/5 border text-center">
+            <p class="text-2xl font-bold">All Time Best Sellers</p>
+            <p class="text-2xl" id="best_selling"></p>
+        </div>
+        <div class="w-2/5 border text-center">
+            <p class="text-2xl font-bold">All Time Best Grossing</p>
+            <p class="text-2xl" id="best_grossing"></p>
+        </div>
+        <div class="w-2/5 border text-center">
+            <p class="text-3xl font-bold">Gross Split by Store</p>
+            <canvas id="stores"></canvas>
+        </div>
+        <div class="w-2/5 border text-center items-middle">
+            <p class="text-3xl font-bold">Total sales</p>
+            <p class="text-2xl" id="total-orders"></p>
+            <p class="text-2xl" id="total-gross"></p>
+        </div>
     </div>
     <script type="module">
         htmx.config.useTemplateFragments = true;
-        htmx.logAll();
-        const ctx = document.getElementById('monthly');
+        //htmx.logAll();
+        const ctx1 = document.getElementById('monthly');
+        const ctx2 = document.getElementById('daily');
     
         await new Promise(resolve => setTimeout(resolve, 1000)); // without this database creates multiple cursor and then dies quietly
-        let res = await fetch("/test")
+        let res = await fetch("/special")
         res = await res.json()
 
         let labels = [];
         let data = [];
-        res.forEach((e) => {
-            labels.push(e[1])
+        let i = 0
+        res[0].forEach((e) => {
+            labels.push(i + "-" + e[1])
             data.push(e[0])
+
+            if (e[1] == 12)
+                i+=1
         })
 
-        new Chart(ctx, {
+        new Chart(ctx1, {
             type: 'bar',
             data: {
                 labels: labels,
@@ -137,6 +139,69 @@
                 }
             }
         });
+
+        data=[]
+        res[1].forEach((e) => {
+            data.push(e[0])
+        })
+
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                datasets: [{
+                    label: 'Day of Orders',
+                    data: data,
+                    borderWidth: 1
+                    }]
+                },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        res[2].forEach((e) => {
+            document.getElementById('best_selling').innerHTML += e[0] + " " + e[1] + " - " + e[2] + " units <br>"
+        })
+
+        res[3].forEach((e) => {
+            document.getElementById('best_grossing').innerHTML += e[0] + " " + e[1] + " - " + e[2] + "$<br>"
+        })
+
+        res[4].forEach((e) => {
+            document.getElementById('stores').innerHTML += e[0] + " - " + e[1] + "$<br>"
+        })
+
+        new Chart(document.getElementById('stores'), {
+            type: 'pie',
+            data: {
+                labels: res[4].map((e) => e[0]),
+                datasets: [{
+                    label: 'Gross Split by Store',
+                    data: res[4].map((e) => e[1]),
+                    borderWidth: 1
+                    }]
+                },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        document.getElementById('total-orders').innerHTML = "Total orders: " + res[6][0][0]
+        document.getElementById('total-gross').innerHTML = "Total gross: " + res[5][0][0] + "$"
     </script>
     <style>
         input, select {
@@ -151,10 +216,15 @@
 
         td {
             border: 1px solid white;
+            height: 5rem;
         }
 
-        table, p {
+        table {
             margin: 0 0 0 5rem;
+        }
+
+        #pager {
+            height: 0;
         }
     </style>
 {% endblock %}
