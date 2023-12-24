@@ -75,10 +75,19 @@
         <table>
             <tr>
                 {%for rows in headers%}
+                {%if rows[0] != "employee_id" %}
                 <th >
-                        <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
-                                hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">{{rows[0]}}</button>
-                </th>
+                    <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
+                            hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">{{rows[0]}}</button>
+                 </th>
+                {%endif%}
+                {%if rows[0] == "employee_id" %}
+                <th >
+                    <button class = "headers" id = {{rows[0]}} type = "button"  hx-get = "/stores_table" hx-vals='js:{"order_opt": "{{rows[0]}}","page_number": "1"}'
+                            hx-trigger="click" hx-target="#data" onclick="sort_by_column('{{rows[0]}}')">manager_id</button>
+                 </th>
+                {%endif%}
+                
                 {%endfor%}
             </tr>
             <tbody id = "data" >
