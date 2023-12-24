@@ -61,7 +61,11 @@ def create_update_button(id):
   """
 
 
-x_svg = """<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns:v="https://vecta.io/nano"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>"""
+x_svg = """
+<div class="w-6 mx-auto my-2">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns:v="https://vecta.io/nano"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+</div>
+"""
 
 
 @orders_bp.route("/get-orders", methods=["GET"])
@@ -100,13 +104,13 @@ def get_orders():
                 <a href="/customer?id={order[1]}">{order[10]} {order[11]}</a>
             </td>
             <td class="border underline">
-                <a href="/products?id={order[2]}">{order[12]}</a>
+                <a href="/products?id={order[2]}">{order[12]} {order[13]}</a>
             </td>
             <td class="border underline">
-                <a href="/stores?id={order[3]}">{order[13]}</a>
+                <a href="/stores?id={order[3]}">{order[14]}</a>
             </td>
             <td class="border underline">
-                <a href="/employees?id={order[4]}">{order[14]} {order[15]}</a>
+                <a href="/employees?id={order[4]}">{order[15]} {order[16]}</a>
             </td>
             <td class="border">{order[5]}</td>
             <td class="border">{order[6]}</td>
@@ -120,7 +124,7 @@ def get_orders():
         rows
         + f"""
         <tr>
-            <td colspan="12" >
+            <td colspan="12" id="pager">
                 <div class="flex justify-center gap-4">
                     <div
                     hx-get="/get-orders?page={page-1}&order_by={order_by}&order={t_order}"
@@ -196,14 +200,14 @@ def add_order():
     return redirect(url_for(".orders"))
 
 
-@orders_bp.route("/test", methods=["GET"])
-def test():
+@orders_bp.route("/special", methods=["GET"])
+def special_queries():
     db = current_app.config.get("db")
 
     if db is None:
         return "No database found"
 
-    return jsonify(db.monthly_order())
+    return jsonify(db.special_queries())
 
 
 @orders_bp.route("/update-order", methods=["GET", "POST"])
@@ -273,6 +277,8 @@ def update_order():
 
         # TODO: db.get_order(order_id) yaratıp oradaki
         # değerleri inputlara yazdırabilirsim
+
+        values = db.get_order(order_id)
 
         return f"""
             <td/>

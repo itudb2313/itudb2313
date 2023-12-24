@@ -155,20 +155,7 @@ class Database:
         finally:
             cursor.close()
 
-    def get_stores_columns(self):
-        query = """show columns from store"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(query)
-
-            stores_column_names = cursor.fetchall()
-            return stores_column_names
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            return None
-        finally:
-            cursor.close()
+   
 
     def get_stores_count(self):
         query = """select count(*) from store"""
@@ -215,32 +202,8 @@ class Database:
         finally:
             cursor.close()
 
-    
-    def delete_store(self, store_id):
-        query = """DELETE FROM store WHERE store_id = %s"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(query, (store_id,))
-            self.connection.commit()
-
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-        finally:
-            cursor.close()
-    
-
-    
-    def get_all_stores_table(self, order_opt="store_id", page_number=1):
-        query = (
-            "SELECT * FROM store order by "
-            + order_opt
-            + " limit 20 offset "
-            + str((int(page_number) - 1) * 20)
-        )
     def update_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
         query = """UPDATE test.store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s;"""
-        print(store_id, employee_id, store_name, phone, street, city, country, email, post_code)
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -263,7 +226,6 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
-
 
     def delete_store(self, store_id):
         query = """DELETE FROM store WHERE store_id = %s"""
@@ -761,7 +723,7 @@ class Database:
             # execute() will put single quotes around the column name
             if order_by in sortable_columns and order in ["ASC", "DESC"]:
                 cursor.execute(
-                    """select orders.*, customer.firstname, customer.lastname, product.product_name, store.store_name, employee.firstname, employee.lastname from orders inner join customer using(customer_id) inner join product using(product_id) inner join store using(store_id) inner join employee on orders.employee_id=employee.employee_id  ORDER BY """
+                    """select orders.*, customer.firstname, customer.lastname, product.product_name, product.model, store.store_name, employee.firstname, employee.lastname from orders inner join customer using(customer_id) inner join product using(product_id) inner join store using(store_id) inner join employee on orders.employee_id=employee.employee_id  ORDER BY """
                     + "orders."
                     + order_by
                     + " "
@@ -815,16 +777,82 @@ class Database:
             )
             # self.connection.commit()
 
-    def monthly_order(self):
-        query = """
+    def special_queries(self):
+        query_monthly = """
                 SELECT count(*), MONTH(order_date), YEAR(order_date)  FROM orders 
                 GROUP BY MONTH(order_date), YEAR(order_date) ORDER BY YEAR(order_date), MONTH(order_date) ASC
                 """
 
+        query_day_of_week = """
+                SELECT count(*) FROM orders 
+                GROUP BY DAYOFWEEK(order_date)
+                """
+
+        query_best_selling = """
+                SELECT product.product_name, product.model, SUM(orders.quantity) FROM orders
+                INNER JOIN product USING(product_id)
+                GROUP BY product.product_name, product.model
+                ORDER BY SUM(orders.quantity) DESC
+                LIMIT 10
+                """
+
+        query_best_grossing = """
+                SELECT product.product_name, product.model, SUM(orders.quantity * product.price) FROM orders
+                INNER JOIN product USING(product_id)
+                GROUP BY product.product_name, product.model
+                ORDER BY SUM(orders.quantity * product.price) DESC
+                LIMIT 10
+                """
+
+        query_best_stores = """
+                SELECT store.store_name, SUM(orders.quantity * product.price) FROM orders
+                INNER JOIN product USING(product_id)
+                INNER JOIN store USING(store_id)
+                GROUP BY store.store_name
+                ORDER BY SUM(orders.quantity * product.price) DESC
+                LIMIT 10
+                """
+
+        query_total_sales = """
+                SELECT SUM(orders.quantity * product.price) FROM orders
+                INNER JOIN product USING(product_id)
+                """
+
+        query_total_orders = """
+                SELECT COUNT(*) FROM orders
+                """
+
+        results = []
         with self.connection.cursor() as cursor:
-            cursor.execute(query)
+            cursor.execute(query_monthly)
             data = cursor.fetchall()
-            return data
+            results.append(data)
+
+            cursor.execute(query_day_of_week)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_best_selling)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_best_grossing)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_best_stores)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_total_sales)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_total_orders)
+            data = cursor.fetchall()
+            results.append(data)
+
+        return results
 
     def update_order(
         self,
@@ -879,7 +907,6 @@ class Database:
 
     def get_all_product_ids_and_names(self):
         query = """SELECT MIN(product_id), product_name, model FROM product GROUP BY product_name, model"""
-
 
         with self.connection.cursor() as cursor:
             cursor.execute(query)
