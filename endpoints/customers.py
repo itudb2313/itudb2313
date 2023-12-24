@@ -41,6 +41,21 @@ def customers():
     return render_template('customers.html', customers=paginated_items, page=page)
 
 
+@customers_bp.route("/get_customer_by_id", methods=["GET"])
+def get_customer_by_id():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+    
+    customer_id = request.args.get('customer_id')
+    
+    customer = db.get_customer_by_id(customer_id)
+
+    return jsonify({"customer": customer})
+
+
 # insert_customer endpoint to insert new customer record into the customer table
 @customers_bp.route("/insert_customer", methods=["GET", "POST"])
 def insert_customer():

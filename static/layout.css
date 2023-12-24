@@ -114,7 +114,7 @@ a, a:link, a:visited {
 
 
 
-#raiseForm {
+.raiseForm {
     background-color: #f9f9f9;
     padding: 20px;
     width: 80%;
@@ -123,15 +123,15 @@ a, a:link, a:visited {
 }
 
 
-#raiseForm label {
+.raiseForm label {
     display: block;
     margin-bottom: 10px;
 }
 
-#raiseForm input[type="text"],
-#raiseForm input[type="date"],
-#raiseForm input[type="email"],
-#raiseForm select {
+.raiseForm input[type="text"],
+.raiseForm input[type="date"],
+.raiseForm input[type="email"],
+.raiseForm select {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -139,7 +139,7 @@ a, a:link, a:visited {
     border-radius: 4px;
 }
 
-#raiseForm input[type="submit"] {
+.raiseForm input[type="submit"] {
     background-color: #4CAF50;
     color: white;
     padding: 12px 20px;
@@ -149,7 +149,7 @@ a, a:link, a:visited {
     width: 100%;
 }
 
-#raiseForm input[type="submit"]:hover {
+.raiseForm input[type="submit"]:hover {
     background-color: #45a049;
 } 
 

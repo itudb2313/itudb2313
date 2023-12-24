@@ -37,7 +37,7 @@
             <td>{{rise.amount_by_percent}}</td>
             <td>{{rise.rise_date}}</td>
             <td>{{rise.rise_state}}</td>
-            <td><a id="updateBtn" class="edit-button" value="{{rise.rise_id}}" href="get_rise_by_id?rise_id={{rise.rise_id}}">Update</a></td>
+            <td><a class="edit-button" value="{{rise.rise_id}}" >Update</a></td>
             <td><a class="delete-button" href="/delete_rise?rise_id={{rise.rise_id}}">Delete</a></td>
           </tr>
           {% endfor %}
@@ -67,7 +67,7 @@
     <span class="close x">&times;</span>
     <div class="insert-container">
         <!-- Insert data form -->
-        <form id="raiseForm" action="/insert_rise" method="post">
+        <form class="raiseForm" action="/insert_rise" method="post">
           <label for="rise_id">Raise ID:</label>
           <input type="text" id="rise_id" name="rise_id" required><br>
   
@@ -101,7 +101,7 @@
      <span class="close close-second">&times;</span>
      <div class="insert-container">
          <!-- Insert data form -->
-         <form id="raiseForm" action="/update_rise" method="post">
+         <form class="raiseForm" action="/update_rise" method="post">
            <label for="rise_idUpdate">Raise ID:</label>
            <input type="text" id="rise_idUpdate" name="rise_id" readonly><br>
    

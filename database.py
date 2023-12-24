@@ -48,6 +48,29 @@ class Database:
         finally:
             cursor.close()
 
+    def get_customer_by_id(self, customer_id):
+        query = """SELECT * FROM customer WHERE customer_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (customer_id,))
+            customer = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                customer.append(row_dict)
+
+            return customer
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
     def insert_customer(
         self,
         customer_id,
@@ -118,6 +141,7 @@ class Database:
             self.connection.rollback()
         finally:
             cursor.close()
+
 
     def delete_customer_by_id(self, customer_id):
         query = """DELETE FROM customer WHERE customer_id = %s"""
@@ -227,6 +251,29 @@ class Database:
                 employees.append(row_dict)
             
             return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_employee_by_id(self, employee_id):
+        query = """SELECT * FROM employee WHERE employee_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (employee_id,))
+            employee = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                employee.append(row_dict)
+
+            return employee
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:

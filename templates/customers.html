@@ -3,125 +3,183 @@
 {% block content %}
 
 
-    <h1>Customers</h1>
-    <!-- <h2>Insert a Customer</h2>
+<h1>Customers</h1>
+<!-- <h2>Insert a Customer</h2>
     <a href="{{ url_for('customers_bp.insert_customer') }}">Click to insert a customer</a> -->
-    <h2>Delete a Customer</h2>
-    <form id="deleteCustomer" action="/delete_customer" method="post">  
+<h2>Delete a Customer</h2>
+<form id="deleteCustomer" action="/delete_customer" method="post">
 
-        <label for="customer_id">Customer ID:</label>
-        <input type="text" id="customer_id" name="customer_id" required><br>
+  <label for="customer_id">Customer ID:</label>
+  <input type="text" id="customer_id" name="customer_id" required><br>
 
-        <input type="submit" class="delete-button" value="Delete">
-    </form>
+  <input type="submit" class="delete-button" value="Delete">
+</form>
 
-         <!-- Trigger/Open The Modal -->
-<button id="myBtn" class="edit-button" >Insert</button>
-
-
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Customer ID</th>
-            <th scope="col">Employee ID</th>
-            <th scope="col">Firstname</th>
-            <th scope="col">Lastname</th>
-            <th scope="col">Date of Birth</th>
-            <th scope="col">Email</th>
-            <th scope="col">City</th>
-            <th scope="col">Country</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for customer in customers %}
-          <tr>
-            <th scope="row">{{customer.customer_id}}</th>
-            <td>{{customer.employee_id}}</td>
-            <td>{{customer.firstname}}</td>
-            <td>{{customer.lastname}}</td>   
-            <td>{{customer.dob}}</td>
-            <td>{{customer.email}}</td>
-            <td>{{customer.city}}</td>
-            <td>{{customer.country}}</td>
-            <td><a class="edit-button" href="/edit_customer?customer_id={{customer.customer_id}}">Edit</a></td>
-            <td><a class="delete-button" href="/delete_customer?customer_id={{customer.customer_id}}">Delete</a></td>
-          </tr>
-          {% endfor %}
-          
-        </tbody>
-      </table>
-
-      <div class="pagination">
-        {% if page > 1 %}
-            <a class="previous-button" href="?page={{ page - 1 }}" >&laquo; Previous</a>
-        {% endif %}
-
-        <span>Page {{ page }}</span>
-
-        {% if customers|length == 10 %}
-            <a class="next-button" href="?page={{ page + 1 }}" >Next &raquo;</a>
-        {% endif %}
-    </div>
+<!-- Trigger/Open The Modal -->
+<button id="myBtn" class="edit-button">Insert</button>
 
 
+<table id="customerTable" class="table">
+  <thead>
+    <tr>
+      <th scope="col">Customer ID</th>
+      <th scope="col">Employee ID</th>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Date of Birth</th>
+      <th scope="col">Email</th>
+      <th scope="col">City</th>
+      <th scope="col">Country</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customers %}
+    <tr>
+      <th scope="row">{{customer.customer_id}}</th>
+      <td>{{customer.employee_id}}</td>
+      <td>{{customer.firstname}}</td>
+      <td>{{customer.lastname}}</td>
+      <td>{{customer.dob}}</td>
+      <td>{{customer.email}}</td>
+      <td>{{customer.city}}</td>
+      <td>{{customer.country}}</td>
+      <td><a class="edit-button" value="{{customer.customer_id}}">Update</a></td>
+      <td><a class="delete-button" href="/delete_customer?customer_id={{customer.customer_id}}">Delete</a></td>
+    </tr>
+    {% endfor %}
 
-       <!-- The Modal -->
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% if page > 1 %}
+  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
+  {% endif %}
+
+  <span>Page {{ page }}</span>
+
+  {% if customers|length == 10 %}
+  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
+  {% endif %}
+</div>
+
+
+
+<!-- The Modal -->
 <div id="myModal" class="modal">
 
-    <!-- Modal content -->
-    <div class="modal-content">
-        
-       <span class="close">&times;</span>
-       
-       <div class="insert-container">
-        
-            
-           <!-- Insert data form -->
-           <form id="raiseForm" action="/insert_customer" method="post">  
-            <div class="row">
-            <div class="col-md-6">
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close x">&times;</span>
+
+    <div class="insert-container">
+
+
+      <!-- Insert data form -->
+      <form class="raiseForm" action="/insert_customer" method="post">
+        <div class="row">
+          <div class="col-md-6">
             <label for="customer_id">Customer ID:</label>
             <input type="text" id="customer_id" name="customer_id" required><br>
-    
+
             <label for="employee_id">Employee ID:</label>
             <input type="text" id="employee_id" name="employee_id" required><br>
-    
+
             <label for="firstname">Firstname:</label>
             <input type="text" id="firstname" name="firstname" required><br>
-    
+
             <label for="lastname">Lastname:</label>
             <input type="text" id="lastname" name="lastname" required><br>
-    
+
             <label for="dob">Date of Birth:</label>
             <input type="date" id="dob" name="dob" required><br>
-            
-        </div>
-        <div class="col-md-6">
+
+          </div>
+          <div class="col-md-6">
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required><br>
-    
+
             <label for="city">City:</label>
             <input type="text" id="city" name="city" required><br>
-    
+
             <label for="country">Country:</label>
             <input type="text" id="country" name="country" required><br>
-    
-    
+
+
             <input type="submit" value="Submit">
+          </div>
         </div>
-        </form>
-   
-   
-       
-       </div>
+      </form>
+
+
+
     </div>
-   
-   </div>
-   
-   <script>
+  </div>
+
+</div>
+
+
+<!-- The Modal -->
+<div id="secondModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close close-second">&times;</span>
+
+    <div class="insert-container">
+
+
+      <!-- Insert data form -->
+      <form class="raiseForm" action="/update_customer" method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="customer_idUpdate">Customer ID:</label>
+            <input type="text" id="customer_idUpdate" name="customer_id" readonly><br>
+
+            <label for="employee_idUpdate">Employee ID:</label>
+            <input type="text" id="employee_idUpdate" name="employee_id" required><br>
+
+            <label for="firstnameUpdate">Firstname:</label>
+            <input type="text" id="firstnameUpdate" name="firstname" required><br>
+
+            <label for="lastnameUpdate">Lastname:</label>
+            <input type="text" id="lastnameUpdate" name="lastname" required><br>
+
+            <label for="dobUpdate">Date of Birth:</label>
+            <input type="date" id="dobUpdate" name="dob" required><br>
+
+          </div>
+          <div class="col-md-6">
+
+            <label for="emailUpdate">Email:</label>
+            <input type="email" id="emailUpdate" name="email" required><br>
+
+            <label for="cityUpdate">City:</label>
+            <input type="text" id="cityUpdate" name="city" required><br>
+
+            <label for="countryUpdate">Country:</label>
+            <input type="text" id="countryUpdate" name="country" required><br>
+
+
+            <input type="submit" value="Submit">
+          </div>
+        </div>
+      </form>
+
+
+
+    </div>
+  </div>
+
+</div>
+
+
+ <script>
    // Get the modal
    var modal = document.getElementById("myModal");
    
@@ -147,6 +205,83 @@
        modal.style.display = "none";
     }
    }
-   </script>
+   </script> 
+
+
+
+<script>
+
+  function convertDateFormat(originalDateString) {
+    // Parse the original date string
+    const originalDate = new Date(originalDateString);
+
+    // Format the date as "yyyy-MM-dd"
+    const formattedDate = originalDate.toISOString().split('T')[0];
+
+    return formattedDate;
+  }
+
+  // UPDATE MODAL
+  var table = document.getElementById('customerTable');
+  var second_modal = document.getElementById('secondModal');
+  var closeButton = document.querySelector('.close-second');
+
+
+  table.addEventListener('click', async function (event) {
+
+    // Check if the clicked element is a button with the class 'editButton'
+    if (event.target.classList.contains('edit-button')) {
+      //event.stopPropagation();
+
+      //event.preventDefault()
+
+      // Get the value (row number) of the clicked button
+      const customer_id = event.target.getAttribute('value');
+
+      second_modal.style.display = "flex";
+      
+      const url = `http://localhost:5000/get_customer_by_id?customer_id=${customer_id}`;
+
+      try {
+        const response = await fetch(url);
+
+        // Check if the request was successful (status code 200)
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        // Parse the response as JSON
+        const data = await response.json();
+
+        document.getElementById('customer_idUpdate').defaultValue = data.customer[0].customer_id;
+        document.getElementById('employee_idUpdate').defaultValue = data.customer[0].employee_id;
+        document.getElementById('firstnameUpdate').defaultValue = data.customer[0].firstname;
+        document.getElementById('lastnameUpdate').value = data.customer[0].lastname;
+        document.getElementById('dobUpdate').value = convertDateFormat(data.customer[0].dob);
+        document.getElementById('emailUpdate').value = data.customer[0].email;
+        document.getElementById('cityUpdate').value = data.customer[0].city;
+        document.getElementById('countryUpdate').value = data.customer[0].country;
+
+      } catch (error) {
+        // Handle errors during the fetch
+        console.error('Error during fetch:', error);
+      }
+
+
+    }
+  });
+
+  closeButton.addEventListener('click', function () {
+    // Close the modal when the X button is clicked
+    second_modal.style.display = 'none';
+  });
+
+  // Close the modal if the user clicks outside of it
+  window.addEventListener('click', function (event) {
+    if (event.target === second_modal) {
+      second_modal.style.display = 'none';
+    }
+  });
+</script>
 
 {% endblock %}

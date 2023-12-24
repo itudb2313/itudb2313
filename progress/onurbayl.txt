@@ -89,5 +89,14 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -Delete endpoints of customers, employees, rises are modified to enable in-line deleting
 -For rise_archive in-line delete and update buttons are fully activated.
 -Pop-Up update modal is completed for update_rise endpoint and introduced for update_employee and update_customer
--Query of select_rise_by_id is introduced
+-Query of get_rise_by_id is introduced
 -CORS package is installed and integrated in app.py to allow CROSS-Origin requests
+-Pop-Up update modal is completed for update_employee endpoint
+-Query of get_employee_by_id is created
+-In employees.html file, new javascript code and html block are created for Pop-Up modal
+-Pop-Up update modal is completed for update_customer endpoint
+-Query of get_customer_by_id is created
+-In customers.html file, new javascript code and html block are created for Pop-Up modal
+-layout.css is modified for accurate view to the user
+-get_employee_by_id endpoint is created that fetches data from database
+-get_customer_by_id endpoint is created that fetches data from database

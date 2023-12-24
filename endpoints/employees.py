@@ -40,6 +40,21 @@ def employees():
     return render_template("employees.html", employees=paginated_items, page=page)
 
 
+@employees_bp.route("/get_employee_by_id", methods=["GET"])
+def get_employee_by_id():
+
+    db = current_app.config.get("db")
+
+    if db is None:
+        return "No database found"
+    
+    employee_id = request.args.get('employee_id')
+    
+    employee = db.get_employee_by_id(employee_id)
+
+    return jsonify({"employee": employee})
+
+
 # insert_employee endpoint to insert new employee record into the employee table
 @employees_bp.route("/insert_employee", methods=["GET", "POST"])
 def insert_employee():
