@@ -33,3 +33,6 @@ Solve weird import bug (It seems like its due to difference between "flask run" 
 Turn /orders into a blueprint to prevent bugging again
 -w12-
 Add dropdown elements to /orders
+Merge all database updates
+Ensure orders table has BCNF
+Bug fixes
