@@ -38,8 +38,6 @@ def edit_store():
             if(i[0] == " "):
                 i = i[1:]
             l.append(i.replace("'", ''))
-            
-        print(l)
         return f"""
                 <tr id="edit">
                 <td id= "store_id_cell">{l[0]}</td>
@@ -91,7 +89,6 @@ def insert_store():
     post_code = request.form.get("post_code")
     db.insert_store(emp_id, store_name, phone, street, city, country, email, post_code)
     store_id = db.get_store_by_name(store_name,country,phone,street,city,email,post_code)[0][0]
-    print(store_id)
     return f"""<tr>
                     <td>{store_id}</td>
                     <td>{emp_id}</td>
