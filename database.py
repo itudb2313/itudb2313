@@ -279,15 +279,14 @@ class Database:
             cursor.close()
 
 
-    def insert_store(self, store_id, employee_id, store_name, phone, street, city, country, email, post_code):
-        query = """INSERT INTO store (store_id, employee_id, store_name, phone, street, city, country, email, post_code)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    def insert_store(self, employee_id, store_name, phone, street, city, country, email, post_code):
+        query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(
                 query,
                 (
-                    store_id,
                     employee_id,
                     store_name,
                     phone,
