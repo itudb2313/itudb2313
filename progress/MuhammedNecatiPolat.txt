@@ -31,4 +31,16 @@ delete product script
 reloading after delete
 creating a table for styling for products
 styling table for products
-
+-w12-
+seperate product and provider logic
+register blueprints
+modify get_products to adapt more filters
+adapt url to blueprints, add filters to products
+fix logical errors and add price and km to table
+add color, km ,year filters, add order by, fix column names
+add get_product and update product
+fix edit button on filters
+change provider and product sql's
+add providers  template
+add, insert update and delete of provider
+add filters to providers

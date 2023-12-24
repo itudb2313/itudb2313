@@ -14,12 +14,16 @@ from endpoints.customers import customers_bp
 from endpoints.employees import employees_bp
 from endpoints.rises import rises_bp
 from endpoints.stores import stores_bp
+from endpoints.products import products_bp
+from endpoints.providers import providers_bp
 
 app.register_blueprint(orders_bp)
 app.register_blueprint(customers_bp)
 app.register_blueprint(employees_bp)
 app.register_blueprint(rises_bp)
 app.register_blueprint(stores_bp)
+app.register_blueprint(products_bp)
+app.register_blueprint(providers_bp)
 
 @app.route("/")
 def hello_world():

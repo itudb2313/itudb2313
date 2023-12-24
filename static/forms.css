@@ -1,0 +1,20 @@
+select {
+    font-size: x-large;
+}
+input {
+    font-size: large;
+    height: 20px;
+}
+button {
+    font-size: large;
+    height: 30px;
+    width: 200px;
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    gap: 20px;
+}
