@@ -101,6 +101,15 @@
             <p class="text-2xl" id="total-orders"></p>
             <p class="text-2xl" id="total-gross"></p>
         </div>
+        <div class="w-5/12 border text-center">
+            <p class="text-3xl font-bold">Our Best Elders</p>
+            <p class="text-2xl" id="best_elders"></p>
+        </div>
+        <div class="w-5/12 border text-center">
+            <p class="text-3xl font-bold">Our Best Young Staff</p>
+            <p class="text-2xl" id="best_newcomers"></p>
+        </div>
+
     </div>
     <script type="module">
         htmx.config.useTemplateFragments = true;
@@ -194,16 +203,19 @@
                         beginAtZero: true
                     }
                 },
-                // plugins: {
-                //     legend: {
-                //         display: false
-                //     }
-                // }
             }
         });
 
         document.getElementById('total-orders').innerHTML = "Number of orders: " + res[6][0][0]
         document.getElementById('total-gross').innerHTML = "Total gross: " + res[5][0][0] + "$"
+
+        res[7].forEach((e) => {
+            document.getElementById('best_elders').innerHTML += e[0] + " " + e[1] + " - " + e[2] + "$<br>"
+        })
+
+        res[8].forEach((e) => {
+            document.getElementById('best_newcomers').innerHTML += e[0] + " " + e[1] + " - " + e[2] + "$<br>"
+        })
     </script>
     <style>
         input, select {

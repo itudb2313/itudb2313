@@ -230,7 +230,7 @@ def update_order():
         quantity = request.form["quantity"]
 
         db.update_order(
-            request.args.get("id"),
+            order_id,
             customer_id,
             product_id,
             store_id,
