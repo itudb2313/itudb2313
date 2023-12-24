@@ -14,11 +14,13 @@ stores_bp = Blueprint("stores_bp", __name__)
 @stores_bp.route("/stores", methods=["GET"])
 def stores():
     db = current_app.config.get("db")
+
     return render_template(
         "stores.html",
         stores=db.get_all_stores_table(),
         headers=db.get_stores_columns(),
         stores_count=db.get_stores_count(),
+        employees=db.highest_salary_manager(),
     )
 
 @stores_bp.route("/stores/delete", methods=["POST"])

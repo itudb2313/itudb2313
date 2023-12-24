@@ -258,7 +258,7 @@ class Database:
     def insert_store(self, employee_id, store_name, phone, street, city, country, email, post_code):
         query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
         VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)"""
-        
+
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -277,6 +277,22 @@ class Database:
             self.connection.commit()
         except dbapi.DatabaseError:
             print("error")
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def highest_salary_manager(self):
+        query = """select  e.firstname, e.lastname, s.store_name,e.salary from employee e
+                    inner join store s
+                    on e.employee_id = s.employee_id
+                    order by salary desc
+                    limit 3"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            employee = cursor.fetchall()
+            return employee
+        except dbapi.DatabaseError:
             self.connection.rollback()
         finally:
             cursor.close()
