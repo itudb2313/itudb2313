@@ -782,6 +782,7 @@ class Database:
     def get_all_product_ids_and_names(self):
         query = """SELECT MIN(product_id), product_name, model FROM product GROUP BY product_name, model"""
 
+
         with self.connection.cursor() as cursor:
             cursor.execute(query)
             product_ids = cursor.fetchall()
