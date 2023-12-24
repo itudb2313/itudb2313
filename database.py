@@ -38,10 +38,10 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 customers.append(row_dict)
-            
+
             return customers
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -242,7 +242,7 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            
+
             employees = []
 
             column_names = [column[0] for column in cursor.description]
@@ -251,10 +251,10 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 employees.append(row_dict)
-            
+
             return employees
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -391,7 +391,7 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 rises.append(row_dict)
 
@@ -414,7 +414,7 @@ class Database:
             for row in cursor:
                 # create a dictionary using the column names and row values
                 row_dict = dict(zip(column_names, row))
-                
+
                 # add the dictionary to the dict_array
                 rise.append(row_dict)
 
@@ -445,9 +445,7 @@ class Database:
 
         try:
             cursor = self.connection.cursor()
-            cursor.execute(
-                query, (amount_by_percent, rise_date, rise_state, rise_id)
-            )
+            cursor.execute(query, (amount_by_percent, rise_date, rise_state, rise_id))
             self.connection.commit()
         except dbapi.DatabaseError:
             self.connection.rollback()
@@ -546,7 +544,8 @@ class Database:
             # execute() will put single quotes around the column name
             if order_by in sortable_columns and order in ["ASC", "DESC"]:
                 cursor.execute(
-                    "SELECT * FROM orders ORDER BY "
+                    """select orders.*, customer.firstname, customer.lastname, product.product_name, store.store_name, employee.firstname, employee.lastname from orders inner join customer using(customer_id) inner join product using(product_id) inner join store using(store_id) inner join employee on orders.employee_id=employee.employee_id  ORDER BY """
+                    + "orders."
                     + order_by
                     + " "
                     + order
@@ -652,3 +651,27 @@ class Database:
             cursor.execute(query, (store_id,))
             employee_ids = cursor.fetchall()
             return employee_ids
+
+    def get_all_store_ids_and_names(self):
+        query = """SELECT store_id, store_name FROM store"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            store_ids = cursor.fetchall()
+            return store_ids
+
+    def get_all_product_ids_and_names(self):
+        query = """SELECT MIN(product_id), product_name FROM product GROUP BY product_name"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            product_ids = cursor.fetchall()
+            return product_ids
+
+    def get_all_customer_ids_and_names(self):
+        query = """SELECT MIN(customer_id), firstname, lastname FROM customer GROUP BY firstname, lastname"""
+
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            customer_ids = cursor.fetchall()
+            return customer_ids

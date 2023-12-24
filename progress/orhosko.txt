@@ -31,3 +31,5 @@ Add little styling to /orders
 -w11-
 Solve weird import bug (It seems like its due to difference between "flask run" and "python app.py")
 Turn /orders into a blueprint to prevent bugging again
+-w12-
+Add dropdown elements to /orders
