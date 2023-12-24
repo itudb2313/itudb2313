@@ -11,3 +11,11 @@ td {
 th {
   background-color: #632626;
 }
+
+a:link {
+  color: black;
+}
+
+a:visited {
+  color: gray;
+}
