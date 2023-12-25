@@ -465,20 +465,20 @@
 
 <script>
   // Get the modal
-  var modal = document.getElementById("topModal");
+  var tmodal = document.getElementById("topModal");
   var topPaidModal = document.getElementById("topPaidModal");
 
   // Get the button that opens the modal
-  var btn = document.getElementById("topBtn");
+  var tbtn = document.getElementById("topBtn");
   var paidBtn = document.getElementById("paidBtn");
 
   // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close-top")[0];
+  var tspan = document.getElementsByClassName("close-top")[0];
   var paidSpan = document.getElementsByClassName("close-top-paid")[0];
 
   // When the user clicks the button, open the modal 
-  btn.onclick = async function () {
-    modal.style.display = "flex";
+  tbtn.onclick = async function () {
+    tmodal.style.display = "flex";
   }
 
   paidBtn.onclick = async function () {
@@ -486,8 +486,8 @@
   }
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal.style.display = "none";
+  tspan.onclick = function () {
+    tmodal.style.display = "none";
   }
 
   paidSpan.onclick = function () {
@@ -496,8 +496,8 @@
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (event.target == tmodal) {
+      tmodal.style.display = "none";
     }
 
     if (event.target == topPaidModal) {
