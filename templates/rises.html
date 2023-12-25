@@ -356,28 +356,28 @@ function convertDateFormat(originalDateString) {
 
 <script>
   // Get the modal
-  var modal = document.getElementById("topModal");
+  var tomodal = document.getElementById("topModal");
 
   // Get the button that opens the modal
-  var btn = document.getElementById("topBtn");
+  var tobtn = document.getElementById("topBtn");
 
   // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close-top")[0];
+  var tospan = document.getElementsByClassName("close-top")[0];
 
   // When the user clicks the button, open the modal 
-  btn.onclick = async function () {
-    modal.style.display = "flex";
+  tobtn.onclick = async function () {
+    tomodal.style.display = "flex";
   }
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal.style.display = "none";
+  tospan.onclick = function () {
+    tomodal.style.display = "none";
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (event.target == tomodal) {
+      tomodal.style.display = "none";
     }
   }
 </script>
