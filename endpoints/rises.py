@@ -29,7 +29,7 @@ def rises():
     
     # Parsing page number parameter
     page = int(request.args.get('page', 1))
-    # Number of items per page
+    # Number of items per page.
     per_page = 10  
 
     # Paginate the data
