@@ -63,32 +63,39 @@ I created the tables according my guess of data type and set the limits to not c
 		);
 	LOAD DATA LOCAL INFILE '/home/archive/category.csv' INTO TABLE category FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 
-	CREATE TABLE employee(
-		employee_id INT AUTO_INCREMENT,
-		store_id INT,
-		firstname VARCHAR(15),
-		lastname VARCHAR(15),
-		dob CHAR(10),
-		email VARCHAR(40),
-		status VARCHAR(6),
-		salary INT,
-		city VARCHAR(30),
-		country VARCHAR(60),
-		PRIMARY KEY(employee_id)
-		);
+	create table employee(
+	employee_id int unsigned primary key,
+	store_id int unsigned, 
+	firstname varchar(100) NOT NULL,
+	lastname varchar(100) NOT NULL, 
+	dob date not null, 
+	email varchar(100) not null check(email like '%@%'), 
+	status varchar(10) not null, 
+	salary int unsigned not null check(salary > 0), 
+	city varchar(100) not null, 
+	country varchar(100) not null,
+
+	foreign key(store_id)
+	references store (store_id)
+	on delete set null
+	on update cascade
+	);
 	LOAD DATA LOCAL INFILE '/home/archive/employee.csv' INTO TABLE employee FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 
-	CREATE TABLE customer(
-		customer_id INT AUTO_INCREMENT,
-		employee_id INT,
-		firstname VARCHAR(15),
-		lastname VARCHAR(15),
-		dof CHAR(10),
-		email VARCHAR(40),
-		city VARCHAR(30),
-		country VARCHAR(60),
-        PRIMARY KEY (customer_id),
-		FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE RESTRICT ON UPDATE CASCADE
+	create table customer(
+	customer_id int unsigned primary key,
+	employee_id int unsigned,
+	firstname varchar(100) NOT NULL,
+	lastname varchar(100) NOT NULL,
+	dob date not null,
+	email varchar(100) not null check(email like '%@%'),
+	city varchar(100) not null,
+	country varchar(100) not null,
+
+	foreign key(employee_id)
+	references employee (employee_id)
+	on delete set null
+	on update cascade
 	);
 	LOAD DATA LOCAL INFILE '/home/archive/customer.csv' INTO TABLE customer FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 
@@ -152,13 +159,12 @@ I created the tables according my guess of data type and set the limits to not c
 		);
 	LOAD DATA LOCAL INFILE '/home/archive/order.csv' INTO TABLE orders FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 
-	CREATE TABLE rise_archive(
-		rise_id CHAR(4),
-		amount_by_percent INT,
-		rise_date CHAR(10),
-		rise_state VARCHAR(10),
-		PRIMARY KEY(rise_id)
-		);
+	create table rise_archive(
+	rise_id varchar(10) primary key,
+	amount_by_percent smallint unsigned not null check(amount_by_percent > 0),
+	rise_date date not null,
+	rise_state char(9) not null
+	);
 	LOAD DATA LOCAL INFILE '/home/archive/rise_archive.csv' INTO TABLE rise_archive FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS \W;
 
 	ALTER TABLE employee ADD CONSTRAINT store_id FOREIGN KEY (store_id) REFERENCES store(store_id) ON DELETE RESTRICT ON UPDATE CASCADE;

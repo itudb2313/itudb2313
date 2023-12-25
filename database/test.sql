@@ -60,16 +60,16 @@ DROP TABLE IF EXISTS `customer`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
   `customer_id` int NOT NULL AUTO_INCREMENT,
-  `employee_id` int DEFAULT NULL,
+  `employee_id` int,
   `firstname` varchar(15) DEFAULT NULL,
   `lastname` varchar(15) DEFAULT NULL,
   `dof` char(10) DEFAULT NULL,
-  `email` varchar(40) DEFAULT NULL,
+  `email` varchar(40) DEFAULT NULL check(email like '%@%'),
   `city` varchar(30) DEFAULT NULL,
   `country` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`customer_id`),
   KEY `employee_id` (`employee_id`),
-  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6727 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -92,18 +92,18 @@ DROP TABLE IF EXISTS `employee`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `employee` (
   `employee_id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int DEFAULT NULL,
+  `store_id` int,
   `firstname` varchar(15) DEFAULT NULL,
   `lastname` varchar(15) DEFAULT NULL,
   `dob` char(10) DEFAULT NULL,
-  `email` varchar(40) DEFAULT NULL,
+  `email` varchar(40) DEFAULT NULL check(email like '%@%'),
   `status` varchar(6) DEFAULT NULL,
-  `salary` int DEFAULT NULL,
+  `salary` int DEFAULT NULL check(salary > 0),
   `city` varchar(30) DEFAULT NULL,
   `country` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`employee_id`),
   KEY `store_id` (`store_id`),
-  CONSTRAINT `store_id` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `store_id` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4750 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

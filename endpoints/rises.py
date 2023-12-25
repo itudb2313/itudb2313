@@ -25,6 +25,7 @@ def rises():
     
     # Fething all rises from database
     rises=db.select_all_rises()
+    topRises = db.select_top_rises()
     
     # Parsing page number parameter
     page = int(request.args.get('page', 1))
@@ -35,7 +36,7 @@ def rises():
     paginated_items = paginate(rises, page, per_page)
 
 
-    return render_template("rises.html", rises=paginated_items, page=page)
+    return render_template("rises.html", rises=paginated_items, topRises=topRises, page=page)
 
 @rises_bp.route("/get_rise_by_id", methods=["GET"])
 def get_rise_by_id():

@@ -100,3 +100,4 @@ After insertion, it redirects to rises page (Fetches up-to-date data from the ta
 -layout.css is modified for accurate view to the user
 -get_employee_by_id endpoint is created that fetches data from database
 -get_customer_by_id endpoint is created that fetches data from database
+-Additional functionalities introduced and general fix

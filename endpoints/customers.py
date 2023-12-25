@@ -28,17 +28,18 @@ def customers():
 
     # Fething all customers from database
     customers=db.select_all_customers()
+    oldcustomers=db.oldest_customers_with_employee()
     
     # Parsing page number parameter
     page = int(request.args.get('page', 1))
     # Number of items per page
-    per_page = 10  
+    per_page = 30  
 
     # Paginate the data
     paginated_items = paginate(customers, page, per_page)
 
     
-    return render_template('customers.html', customers=paginated_items, page=page)
+    return render_template('customers.html', customers=paginated_items, oldcustomers=oldcustomers, page=page)
 
 
 @customers_bp.route("/get_customer_by_id", methods=["GET"])

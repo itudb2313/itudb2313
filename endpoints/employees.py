@@ -26,18 +26,18 @@ def employees():
     
     # Fething all employees from database
     employees=db.select_all_employees()
+    topEmployees=db.select_top_ten_employees()
+    mostPayed = db.select_most_paid_employees()
     
     # Parsing page number parameter
     page = int(request.args.get('page', 1))
     # Number of items per page
-    per_page = 10  
+    per_page = 30  
 
     # Paginate the data
     paginated_items = paginate(employees, page, per_page)
-    
 
-
-    return render_template("employees.html", employees=paginated_items, page=page)
+    return render_template("employees.html", employees=paginated_items, topEmployees=topEmployees, mostPayed=mostPayed, page=page)
 
 
 @employees_bp.route("/get_employee_by_id", methods=["GET"])

@@ -4,9 +4,8 @@
 
 
 <h1>Employees</h1>
-<!-- <h2>Insert a Employee</h2>
-    <a href="{{ url_for('employees_bp.insert_employee') }}">Click to insert a employee</a> -->
-<h2>Delete a Employees</h2>
+
+<h4>Delete an employee by ID</h4>
 <form id="deleteEmployee" action="/delete_employee" method="post">
 
   <label for="employee_id">Employee ID:</label>
@@ -17,6 +16,26 @@
 
 <!-- Trigger/Open The Modal -->
 <button id="myBtn" class="edit-button">Insert</button>
+<button id="topBtn" class="edit-button">Top 10 Employees Working Most Customers</button>
+<button id="paidBtn" class="edit-button">Top 12 Most Paid Employees</button>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for any column">
+<input type="number" id="minAmountFilter" placeholder="Min Salary">
+<input type="number" id="maxAmountFilter" placeholder="Max Salary">
+<input type="date" id="dateStart" placeholder="Start Date">
+<input type="date" id="dateEnd" placeholder="End Date">
+
+<div style="float: right;" class="pagination">
+  {% if page > 1 %}
+  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
+  {% endif %}
+
+  <span>Page {{ page }}</span>
+
+  {% if employees|length == 30 %}
+  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
+  {% endif %}
+</div>
 
 <table id="employeeTable" class="table">
   <thead>
@@ -38,7 +57,7 @@
   <tbody>
     {% for employee in employees %}
     <tr>
-      <th scope="row">{{employee.employee_id}}</th>
+      <td style="font-weight: bold;" scope="row">{{employee.employee_id}}</th>
       <td>{{employee.store_id}}</td>
       <td>{{employee.firstname}}</td>
       <td>{{employee.lastname}}</td>
@@ -56,17 +75,7 @@
   </tbody>
 </table>
 
-<div class="pagination">
-  {% if page > 1 %}
-  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
-  {% endif %}
 
-  <span>Page {{ page }}</span>
-
-  {% if employees|length == 10 %}
-  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
-  {% endif %}
-</div>
 
 
 <!-- The Modal -->
@@ -192,6 +201,86 @@
   </div>
 </div>
 
+<!-- The Modal -->
+<div id="topModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close close-top">&times;</span>
+
+    <div class="insert-container">
+
+      <table id="topTable" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Store ID</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Number of Customers Working With</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for employee in topEmployees %}
+          <tr>
+            <td style="font-weight: bold;" scope="row">{{loop.index}}</th>
+            <td>{{employee.employee_id}}</td>
+            <td>{{employee.store_id}}</td>
+            <td>{{employee.firstname}}</td>
+            <td>{{employee.lastname}}</td>
+            <td>{{employee.customer_number}}</td>
+          </tr>
+          {% endfor %}
+      
+        </tbody>
+      </table>
+      
+    </div>
+  </div>
+</div>
+
+
+<div id="topPaidModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close close-top-paid">&times;</span>
+
+    <div class="insert-container">
+
+      <table id="topTable" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Salary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for employee in mostPayed %}
+          <tr>
+            <td style="font-weight: bold;" scope="row">{{loop.index}}</th>
+            <td>{{employee.employee_id}}</td>
+            <td>{{employee.firstname}}</td>
+            <td>{{employee.lastname}}</td>
+            <td>{{employee.dob}}</td>
+            <td>{{employee.salary}}</td>
+          </tr>
+          {% endfor %}
+      
+        </tbody>
+      </table>
+      
+    </div>
+  </div>
+</div>
+
 <script>
   // Get the modal
   var modal = document.getElementById("myModal");
@@ -292,6 +381,138 @@
       second_modal.style.display = 'none';
     }
   });
+</script>
+
+
+<script>
+  function myFunction() {
+ var input, filter, table, tr, td, i, j, txtValue;
+ input = document.getElementById("myInput");
+ filter = input.value.toUpperCase();
+ table = document.getElementById("employeeTable");
+ tr = table.getElementsByTagName("tr");
+ for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td");
+    for (j = 0; j < td.length; j++) {
+      if (td[j]) {
+        txtValue = td[j].textContent || td[j].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+          break;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+ }
+}
+  </script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get input elements
+      var minAmountInput = document.getElementById("minAmountFilter");
+      var maxAmountInput = document.getElementById("maxAmountFilter");
+      var startDateInput = document.getElementById("dateStart");
+      var endDateInput = document.getElementById("dateEnd");
+      
+
+      // Get table rows
+      var tableRows = document.querySelectorAll("#employeeTable tbody tr");
+
+      // Add event listeners to input elements
+      minAmountInput.addEventListener("input", filterTable);
+      maxAmountInput.addEventListener("input", filterTable);
+      startDateInput.addEventListener("input", filterTable);
+      endDateInput.addEventListener("input", filterTable);
+      
+
+      function filterTable() {
+          var minAmountFilter = parseFloat(minAmountInput.value) || 0;
+          var maxAmountFilter = parseFloat(maxAmountInput.value) || Number.MAX_VALUE;
+          var startDateFilter = startDateInput.value ? new Date(startDateInput.value) : -Infinity;
+          var endDateFilter = endDateInput.value ? new Date(endDateInput.value) : +Infinity;
+          
+
+          tableRows.forEach(function(row) {
+              var rowCells = row.querySelectorAll("td");
+              var rowAmount = parseFloat(rowCells[7].textContent); // the first cell contains rise_amount
+              var rowDate = new Date(rowCells[4].textContent); // the second cell contains rise_date
+
+              var amountMatch = rowAmount >= minAmountFilter && rowAmount <= maxAmountFilter;
+              var dateMatch = true;
+
+              if (startDateFilter !== -Infinity && endDateFilter !== Infinity) {
+                        dateMatch = rowDate >= startDateFilter && rowDate <= endDateFilter;
+                    } else if (startDateFilter !== -Infinity) {
+                        dateMatch = rowDate >= startDateFilter;
+                    } else if (endDateFilter !== Infinity) {
+                        dateMatch = rowDate <= endDateFilter;
+                    }
+
+              if (amountMatch && (dateMatch)) {
+                  row.style.display = "";
+              } else {
+                  row.style.display = "none";
+              }
+          });
+      }
+  });
+</script>
+
+
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("topModal");
+  var topPaidModal = document.getElementById("topPaidModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("topBtn");
+  var paidBtn = document.getElementById("paidBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close-top")[0];
+  var paidSpan = document.getElementsByClassName("close-top-paid")[0];
+
+  // When the user clicks the button, open the modal 
+  btn.onclick = async function () {
+    modal.style.display = "flex";
+  }
+
+  paidBtn.onclick = async function () {
+    topPaidModal.style.display = "flex";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  paidSpan.onclick = function () {
+    topPaidModal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+
+    if (event.target == topPaidModal) {
+      topPaidModal.style.display = "none";
+    }
+  }
+</script>
+
+
+
+<script>
+
+const handleTopTen = () => {
+  console.log("okk")
+}
 </script>
 
 

@@ -4,9 +4,8 @@
 
 
 <h1>Customers</h1>
-<!-- <h2>Insert a Customer</h2>
-    <a href="{{ url_for('customers_bp.insert_customer') }}">Click to insert a customer</a> -->
-<h2>Delete a Customer</h2>
+
+<h4>Delete a customer by ID</h4>
 <form id="deleteCustomer" action="/delete_customer" method="post">
 
   <label for="customer_id">Customer ID:</label>
@@ -17,7 +16,24 @@
 
 <!-- Trigger/Open The Modal -->
 <button id="myBtn" class="edit-button">Insert</button>
+<button id="oldBtn" class="edit-button">Top 10 Oldest Customer with Employee Data</button>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for any column">
+<input type="number" id="minAmountFilter" placeholder="Min Customer ID">
+<input type="number" id="maxAmountFilter" placeholder="Max Customer ID">
+<input type="date" id="dateStart" placeholder="Start Date">
+<input type="date" id="dateEnd" placeholder="End Date">
 
+<div style="float: right;" class="pagination">
+  {% if page > 1 %}
+  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
+  {% endif %}
+
+  <span>Page {{ page }}</span>
+
+  {% if customers|length == 30 %}
+  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
+  {% endif %}
+</div>
 
 <table id="customerTable" class="table">
   <thead>
@@ -37,7 +53,7 @@
   <tbody>
     {% for customer in customers %}
     <tr>
-      <th scope="row">{{customer.customer_id}}</th>
+      <td style="font-weight: bold;" scope="row">{{customer.customer_id}}</th>
       <td>{{customer.employee_id}}</td>
       <td>{{customer.firstname}}</td>
       <td>{{customer.lastname}}</td>
@@ -53,17 +69,7 @@
   </tbody>
 </table>
 
-<div class="pagination">
-  {% if page > 1 %}
-  <a class="previous-button" href="?page={{ page - 1 }}">&laquo; Previous</a>
-  {% endif %}
 
-  <span>Page {{ page }}</span>
-
-  {% if customers|length == 10 %}
-  <a class="next-button" href="?page={{ page + 1 }}">Next &raquo;</a>
-  {% endif %}
-</div>
 
 
 
@@ -179,30 +185,86 @@
 </div>
 
 
+<div id="oldModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <span class="close close-old">&times;</span>
+
+    <div class="insert-container">
+
+      <table id="topTable" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Customer ID</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Employee Firstname</th>
+            <th scope="col">Employee Lastname</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for oldcustomer in oldcustomers %}
+          <tr>
+            <td style="font-weight: bold;" scope="row">{{loop.index}}</th>
+            <td>{{oldcustomer.customer_id}}</td>
+            <td>{{oldcustomer.firstname}}</td>
+            <td>{{oldcustomer.lastname}}</td>
+            <td>{{oldcustomer.dob}}</td>
+            <td>{{oldcustomer.emp_id}}</td>
+            <td>{{oldcustomer.emp_fn}}</td>
+            <td>{{oldcustomer.emp_ln}}</td>
+          </tr>
+          {% endfor %}
+      
+        </tbody>
+      </table>
+      
+    </div>
+  </div>
+</div>
+
+
  <script>
    // Get the modal
    var modal = document.getElementById("myModal");
+   var oldmodal = document.getElementById("oldModal");
    
    // Get the button that opens the modal
    var btn = document.getElementById("myBtn");
+   var oldbtn = document.getElementById("oldBtn");
    
    // Get the <span> element that closes the modal
    var span = document.getElementsByClassName("close")[0];
+   var oldspan = document.getElementsByClassName("close-old")[0];
    
    // When the user clicks the button, open the modal 
    btn.onclick = function() {
     modal.style.display = "flex";
+   }
+   oldbtn.onclick = function() {
+    oldmodal.style.display = "flex";
    }
    
    // When the user clicks on <span> (x), close the modal
    span.onclick = function() {
     modal.style.display = "none";
    }
+   oldspan.onclick = function() {
+    oldmodal.style.display = "none";
+   }
    
    // When the user clicks anywhere outside of the modal, close it
    window.onclick = function(event) {
     if (event.target == modal) {
        modal.style.display = "none";
+    }
+    if (event.target == oldmodal) {
+       oldmodal.style.display = "none";
     }
    }
    </script> 
@@ -281,6 +343,85 @@
     if (event.target === second_modal) {
       second_modal.style.display = 'none';
     }
+  });
+</script>
+
+
+<script>
+  function myFunction() {
+ var input, filter, table, tr, td, i, j, txtValue;
+ input = document.getElementById("myInput");
+ filter = input.value.toUpperCase();
+ table = document.getElementById("customerTable");
+ tr = table.getElementsByTagName("tr");
+ for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td");
+    for (j = 0; j < td.length; j++) {
+      if (td[j]) {
+        txtValue = td[j].textContent || td[j].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+          break;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+ }
+}
+  </script>
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get input elements
+      var minAmountInput = document.getElementById("minAmountFilter");
+      var maxAmountInput = document.getElementById("maxAmountFilter");
+      var startDateInput = document.getElementById("dateStart");
+      var endDateInput = document.getElementById("dateEnd");
+      
+
+      // Get table rows
+      var tableRows = document.querySelectorAll("#customerTable tbody tr");
+
+      // Add event listeners to input elements
+      minAmountInput.addEventListener("input", filterTable);
+      maxAmountInput.addEventListener("input", filterTable);
+      startDateInput.addEventListener("input", filterTable);
+      endDateInput.addEventListener("input", filterTable);
+      
+
+      function filterTable() {
+          var minAmountFilter = parseFloat(minAmountInput.value) || 0;
+          var maxAmountFilter = parseFloat(maxAmountInput.value) || Number.MAX_VALUE;
+          var startDateFilter = startDateInput.value ? new Date(startDateInput.value) : -Infinity;
+          var endDateFilter = endDateInput.value ? new Date(endDateInput.value) : +Infinity;
+          
+
+          tableRows.forEach(function(row) {
+              var rowCells = row.querySelectorAll("td");
+              var rowAmount = parseFloat(rowCells[0].textContent); // the first cell contains rise_amount
+              var rowDate = new Date(rowCells[4].textContent); // the second cell contains rise_date
+
+              var amountMatch = rowAmount >= minAmountFilter && rowAmount <= maxAmountFilter;
+              var dateMatch = true;
+              if (startDateFilter !== -Infinity && endDateFilter !== Infinity) {
+                        dateMatch = rowDate >= startDateFilter && rowDate <= endDateFilter;
+                    } else if (startDateFilter !== -Infinity) {
+                        dateMatch = rowDate >= startDateFilter;
+                    } else if (endDateFilter !== Infinity) {
+                        dateMatch = rowDate <= endDateFilter;
+                    }
+
+              if (amountMatch && (dateMatch)) {
+                  row.style.display = "";
+              } else {
+                  row.style.display = "none";
+              }
+          });
+      }
   });
 </script>
 

@@ -34,12 +34,42 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
+                customers.append(row_dict)
+
+            return customers
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def oldest_customers_with_employee(self):
+        query = """select customer.customer_id AS customer_id, customer.firstname AS firstname, customer.lastname AS lastname,
+        customer.dob AS dob, employee.firstname AS emp_fn, employee.lastname AS emp_ln, employee.employee_id AS emp_id
+        from customer
+        join employee
+        on customer.employee_id=employee.employee_id
+        order by customer.dob ASC
+        limit 10;"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            customers = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            #Forwarding cursor to get row data
+            for row in cursor:
+                #We create dictionary from the row
+                row_dict = dict(zip(column_names, row))
+
+                #We append the created dictionary to the array
                 customers.append(row_dict)
 
             return customers
@@ -57,12 +87,12 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
                 customer.append(row_dict)
 
             return customer
@@ -358,12 +388,71 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
+                employees.append(row_dict)
+
+            return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def select_top_ten_employees(self):
+        query = """SELECT employee.employee_id AS employee_id, employee.store_id AS store_id, 
+                employee.firstname AS firstname, 
+                employee.lastname AS lastname, count(*) AS customer_number
+                FROM employee
+                JOIN customer
+                ON employee.employee_id=customer.employee_id
+                GROUP BY employee.employee_id
+                ORDER BY count(*) DESC
+                LIMIT 10"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            employees = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            #Forwarding cursor to get row data
+            for row in cursor:
+                #We create dictionary from the row
+                row_dict = dict(zip(column_names, row))
+
+                #We append the created dictionary to the array
+                employees.append(row_dict)
+
+            return employees
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def select_most_paid_employees(self):
+        query = """SELECT employee_id, firstname, lastname, dob, salary
+                FROM employee
+                ORDER BY salary DESC
+                LIMIT 12"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+
+            employees = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            #Forwarding cursor to get row data
+            for row in cursor:
+                #We create dictionary from the row
+                row_dict = dict(zip(column_names, row))
+
+                #We append the created dictionary to the array
                 employees.append(row_dict)
 
             return employees
@@ -381,12 +470,12 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
                 employee.append(row_dict)
 
             return employee
@@ -498,12 +587,36 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
+                rises.append(row_dict)
+
+            return rises
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+
+    def select_top_rises(self):
+        query = """SELECT * FROM rise_archive WHERE rise_state!='Suspended' ORDER BY amount_by_percent DESC LIMIT 5"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            rises = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            #Forwarding cursor to get row data
+            for row in cursor:
+                #We create dictionary from the row
+                row_dict = dict(zip(column_names, row))
+
+                #We append the created dictionary to the array
                 rises.append(row_dict)
 
             return rises
@@ -521,12 +634,12 @@ class Database:
 
             column_names = [column[0] for column in cursor.description]
 
-            # iterate over the cursor object to get each row
+            #Forwarding cursor to get row data
             for row in cursor:
-                # create a dictionary using the column names and row values
+                #We create dictionary from the row
                 row_dict = dict(zip(column_names, row))
 
-                # add the dictionary to the dict_array
+                #We append the created dictionary to the array
                 rise.append(row_dict)
 
             return rise
