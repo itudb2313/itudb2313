@@ -9,6 +9,7 @@ with app.app_context():
     db = Database()
     app.config["db"] = db
 
+from endpoints.categories import categories_bp
 from endpoints.orders import orders_bp
 from endpoints.customers import customers_bp
 from endpoints.employees import employees_bp
@@ -17,6 +18,7 @@ from endpoints.stores import stores_bp
 from endpoints.products import products_bp
 from endpoints.providers import providers_bp
 
+app.register_blueprint(categories_bp)
 app.register_blueprint(orders_bp)
 app.register_blueprint(customers_bp)
 app.register_blueprint(employees_bp)
@@ -28,12 +30,6 @@ app.register_blueprint(providers_bp)
 @app.route("/")
 def hello_world():
     return render_template("index.html")
-
-
-# categories endpoint to view content of categories table
-@app.route("/categories", methods=["GET"])
-def categories():
-    return render_template("categories.html", categories=db.select_all_categories())
 
 
 

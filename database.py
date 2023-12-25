@@ -17,8 +17,129 @@ class Database:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            categories = cursor.fetchall()
+
+            categories = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                categories.append(row_dict)
+            
             return categories
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()  
+
+    def get_category_by_id(self, category_id):
+        query = """SELECT * FROM category WHERE category_id=%s"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (category_id,))
+            category = []
+
+            column_names = [column[0] for column in cursor.description]
+
+            # iterate over the cursor object to get each row
+            for row in cursor:
+                # create a dictionary using the column names and row values
+                row_dict = dict(zip(column_names, row))
+                
+                # add the dictionary to the dict_array
+                category.append(row_dict)
+
+            return category
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def insert_category(
+        self,
+        category_id,
+        employee_id,
+        category_name,
+        rating,
+        quantity_sold,
+        being_manufactured,
+        total_sold_value,
+    ):
+        query = """INSERT INTO category
+        (category_id,
+            employee_id,
+            category_name,
+            rating,
+            quantity_sold,
+            being_manufactured,
+            total_sold_value)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    category_id,
+                    employee_id,
+                    category_name,
+                    rating,
+                    quantity_sold,
+                    being_manufactured,
+                    total_sold_value,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def update_category_by_id(
+        self,
+        category_id,
+        employee_id,
+        category_name,
+        rating,
+        quantity_sold,
+        being_manufactured,
+        total_sold_value,
+    ):
+        query = """UPDATE category SET employee_id = %s, category_name = %s, rating = %s, quantity_sold = %s, being_manufactured = %s, total_sold_value = %s
+        WHERE category_id = %s"""
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                query,
+                (
+                    employee_id,
+                    category_name,
+                    rating,
+                    quantity_sold,
+                    being_manufactured,
+                    total_sold_value,
+                ),
+            )
+            self.connection.commit()
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+
+    def delete_category_by_id(self, category_id):
+        query = """DELETE FROM category WHERE category_id = %s"""
+        print(category_id)
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, (category_id,))
+            self.connection.commit()
+
         except dbapi.DatabaseError:
             self.connection.rollback()
         finally:

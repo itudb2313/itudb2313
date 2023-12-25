@@ -60,6 +60,9 @@ a, a:link, a:visited {
     padding: 20px 0;
 }
 
+.round {
+    border-radius: 25px;
+}
 .pagination a {
     background-color: #f4f4f4;
     color: black;

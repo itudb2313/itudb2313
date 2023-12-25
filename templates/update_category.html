@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Add New Category{% endblock %}
+{% block content %}
+
+<h1>Add New Category</h1>
+<form id="raiseForm" action="{{ url_for('categories_bp.update_category') }}" method="post">  
+    <div style=" width: 150px ; display: flex; flex-direction: column;  gap: 5px;">
+        <label for="category_id">Category ID</label>
+        <input type="text" name="category_id" id="category_id" required />
+
+        <label for="employee_id">Employee ID</label>
+        <input type="number" name="employee_id" id="employee_id" required />
+
+        <label for="category_name">Category Name</label>
+        <input type="text" name="category_name" id="category_name" required />
+        
+        <label for="rating">Rating</label>
+        <input type="text" name="rating" id="rating" required />
+        
+        <label for="quantity_sold">Quantity Sold</label>
+        <input type="number" name="quantity_sold" id="quantity_sold" required />
+       
+        <label for="total_sold_value">Total Sold Value</label>
+        <input type="number" name="total_sold_value" id="total_sold_value" required /> 
+        
+        <label for="being_manufactured">Being Manufactured</label>
+        <input type="number" name="being_manufactured" id="being_manufactured" required />
+    </div>
+    
+    <button type="submit">Update</button>
+  {% endblock %}
+</form>
