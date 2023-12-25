@@ -6,10 +6,10 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <h1 class="text-6xl mx-20 my-6 font-bold">Orders</h1>
+    <h1 class="text-6xl text-center my-6 font-bold">Orders</h1>
     <form id="update" hx-post="/update-order">
     </form>
-    <table class="table-auto border text-center">
+    <table class="table-auto border mx-auto text-center">
         <thead />
         <tbody id="replace">
             <tr>
@@ -75,30 +75,41 @@
             </form>
         </tr>
     </table>
-    <div class="mx-16 mt-16 flex flex-wrap gap-8">
-        <div class="w-2/5 border">
+    <p class="text-5xl mx-20 my-16 font-bold text-center">Statistics</p>
+
+    <div class="mx-auto w-4/5 mt-16 flex flex-wrap justify-center gap-8">
+        <div class="w-5/12 border">
             <canvas id="monthly"></canvas>
         </div>
-        <div class="w-2/5 border">
+        <div class="w-5/12 border">
             <canvas id="daily"></canvas>
         </div>
-        <div class="w-2/5 border text-center">
+        <div class="w-5/12 border text-center">
             <p class="text-2xl font-bold">All Time Best Sellers</p>
             <p class="text-2xl" id="best_selling"></p>
         </div>
-        <div class="w-2/5 border text-center">
+        <div class="w-5/12 border text-center">
             <p class="text-2xl font-bold">All Time Best Grossing</p>
             <p class="text-2xl" id="best_grossing"></p>
         </div>
-        <div class="w-2/5 border text-center">
-            <p class="text-3xl font-bold">Gross Split by Store</p>
+        <div class="w-5/12 border text-center">
+            <p class="text-3xl font-bold">Gross Split by Top 20 Store</p>
             <canvas id="stores"></canvas>
         </div>
-        <div class="w-2/5 border text-center items-middle">
+        <div class="w-5/12 border flex flex-column justify-center text-center">
             <p class="text-3xl font-bold">Total sales</p>
             <p class="text-2xl" id="total-orders"></p>
             <p class="text-2xl" id="total-gross"></p>
         </div>
+        <div class="w-5/12 border text-center">
+            <p class="text-3xl font-bold">Our Best Elders</p>
+            <p class="text-2xl" id="best_elders"></p>
+        </div>
+        <div class="w-5/12 border text-center">
+            <p class="text-3xl font-bold">Our Best Young Staff</p>
+            <p class="text-2xl" id="best_newcomers"></p>
+        </div>
+
     </div>
     <script type="module">
         htmx.config.useTemplateFragments = true;
@@ -192,16 +203,19 @@
                         beginAtZero: true
                     }
                 },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
             }
         });
 
-        document.getElementById('total-orders').innerHTML = "Total orders: " + res[6][0][0]
+        document.getElementById('total-orders').innerHTML = "Number of orders: " + res[6][0][0]
         document.getElementById('total-gross').innerHTML = "Total gross: " + res[5][0][0] + "$"
+
+        res[7].forEach((e) => {
+            document.getElementById('best_elders').innerHTML += e[0] + " " + e[1] + " - " + e[2] + "$<br>"
+        })
+
+        res[8].forEach((e) => {
+            document.getElementById('best_newcomers').innerHTML += e[0] + " " + e[1] + " - " + e[2] + "$<br>"
+        })
     </script>
     <style>
         input, select {

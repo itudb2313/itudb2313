@@ -230,7 +230,7 @@ def update_order():
         quantity = request.form["quantity"]
 
         db.update_order(
-            request.args.get("id"),
+            order_id,
             customer_id,
             product_id,
             store_id,
@@ -277,8 +277,6 @@ def update_order():
 
         # TODO: db.get_order(order_id) yaratıp oradaki
         # değerleri inputlara yazdırabilirsim
-
-        values = db.get_order(order_id)
 
         return f"""
             <td/>

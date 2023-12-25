@@ -3,6 +3,17 @@ body {
     color: #ffffff;
 }
 
+nav {
+    background-color: #202020;
+    color: #ffffff;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 nav ul{
     background-color: #202020;
     margin: 0;

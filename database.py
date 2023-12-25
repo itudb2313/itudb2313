@@ -185,21 +185,6 @@ class Database:
         finally:
             cursor.close()
 
-    def get_stores_columns(self):
-        query = """show columns from store"""
-
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(query)
-
-            stores_column_names = cursor.fetchall()
-            return stores_column_names
-        except dbapi.DatabaseError:
-            self.connection.rollback()
-            return None
-        finally:
-            cursor.close()
-
     def get_stores_count(self):
         query = """select count(*) from store"""
 
@@ -257,8 +242,7 @@ class Database:
         email,
         post_code,
     ):
-        query = """UPDATE store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s"""
-
+        query = """UPDATE test.store SET employee_id=%s, store_name=%s, phone=%s, street=%s, city=%s, country=%s, email=%s, post_code=%s WHERE store_id=%s;"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -277,6 +261,7 @@ class Database:
             )
             self.connection.commit()
         except dbapi.DatabaseError:
+            print("error")
             self.connection.rollback()
         finally:
             cursor.close()
@@ -294,38 +279,20 @@ class Database:
         finally:
             cursor.close()
 
-    def update_store(
-        self,
-        store_id,
-        employee_id,
-        store_name,
-        phone,
-        street,
-        city,
-        country,
-        email,
-        post_code,
+    def get_store_by_name(
+        self, store_name, country, phone, street, city, email, post_code
     ):
-        query = """UPDATE store SET employee_id=%s, store_name='%s', phone='%s', street='%s', city='%s', country='%s', email='%s', post_code=%s WHERE store_id=%s"""
+        query = """SELECT store_id FROM store WHERE store_name=%s AND phone=%s AND street=%s AND city=%s 
+                    AND country=%s  AND email=%s AND post_code=%s"""
         try:
             cursor = self.connection.cursor()
             cursor.execute(
-                query,
-                (
-                    employee_id,
-                    store_name,
-                    phone,
-                    street,
-                    city,
-                    country,
-                    email,
-                    post_code,
-                    store_id,
-                ),
+                query, (store_name, phone, street, city, country, email, post_code)
             )
-            self.connection.commit()
+            store = cursor.fetchall()
+
+            return store
         except dbapi.DatabaseError:
-            print("error")
             self.connection.rollback()
         finally:
             cursor.close()
@@ -334,7 +301,8 @@ class Database:
         self, employee_id, store_name, phone, street, city, country, email, post_code
     ):
         query = """INSERT INTO store ( employee_id, store_name, phone, street, city, country, email, post_code)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)"""
+
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -357,13 +325,24 @@ class Database:
         finally:
             cursor.close()
 
-    def get_all_stores_table(self, order_opt="store_id", page_number=1):
-        query = (
-            "SELECT * FROM store order by "
-            + order_opt
-            + " limit 20 offset "
-            + str((int(page_number) - 1) * 20)
-        )
+    def highest_salary_manager(self):
+        query = """select  e.firstname, e.lastname, s.store_name,e.salary from employee e
+                    inner join store s
+                    on e.employee_id = s.employee_id
+                    order by salary desc
+                    limit 3"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            employee = cursor.fetchall()
+            return employee
+        except dbapi.DatabaseError:
+            self.connection.rollback()
+        finally:
+            cursor.close()
+
+    def get_all_stores_table(self,order_opt = "store_id",page_number = 1):
+        query = "SELECT * FROM store order by "+ order_opt +" limit 20 offset "+ str((int(page_number)-1)*20)
         try:
             cursor = self.connection.cursor()
             cursor.execute(
@@ -940,7 +919,7 @@ class Database:
                     quantity,
                 ),
             )
-            # self.connection.commit()
+            self.connection.commit()
 
     def special_queries(self):
         query_monthly = """
@@ -975,7 +954,7 @@ class Database:
                 INNER JOIN store USING(store_id)
                 GROUP BY store.store_name
                 ORDER BY SUM(orders.quantity * product.price) DESC
-                LIMIT 10
+                LIMIT 20
                 """
 
         query_total_sales = """
@@ -985,6 +964,27 @@ class Database:
 
         query_total_orders = """
                 SELECT COUNT(*) FROM orders
+                """
+
+        # not most necessary subquery but it is a subquery
+        query_highest_seller_older_then_50 = """
+                SELECT employee.firstname, employee.lastname, SUM(orders.quantity * product.price) FROM orders 
+                INNER JOIN (SELECT firstname, lastname, employee_id FROM employee WHERE
+                YEAR(CURDATE()) - YEAR(dob) > 50) AS employee USING(employee_id)
+                INNER JOIN product USING(product_id)
+                GROUP BY employee.firstname, employee.lastname
+                ORDER BY SUM(orders.quantity * product.price) DESC
+                LIMIT 10
+                """
+
+        query_highest_seller_younger_then_25 = """
+                SELECT employee.firstname, employee.lastname, SUM(orders.quantity * product.price) FROM orders
+                INNER JOIN (SELECT firstname, lastname, employee_id FROM employee WHERE
+                YEAR(CURDATE()) - YEAR(dob) < 25) AS employee USING(employee_id)
+                INNER JOIN product USING(product_id)
+                GROUP BY employee.firstname, employee.lastname
+                ORDER BY SUM(orders.quantity * product.price) DESC
+                LIMIT 10
                 """
 
         results = []
@@ -1014,6 +1014,14 @@ class Database:
             results.append(data)
 
             cursor.execute(query_total_orders)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_highest_seller_older_then_50)
+            data = cursor.fetchall()
+            results.append(data)
+
+            cursor.execute(query_highest_seller_younger_then_25)
             data = cursor.fetchall()
             results.append(data)
 
@@ -1052,7 +1060,7 @@ class Database:
                     order_id,
                 ),
             )
-            # self.connection.commit()
+            self.connection.commit()
 
     def get_all_employee_ids_and_names(self, store_id):
         query = """SELECT DISTINCT employee_id, firstname, lastname FROM employee WHERE store_id = %s"""
