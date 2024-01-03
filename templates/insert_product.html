@@ -22,7 +22,7 @@ block content %}
         <label for="category_id">Category</label>
         <select name="category_id" id="category_id">
             {% for category in categories %}
-            <option value="{{category[0]}}">{{category[2]}}</option>
+            <option value="{{category.category_id}}">{{category.category_name}}</option>
             {% endfor %}
         </select>
         <label for="provider_id">Provider</label>

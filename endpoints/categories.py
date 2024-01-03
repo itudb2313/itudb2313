@@ -27,7 +27,7 @@ def categories():
     categories=db.select_all_categories()
     
     page = int(request.args.get('page', 1))
-    per_page = 12 
+    per_page = 1500
     paginated_items = paginate(categories, page, per_page)
 
     
