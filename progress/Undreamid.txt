@@ -6,3 +6,15 @@ Informations added to README.md
 Categories tab is created in "layout.html"
 "categories.html" file has been created to view the data of categories table
  GET functions are implemented in app.py and database.py for Categories table 
+ -w12-
+category_bp blueprint is created 
+category.html is updated.
+insert_category.html is created.
+update_category.html is created.
+layout is updated for category tab.
+Adding(Create) button is added.
+Action buttons which are delete and update are added. 
+Create operation for categories table are implemented
+Update operation for categories table are implemented
+Delete operation for categories table are implemented.
+sql implementation at creating the table for keys

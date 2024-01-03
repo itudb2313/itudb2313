@@ -37,7 +37,11 @@ CREATE TABLE `category` (
   `rating` varchar(5) DEFAULT NULL,
   `quantity_sold` int DEFAULT NULL,
   `being_manufactured` int DEFAULT NULL,
-  `total_sold_value` int DEFAULT NULL
+  `total_sold_value` int DEFAULT NULL,
+  PRIMARY KEY (`category_id`),
+  KEY `employee_id` (`employee_id`),
+  CONSTRAINT `category_fk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`)
+  ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
